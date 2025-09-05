@@ -21,4 +21,4 @@ Primera entrega: sin persistencia (no base de datos, no JSON), manejo de estruct
 - **Trello del Proyecto:** [https://trello.com/b/LePKo6J6/srg-sistemas-de-reservas-gale](Link)
 - **Carpeta Compartida en Google Drive:** [https://drive.google.com/drive/u/0/folders/1_R_JRjaMFSzTjN6Y907UZiyd5XfOL9k6](Link)
 - **Repositorio en GitHub:** [https://github.com/Lautiim/SRG-Sistemas_de_Reservas_GALE](Link)
-- **Documentación de Python:** [https://docs.python.org/3](Link)
+- **Documentación de Python:** [Link](https://docs.python.org/3)
