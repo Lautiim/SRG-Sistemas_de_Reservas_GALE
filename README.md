@@ -18,7 +18,7 @@ Primera entrega: sin persistencia (no base de datos, no JSON), manejo de estruct
 - Lautaro Salto
 
 ## Links Útiles
-- **Trello del Proyecto:** [Link](https://github.com/Lautiim/SRG-Sistemas_de_Reservas_GALE)
+- **Trello del Proyecto:** [https://github.com/Lautiim/SRG-Sistemas_de_Reservas_GALE](https://trello.com/b/LePKo6J6/srg-sistemas-de-reservas-gale)
 - **Carpeta Compartida en Google Drive:** [Link](https://github.com/Lautiim/SRG-Sistemas_de_Reservas_GALE)
 - **Repositorio en GitHub:** [Link](https://github.com/Lautiim/SRG-Sistemas_de_Reservas_GALE)
 - **Documentación de Python:** [Link](https://docs.python.org/3)
