@@ -1,0 +1,26 @@
+# --- Archivos compilados por Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Entornos virtuales ---
+.venv/
+env/
+venv/
+
+# --- Archivos de configuración / temporales ---
+*.log
+*.pot
+*.pyproj
+*.sublime-project
+*.sublime-workspace
+
+# --- Sistemas operativos ---
+.DS_Store
+Thumbs.db
+
+# --- Carpetas de pruebas o builds ---
+build/
+dist/
+.eggs/
+*.egg-info/
