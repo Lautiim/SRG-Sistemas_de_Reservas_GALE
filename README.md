@@ -7,9 +7,9 @@ SRG es un sistema de reservas para hoteles desarrollado en **Python**.
 Primera entrega: sin persistencia (no base de datos, no JSON), manejo de estructuras en memoria.
 
 ## Estructura del Repositorio
-**/src** → código fuente en Python
-**/docs** → documentación y diagramas
-**/tests** → pruebas básicas (funciones aisladas, etc)
+- **/src** → código fuente en Python
+- **/docs** → documentación y diagramas
+- **/tests** → pruebas básicas (funciones aisladas, etc)
 
 ## Integrantes
 - Axel Aguilar
