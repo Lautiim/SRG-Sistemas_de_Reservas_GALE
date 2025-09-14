@@ -173,14 +173,16 @@ def eliminar_reserva():
     Al ser invocada, esta funcion permite al usuario ingresar el id de una reserva
     para eliminar la misma.
     """
-    confirmacion = False
+    confirmacion = False # Esta variable almacena la confirmacion del usuario para eliminar la reserva, por defecto False
 
-    id_reserva = input("Ingrese el ID de la reserva que desea eliminar: ")
+    # Solicitamos el ID de la reserva a eliminar
+    id_reserva = int(input("Ingrese el ID de la reserva que desea eliminar: "))
 
-    for reserva in reservas:
-        if id_reserva == reserva["ID"]:
+    # Recorremos reservas buscand una reserva con el ID indicado
+    for reserva in reservas: 
+        if id_reserva == reserva["ID"]: # Si se encuentra la reserva, se pide confirmacion al usuario para eliminarla
             confirmacion = input(f"Esta seguro que desea eliminar la reserva {reserva}? (s/n): ")
-            if confirmacion.lower() == "s":
+            if confirmacion.lower() == "s": # Para evitar problemas convertimos la respuesta a minusculas, si es "s" se elimina la reserva
                 reservas.remove(reserva)
                 print("Reserva eliminada correctamente.")
             break
