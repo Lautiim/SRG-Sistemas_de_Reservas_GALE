@@ -76,7 +76,7 @@ def gestionar_reservas():
     while True:
          print("\n--- Gestión de Reservas ---")
          print("1. Agregar Reserva")
-         print("2. Buscar Reserva")
+         print("2. Consultar Reservas")
          print("3. Eliminar Reserva")
          print("0. Volver al menu principal")
 
@@ -84,7 +84,7 @@ def gestionar_reservas():
          if opcion == "1":
             agregar_reserva()
          elif opcion == "2":
-            buscar_reserva()
+            consultar_reservas()
          elif opcion == "3":
             eliminar_reserva()
          elif opcion == "0":
@@ -128,7 +128,7 @@ def agregar_reserva():
 
     print("Reserva agregada correctamente")
 
-def buscar_reserva():
+def buscar_reserva_x_cliente(): # Esta funcion fue renombrada, se usara mas adelante en la seccion de reportes. Actualmente no se invoca en ningun lado
     """Funcionalidad para buscar las reservas de un cliente
 
     Al ser invocada, esta funcion permite al usuario ingresar el nombre
@@ -155,16 +155,37 @@ def buscar_reserva():
         else: # En caso de no haber reservas, lo informamos igualmente
             print("No se encontraron reservas para ese cliente")
 
-def eliminar_reserva(): # TODO: Implementar la funcionalidad para eliminar reservas
-   borrar = input("Ingrese el nombre del cliente para eliminar su/sus reserva/s: ")
+def consultar_reservas():
+    """Funcionalidad para buscar las reservas existentes
 
-   for reserva in reservas:
-      if borrar == reserva["Cliente"]:
-         reservas.remove(reserva)
-         print("Reserva eliminada correctamente")
-         break
-   else:
-      print("No se encontro una reserva para ese cliente")
+    Al ser invocada se muestra por pantalla la lista de reservas existentes
+    """
+    if reservas: # Si existen reservas, se muestran por pantalla
+        print("Reservas existentes:")
+        for reserva in reservas:
+            print(reserva)
+    else:
+        print("No hay reservas existentes.")
+
+def eliminar_reserva():
+    """Funcionalidad para eliminar reservas de un cliente
+
+    Al ser invocada, esta funcion permite al usuario ingresar el id de una reserva
+    para eliminar la misma.
+    """
+    confirmacion = False
+
+    id_reserva = input("Ingrese el ID de la reserva que desea eliminar: ")
+
+    for reserva in reservas:
+        if id_reserva == reserva["ID"]:
+            confirmacion = input(f"Esta seguro que desea eliminar la reserva {reserva}? (s/n): ")
+            if confirmacion.lower() == "s":
+                reservas.remove(reserva)
+                print("Reserva eliminada correctamente.")
+            break
+    else:
+        print("No se encontro una reserva con ese ID.")
 
 def generar_reportes():
     # TODO: Implementar la funcionalidad para generar reportes
