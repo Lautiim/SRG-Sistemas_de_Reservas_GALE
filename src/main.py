@@ -62,19 +62,34 @@ def buscar_reserva():
     Al ser invocada, esta funcion permite al usuario ingresar el nombre
     de un cliente para buscar reservas a su nombre.
     """
-    reservas_cliente = []
+    reservas_cliente = [] # Lista que almacenara las reservas del cliente
 
+    # Solicitamos el nombre del cliente
     nombre_cliente = input("Ingrese el nombre del cliente para buscar su/sus reserva/s: ")
+    ID_cliente = 0 # Variable para almacenar el ID del cliente, por defecto 0 (no se encontro)
 
-    for reserva in reservas:
-        if nombre_cliente == reserva["Cliente"]:
-            reservas_cliente.append(reserva)
+    # Buscamos el ID del cliente
+    for cliente in clientes:
+        # En caso de encontrar el cliente, guardamos su ID y salimos del bucle
+        if nombre_cliente == cliente["Nombre"]:
+            ID_cliente = cliente["ID"]
+            break
+
+    # En caso de no encontrar el cliente lo informamos por pantalla
+    if ID_cliente == 0:
+        print("No se encontro un cliente con ese nombre")
+        return    
+    else: # Si encontramos al cliente, buscamos por reservas con su ID
+        for reserva in reservas:
+            if ID_cliente == reserva["ID_cliente"]:
+                reservas_cliente.append(reserva) # Si encontramos una reserva que coincida, la agregamos a la lista
     
+    # Si hay reservas, las mostramos por pantalla
     if reservas_cliente:
         print(f"Reservas encontradas para {nombre_cliente}:")
         for reserva in reservas_cliente:
             print(reserva)
-    else:
+    else: # En caso de no haber reservas, lo informamos igualmente
         print("No se encontraron reservas para ese cliente")
 
 def eliminar_reserva(): # TODO: Implementar la funcionalidad para eliminar reservas
