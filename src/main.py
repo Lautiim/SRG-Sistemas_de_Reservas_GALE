@@ -1,3 +1,5 @@
+import re
+
 def menu():
     # Muestra las opciones del menú principal
     print("1. Gestion de Hoteles")
@@ -5,6 +7,56 @@ def menu():
     print("3. Gestion de Reservas")
     print("4. Gestionar Reportes")
     print("0. Salir")
+
+def validar_cliente(nombre_cliente: str) -> int:
+    """Funcion para validar si un cliente existe
+
+    Pre: Recibe un string con el nombre del cliente que se debe buscar
+
+    Post: Retorna el ID del cliente si se encontro, o 0 si no se encontro
+    
+    """
+    # Recorremos la lista de clientes buscando un cliente con dicho nombre
+    for cliente in clientes:
+        if cliente["Nombre"] == nombre_cliente: # Si se encuentra el cliente, la funcion devuelve su ID
+            return cliente["ID"]
+    return 0
+
+def validar_hotel(nombre_hotel: str) -> int:
+    """Funcion para validar si un hotel existe
+
+    Pre: Recibe un string con el nombre del hotel que se debe buscar
+
+    Post: Retorna el ID del hotel si se encontro, o 0 si no se encontro
+    
+    """
+    # Recorremos la lista de hoteles buscando un hotel con dicho nombre
+    for hotel in hoteles:
+        if hotel["Nombre"] == nombre_hotel: # Si se encuentra el hotel, la funcion devuelve su ID
+            return hotel["ID"]
+    return 0
+
+def validar_fecha(fecha: str) -> bool:
+    """Funcion para validar que una fecha tenga el formato correcto
+
+    Pre: Recibe un string con la fecha a validar
+
+    Post: Retorna un booleano de valor True si la fecha es valida, o False si no lo es
+
+    Se realiza a partir de expresiones regulares, que se basan en las siguientes reglas:
+    El formato debe ser DD/MM/AAAA
+        Teniendo en cuenta que:
+        DD puede ser un numero del 01 al 31 -
+        MM puede ser un numero del 01 al 12 - 
+        AAAA puede ser un numero del 1000 al 9999
+    """
+    # Definimos el patron que debe cumplir la fecha
+    patron = r"^(0[1-9]|[12]\d|3[01])/(0[1-9]|1[0-2])/[1-9]\d{3}$"
+    # Si la fecha cumple con el patron, devolvemos True, sino devolvemos False
+    if re.match(patron, fecha):
+        return True
+    else:
+        return False
 
 def gestionar_hoteles():
     # TODO: Implementar la funcionalidad para gestionar hoteles
@@ -46,14 +98,34 @@ def agregar_reserva():
     Al ser invocada, esta funcion permite al usuario ingresar los datos
     para crear una nueva reserva.
     """
-    cliente = input("Ingrese el nombre del cliente: ")
-
-    hotel = input("Ingrese el nombre del hotel: ")
-    fecha_entrada = input("Ingrese la fecha de entrada (DD/MM/AAAA): ")
-    fecha_salida = input("Ingrese la fecha de salida (DD/MM/AAAA): ")
-
-    reservas.append({"ID_cliente":cliente,"ID_hotel":hotel,"Fecha Entrada":fecha_entrada,"Fecha Salida":fecha_salida})
+    cliente = validar_cliente(input("Ingrese el nombre del cliente: "))
+    if cliente == 0:
+        print("No se encontro un cliente con ese nombre. Primero debe agregar el cliente.")
+        return # Usamos un return para salir de la funcion
     
+    hotel = validar_hotel(input("Ingrese el nombre del hotel: "))
+    if hotel == 0:
+        print("No se encontro un hotel con ese nombre. Primero debe agregar el hotel.")
+        return # Usamos un return para salir de la funcion
+
+    # TODO validar que la habitacion exista en el hotel anteriormente indicado
+    numero_habitacion = input("Ingrese el numero de habitacion: ")
+
+    # TODO validar que la habitacion no este reservada en las fechas indicadas
+    fecha_entrada = input("Ingrese la fecha de entrada (DD/MM/AAAA): ")
+    while not validar_fecha(fecha_entrada): # Validamos que la fecha tenga el formato correcto invocando la funcion validar_fecha
+        print("Fecha invalida. Intente de nuevo.")
+        fecha_entrada = input("Ingrese la fecha de entrada (DD/MM/AAAA): ")
+
+    fecha_salida = input("Ingrese la fecha de salida (DD/MM/AAAA): ")
+    while not validar_fecha(fecha_salida): # Validamos que la fecha tenga el formato correcto invocando la funcion validar_fecha
+        print("Fecha invalida. Intente de nuevo.")
+        fecha_salida = input("Ingrese la fecha de salida (DD/MM/AAAA): ")
+
+    # Agregamos la nueva reserva a la lista de reservas si todo fue correcto
+    id_reserva = len(reservas) + 1 # Se genera un ID para la reserva sumando 1 a la cantidad de reservas actuales
+    reservas.append({"ID": id_reserva, "ID_cliente":cliente,"ID_hotel":hotel,"Numero Habitacion":numero_habitacion,"Fecha Inicio":fecha_entrada,"Fecha Fin":fecha_salida})
+
     print("Reserva agregada correctamente")
 
 def buscar_reserva():
@@ -65,32 +137,23 @@ def buscar_reserva():
     reservas_cliente = [] # Lista que almacenara las reservas del cliente
 
     # Solicitamos el nombre del cliente
-    nombre_cliente = input("Ingrese el nombre del cliente para buscar su/sus reserva/s: ")
-    ID_cliente = 0 # Variable para almacenar el ID del cliente, por defecto 0 (no se encontro)
+    nombre_cliente = input("Ingrese el nombre del cliente para buscar sus reservas: ")
+    ID_cliente = validar_cliente(nombre_cliente)
 
-    # Buscamos el ID del cliente
-    for cliente in clientes:
-        # En caso de encontrar el cliente, guardamos su ID y salimos del bucle
-        if nombre_cliente == cliente["Nombre"]:
-            ID_cliente = cliente["ID"]
-            break
-
-    # En caso de no encontrar el cliente lo informamos por pantalla
-    if ID_cliente == 0:
+    if ID_cliente == 0: # Si no encontramos al cliente, informamos por pantalla
         print("No se encontro un cliente con ese nombre")
-        return    
     else: # Si encontramos al cliente, buscamos por reservas con su ID
         for reserva in reservas:
             if ID_cliente == reserva["ID_cliente"]:
                 reservas_cliente.append(reserva) # Si encontramos una reserva que coincida, la agregamos a la lista
     
-    # Si hay reservas, las mostramos por pantalla
-    if reservas_cliente:
-        print(f"Reservas encontradas para {nombre_cliente}:")
-        for reserva in reservas_cliente:
-            print(reserva)
-    else: # En caso de no haber reservas, lo informamos igualmente
-        print("No se encontraron reservas para ese cliente")
+        # Si hay reservas, las mostramos por pantalla
+        if reservas_cliente:
+            print(f"Reservas encontradas para {nombre_cliente}:")
+            for reserva in reservas_cliente:
+                print(reserva)
+        else: # En caso de no haber reservas, lo informamos igualmente
+            print("No se encontraron reservas para ese cliente")
 
 def eliminar_reserva(): # TODO: Implementar la funcionalidad para eliminar reservas
    borrar = input("Ingrese el nombre del cliente para eliminar su/sus reserva/s: ")
@@ -142,14 +205,15 @@ hoteles = [
 clientes = [
     {"ID": 1, "Nombre": "Juan Perez", "DNI": "12345678", "Telefono": "1111-1111"},
     {"ID": 2, "Nombre": "Maria Rodriguez", "DNI": "87654321", "Telefono": "2222-2222"},
-    {"ID": 3, "Nombre": "Carlos Gomez", "DNI": "45678912", "Telefono": "3333-3333"}
+    {"ID": 3, "Nombre": "Carlos Gomez", "DNI": "45678912", "Telefono": "3333-3333"},
+    {"ID": 4, "Nombre": "Laura Torres", "DNI": "98765432", "Telefono": "4444-4444"}
 ]
 reservas = [
-    {"ID": 1, "ID_cliente": 1, "ID_hotel": 1, "Fecha Entrada": "01/01/2024", "Fecha Salida": "05/01/2024"},
-    {"ID": 2, "ID_cliente": 2, "ID_hotel": 2, "Fecha Entrada": "10/01/2024", "Fecha Salida": "15/01/2024"},
-    {"ID": 3, "ID_cliente": 3, "ID_hotel": 1, "Fecha Entrada": "15/01/2024", "Fecha Salida": "20/01/2024"},
-    {"ID": 4, "ID_cliente": 1, "ID_hotel": 3, "Fecha Entrada": "22/02/2024", "Fecha Salida": "25/02/2024"},
-    {"ID": 5, "ID_cliente": 1, "ID_hotel": 4, "Fecha Entrada": "01/03/2024", "Fecha Salida": "10/03/2024"}
+    {"ID": 1, "ID_cliente": 1, "ID_hotel": 1, "Numero Habitacion": 101, "Fecha Inicio": "01/01/2024", "Fecha Fin": "05/01/2024"},
+    {"ID": 2, "ID_cliente": 2, "ID_hotel": 2, "Numero Habitacion": 202, "Fecha Inicio": "10/01/2024", "Fecha Fin": "15/01/2024"},
+    {"ID": 3, "ID_cliente": 3, "ID_hotel": 1, "Numero Habitacion": 103, "Fecha Inicio": "15/01/2024", "Fecha Fin": "20/01/2024"},
+    {"ID": 4, "ID_cliente": 1, "ID_hotel": 3, "Numero Habitacion": 304, "Fecha Inicio": "22/02/2024", "Fecha Fin": "25/02/2024"},
+    {"ID": 5, "ID_cliente": 1, "ID_hotel": 4, "Numero Habitacion": 405, "Fecha Inicio": "01/03/2024", "Fecha Fin": "10/03/2024"}
 ]
 
 if __name__ == "__main__":
