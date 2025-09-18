@@ -52,11 +52,26 @@ def validar_fecha(fecha: str) -> bool:
     """
     # Definimos el patron que debe cumplir la fecha
     patron = r"^(0[1-9]|[12]\d|3[01])/(0[1-9]|1[0-2])/[1-9]\d{3}$"
-    # Si la fecha cumple con el patron, devolvemos True, sino devolvemos False
-    if re.match(patron, fecha):
-        return True
-    else:
+    if not re.match(patron, fecha):
         return False
+
+    # Validamos dias segun mes y año bisiesto
+    dia, mes, anio = map(int, fecha.split("/"))
+    
+    if mes == 2: # Febrero, puede variar si es bisiesto o no
+        # Un año es bisiesto si es divisible por 4, pero no por 100, a menos que sea divisible por 400
+        es_bisiesto = (anio % 4 == 0 and (anio % 100 != 0 or anio % 400 == 0))
+        
+        if es_bisiesto and dia > 29:
+            return False
+        if not es_bisiesto and dia > 28:
+            return False
+    
+    elif mes in [4, 6, 9, 11] and dia > 30: # Abril, Junio, Septiembre y Noviembre tienen 30 dias
+        return False
+    elif dia > 31: # Los demas meses tienen 31 dias
+        return False
+    return True
 
 def gestionar_hoteles():
     # TODO: Implementar la funcionalidad para gestionar hoteles
