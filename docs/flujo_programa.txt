@@ -1,0 +1,67 @@
+Flujo del programa SRG - Sistema de Registro de Hotelería
+
+Inicio
+  |
+  v
+main()
+  |
+  v
+Muestra mensaje de bienvenida
+  |
+  v
+menu()  --> Muestra opciones principales
+  |
+  v
+input() para seleccionar opción
+  |
+  v
++-------------------------------+
+| Según opción elegida:         |
+| 1 -> gestionar_hoteles()      |
+| 2 -> gestionar_clientes()     |
+| 3 -> gestionar_reservas()     |
+| 4 -> generar_reportes()       |
+| 0 -> Salir                    |
++-------------------------------+
+  |
+  v
+Si opción 3 (Gestionar Reservas):
+  |
+  v
+gestionar_reservas()
+  |
+  v
+Muestra submenú de reservas
+  |
+  v
+input() para seleccionar acción
+  |
+  v
++---------------------------------------------+
+| Según sub-opción elegida:                   |
+| 1 -> agregar_reserva()                      |
+|      - Valida cliente y hotel               |
+|      - Pide datos de reserva                |
+|      - Valida fechas                        |
+|      - Agrega reserva a la lista            |
+| 2 -> consultar_reservas()                   |
+|      - Muestra todas las reservas           |
+| 3 -> eliminar_reserva()                     |
+|      - Pide ID de reserva                   |
+|      - Elimina si existe y confirma         |
+| 0 -> Volver al menú principal               |
++---------------------------------------------+
+  |
+  v
+Vuelve al menú principal
+  |
+  v
+Repite ciclo hasta que el usuario elija '0' para salir
+  |
+  v
+Fin
+
+Notas:
+- Los datos de hoteles, clientes y reservas están precargados en listas.
+- Hay validaciones para existencia de clientes, hoteles y formato de fechas.
+- El flujo es cíclico: tras cada acción, vuelve al menú principal.
