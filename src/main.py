@@ -178,7 +178,21 @@ def consultar_reservas():
     if reservas: # Si existen reservas, se muestran por pantalla
         print("Reservas existentes:")
         for reserva in reservas:
-            print(reserva)
+            # Buscar el nombre del cliente por ID
+            nombre_cliente = "Desconocido"
+            for cliente in clientes:
+                if cliente["ID"] == reserva["ID_cliente"]:
+                    nombre_cliente = cliente["Nombre"]
+                    break
+
+            # Buscar el nombre del hotel por ID
+            nombre_hotel = "Desconocido"
+            for hotel in hoteles:
+                if hotel["ID"] == reserva["ID_hotel"]:
+                    nombre_hotel = hotel["Nombre"]
+                    break
+
+            print(f"Cliente: {nombre_cliente} ({reserva['ID_cliente']}), Hotel: {nombre_hotel} ({reserva['ID_hotel']}), Habitación: {reserva['Numero Habitacion']}, Fecha Inicio: {reserva['Fecha Inicio']}, Fecha Fin: {reserva['Fecha Fin']}")
     else:
         print("No hay reservas existentes.")
 
