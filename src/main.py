@@ -118,8 +118,50 @@ def eliminar_hotel():
             print("Hotel eliminado exitosamente")
 
 def gestionar_clientes():
-    # TODO: Implementar la funcionalidad para gestionar clientes
-    print("Funcionalidad para gestionar clientes (pendiente de implementar)")
+     while True:
+         print("\n--- Gestión de Clientes ---")
+         print("1. Agregar Cliente")
+         print("2. Consultar cliente")
+         print("3. Eliminar cliente")
+         print("4. Volver al menu principal")
+
+         opcion = int(input("Seleccione una opcion: "))
+         if opcion == 1:
+            agregar_cliente()
+         elif opcion == 2:
+            consultar_cliente()
+         elif opcion == 3:
+            eliminar_cliente()
+         elif opcion == 4:
+            break
+         else:
+            print("Opcion invalida")
+
+
+def agregar_cliente():
+   nombre = input("Ingrese el nombre del cliente: ")
+   dni = int(input("Ingrese el DNI del cliente sin puntos ni espacios: "))
+   telefono = int(input("Ingrese el numero de telefono del cliente sin signos ni guiones: "))
+   id_cliente = len(clientes) + 1
+   clientes.append({"ID":id_cliente,"Nombre":nombre,"DNI":dni,"Telefono":telefono})
+   print("Cliente agregado correctamente")
+
+
+def consultar_cliente():
+    for cliente in clientes:
+        if len(clientes) > 0:
+            print(cliente)
+        else:
+            print("No hay clientes registrados")
+
+
+def eliminar_cliente():
+   borrar = input("Ingrese el cliente que desea eliminar: ")
+   for cliente in clientes:
+      if borrar == cliente["Nombre"]:
+         clientes.remove(cliente)
+         print("Cliente eliminado correctamente")
+
 
 def gestionar_reservas():
     """Funcionalidad para gestionar reservas
