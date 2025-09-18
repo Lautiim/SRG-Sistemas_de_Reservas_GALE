@@ -143,33 +143,6 @@ def agregar_reserva():
 
     print("Reserva agregada correctamente")
 
-def buscar_reserva_x_cliente(): # Esta funcion fue renombrada, se usara mas adelante en la seccion de reportes. Actualmente no se invoca en ningun lado
-    """Funcionalidad para buscar las reservas de un cliente
-
-    Al ser invocada, esta funcion permite al usuario ingresar el nombre
-    de un cliente para buscar reservas a su nombre.
-    """
-    reservas_cliente = [] # Lista que almacenara las reservas del cliente
-
-    # Solicitamos el nombre del cliente
-    nombre_cliente = input("Ingrese el nombre del cliente para buscar sus reservas: ")
-    ID_cliente = validar_cliente(nombre_cliente)
-
-    if ID_cliente == 0: # Si no encontramos al cliente, informamos por pantalla
-        print("No se encontro un cliente con ese nombre")
-    else: # Si encontramos al cliente, buscamos por reservas con su ID
-        for reserva in reservas:
-            if ID_cliente == reserva["ID_cliente"]:
-                reservas_cliente.append(reserva) # Si encontramos una reserva que coincida, la agregamos a la lista
-    
-        # Si hay reservas, las mostramos por pantalla
-        if reservas_cliente:
-            print(f"Reservas encontradas para {nombre_cliente}:")
-            for reserva in reservas_cliente:
-                print(reserva)
-        else: # En caso de no haber reservas, lo informamos igualmente
-            print("No se encontraron reservas para ese cliente")
-
 def consultar_reservas():
     """Funcionalidad para buscar las reservas existentes
 
@@ -218,9 +191,96 @@ def eliminar_reserva():
     else:
         print("No se encontro una reserva con ese ID.")
 
-def generar_reportes():
-    # TODO: Implementar la funcionalidad para generar reportes
-    print("Funcionalidad para generar reportes (pendiente de implementar)")
+def generar_reportes() -> None:
+    """Funcionalidad para generar reportes
+    
+    Al ser invocada, esta funcion permite al usuario ver las opciones
+    para generar reportes.
+    """
+    while True:
+        print("\n--- Generacion de Reportes ---")
+        print("1. Consultar hoteles")
+        print("2. Consultar clientes")
+        print("3. Consultar reservas")
+        print("4. Consultar reservas por cliente")
+        print("5. Consultar reservas por hotel")
+        print("6. Consultar habitaciones disponibles en un hotel")
+        print("0. Volver al menu principal")
+
+        opcion = input("Seleccione una opcion: ")
+        if opcion == "1":
+            # TODO consultar_hoteles()
+            pass
+        elif opcion == "2":
+            # TODO consultar_clientes()
+            pass
+        elif opcion == "3":
+            consultar_reservas()
+        elif opcion == "4":
+            buscar_reserva_x_cliente()
+        elif opcion == "5":
+            buscar_reserva_x_hotel()
+        elif opcion == "6":
+            # TODO consultar_habitaciones_disponibles()
+            pass
+        elif opcion == "0":
+            break
+        else:
+            print("Opcion invalida")
+
+def buscar_reserva_x_cliente(): # Esta funcion fue renombrada, se usara mas adelante en la seccion de reportes. Actualmente no se invoca en ningun lado
+    """Funcionalidad para buscar las reservas de un cliente
+
+    Al ser invocada, esta funcion permite al usuario ingresar el nombre
+    de un cliente para buscar reservas a su nombre.
+    """
+    reservas_cliente = [] # Lista que almacenara las reservas del cliente
+
+    # Solicitamos el nombre del cliente
+    nombre_cliente = input("Ingrese el nombre del cliente para buscar sus reservas: ")
+    ID_cliente = validar_cliente(nombre_cliente)
+
+    if ID_cliente == 0: # Si no encontramos al cliente, informamos por pantalla
+        print("No se encontro un cliente con ese nombre")
+    else: # Si encontramos al cliente, buscamos por reservas con su ID
+        for reserva in reservas:
+            if ID_cliente == reserva["ID_cliente"]:
+                reservas_cliente.append(reserva) # Si encontramos una reserva que coincida, la agregamos a la lista
+    
+        # Si hay reservas, las mostramos por pantalla
+        if reservas_cliente:
+            print(f"Reservas encontradas para {nombre_cliente}:")
+            for reserva in reservas_cliente:
+                print(reserva)
+        else: # En caso de no haber reservas, lo informamos igualmente
+            print("No se encontraron reservas para ese cliente")
+
+def buscar_reserva_x_hotel() -> None:
+    """Funcionalidad para buscar las reservas de un hotel
+
+    Al ser invocada, esta funcion permite al usuario ingresar el nombre
+    de un hotel para buscar reservas asociadas a ese hotel.
+    """
+    reservas_hotel = [] # Lista que almacenara las reservas del hotel
+
+    # Solicitamos el nombre del hotel
+    nombre_hotel = input("Ingrese el nombre del hotel para buscar sus reservas: ")
+    ID_hotel = validar_hotel(nombre_hotel)
+
+    if ID_hotel == 0: # Si no encontramos al hotel, informamos por pantalla
+        print("No se encontro un hotel con ese nombre")
+    else: # Si encontramos al hotel, buscamos por reservas con su ID
+        for reserva in reservas:
+            if ID_hotel == reserva["ID_hotel"]:
+                reservas_hotel.append(reserva) # Si encontramos una reserva que coincida, la agregamos a la lista
+
+        # Si hay reservas, las mostramos por pantalla
+        if reservas_hotel:
+            print(f"Reservas encontradas para {nombre_hotel}:")
+            for reserva in reservas_hotel:
+                print(reserva)
+        else: # En caso de no haber reservas, lo informamos igualmente
+            print("No se encontraron reservas para ese hotel")
 
 def main():
     # Función principal que inicia la aplicación
