@@ -77,9 +77,17 @@ def gestionar_hoteles():
     # TODO: Implementar la funcionalidad para gestionar hoteles
     print("Funcionalidad para gestionar hoteles (pendiente de implementar)")
 
+def consultar_hoteles():
+    # TODO: Implementar la funcionalidad para consultar hoteles
+    print("Funcionalidad para consultar hoteles (pendiente de implementar)")
+
 def gestionar_clientes():
     # TODO: Implementar la funcionalidad para gestionar clientes
     print("Funcionalidad para gestionar clientes (pendiente de implementar)")
+
+def consultar_clientes():
+    # TODO: Implementar la funcionalidad para consultar clientes
+    print("Funcionalidad para consultar clientes (pendiente de implementar)")
 
 def gestionar_reservas():
     """Funcionalidad para gestionar reservas
@@ -165,7 +173,7 @@ def consultar_reservas():
                     nombre_hotel = hotel["Nombre"]
                     break
 
-            print(f"Cliente: {nombre_cliente} ({reserva['ID_cliente']}), Hotel: {nombre_hotel} ({reserva['ID_hotel']}), Habitación: {reserva['Numero Habitacion']}, Fecha Inicio: {reserva['Fecha Inicio']}, Fecha Fin: {reserva['Fecha Fin']}")
+            print(f"Nro Reserva: {reserva['ID']}, Cliente: {nombre_cliente} ({reserva['ID_cliente']}), Hotel: {nombre_hotel} ({reserva['ID_hotel']}), Habitación: {reserva['Numero Habitacion']}, Fecha Inicio: {reserva['Fecha Inicio']}, Fecha Fin: {reserva['Fecha Fin']}")
     else:
         print("No hay reservas existentes.")
 
@@ -209,10 +217,10 @@ def generar_reportes() -> None:
 
         opcion = input("Seleccione una opcion: ")
         if opcion == "1":
-            # TODO consultar_hoteles()
+            consultar_hoteles()
             pass
         elif opcion == "2":
-            # TODO consultar_clientes()
+            consultar_clientes()
             pass
         elif opcion == "3":
             consultar_reservas()
@@ -222,7 +230,7 @@ def generar_reportes() -> None:
             buscar_reserva_x_hotel()
         elif opcion == "6":
             # TODO consultar_habitaciones_disponibles()
-            pass
+            print("Funcionalidad en desarrollo.. :D")
         elif opcion == "0":
             break
         else:
