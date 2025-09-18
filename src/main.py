@@ -62,9 +62,9 @@ def validar_fecha(fecha: str) -> bool:
         # Un año es bisiesto si es divisible por 4, pero no por 100, a menos que sea divisible por 400
         es_bisiesto = (anio % 4 == 0 and (anio % 100 != 0 or anio % 400 == 0))
         
-        if es_bisiesto and dia > 29:
+        if es_bisiesto and dia > 29: # Si es bisiesto, febrero tiene 29 dias
             return False
-        if not es_bisiesto and dia > 28:
+        if not es_bisiesto and dia > 28: # Si no es bisiesto, febrero tiene 28 dias
             return False
     
     elif mes in [4, 6, 9, 11] and dia > 30: # Abril, Junio, Septiembre y Noviembre tienen 30 dias
