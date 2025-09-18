@@ -73,6 +73,50 @@ def validar_fecha(fecha: str) -> bool:
         return False
     return True
 
+def gestionar_hoteles():
+    while True:
+        print("\n--- Gestión de Hoteles ---")
+        print("1. Agregar hotel")
+        print("2. Consultar hoteles")
+        print("3. Eliminar hotel")
+        print("4. Salir al menu principal")
+
+        opcion = int(input("Ingrese la opcion que quiere llevar a cabo: "))
+        if opcion == 1:
+            agregar_hotel()
+        elif opcion == 2:
+            consultar_hotel()
+        elif opcion == 3:
+            eliminar_hotel()
+        elif opcion == 4:
+            break
+        else:
+            print("Valor invalido")
+
+
+
+def agregar_hotel():
+    hotel = input("Ingrese el nombre del hotel: ")
+    localidad = input("Ingrese la ciudad donde se encuentra el hotel: ")
+    habitaciones = int(input("Ingrese la cantidad de habitaciones que tiene el hotel: "))
+    id_hotel = len(hoteles) + 1
+    hoteles.append({"ID":id_hotel,"Nombre":hotel,"Ubicacion":localidad,"Cantidad de Habitaciones":habitaciones})
+    print("Hotel agregado correctamente")
+    
+def consultar_hotel():
+    for hotel in hoteles:
+        if len(hotel) > 0:
+            print(hotel)
+        else:
+            print("No hay hoteles registrados")
+
+def eliminar_hotel():
+    borrar = input("Ingrese el hotel a eliminar: ")
+    for hotel in hoteles:
+        if borrar == hotel["Nombre"]:
+            hoteles.remove(hotel)
+            print("Hotel eliminado exitosamente")
+
 def gestionar_clientes():
      while True:
          print("\n--- Gestión de Clientes ---")
