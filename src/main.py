@@ -1,6 +1,6 @@
 import re
 
-def menu():
+def menu() -> None:
     # Muestra las opciones del menú principal
     print("1. Gestion de Hoteles")
     print("2. Gestion de Clientes")
@@ -73,76 +73,69 @@ def validar_fecha(fecha: str) -> bool:
         return False
     return True
 
-def gestionar_hoteles():
+def gestionar_hoteles() -> None:
     while True:
         print("\n--- Gestión de Hoteles ---")
         print("1. Agregar hotel")
         print("2. Consultar hoteles")
         print("3. Eliminar hotel")
-        print("4. Salir al menu principal")
+        print("0. Salir al menu principal")
 
         opcion = int(input("Ingrese la opcion que quiere llevar a cabo: "))
         if opcion == 1:
             agregar_hotel()
         elif opcion == 2:
-            consultar_hotel()
+            consultar_hoteles()
         elif opcion == 3:
             eliminar_hotel()
-        elif opcion == 4:
+        elif opcion == 0:
             break
         else:
             print("Valor invalido")
 
-
-
-def agregar_hotel():
+def agregar_hotel() -> None:
     hotel = input("Ingrese el nombre del hotel: ")
     localidad = input("Ingrese la ciudad donde se encuentra el hotel: ")
     habitaciones = int(input("Ingrese la cantidad de habitaciones que tiene el hotel: "))
     id_hotel = len(hoteles) + 1
     hoteles.append({"ID":id_hotel,"Nombre":hotel,"Ubicacion":localidad,"Cantidad de Habitaciones":habitaciones})
     print("Hotel agregado correctamente")
-    
-def consultar_hotel():
-    for hotel in hoteles:
-        if len(hotel) > 0:
-            print(hotel)
-        else:
-            print("No hay hoteles registrados")
 
-def eliminar_hotel():
+def consultar_hoteles() -> None:
+    if len(hoteles) > 0:
+        for hotel in hoteles:
+            print(hotel)
+    else:
+        print("No hay hoteles registrados")
+
+def eliminar_hotel() -> None:
     borrar = input("Ingrese el hotel a eliminar: ")
     for hotel in hoteles:
         if borrar == hotel["Nombre"]:
             hoteles.remove(hotel)
             print("Hotel eliminado exitosamente")
 
-def consultar_hoteles():
-    # TODO: Implementar la funcionalidad para consultar hoteles
-    print("Funcionalidad para consultar hoteles (pendiente de implementar)")
-
-def gestionar_clientes():
+def gestionar_clientes() -> None:
      while True:
          print("\n--- Gestión de Clientes ---")
          print("1. Agregar Cliente")
          print("2. Consultar cliente")
          print("3. Eliminar cliente")
-         print("4. Volver al menu principal")
+         print("0. Volver al menu principal")
 
          opcion = int(input("Seleccione una opcion: "))
          if opcion == 1:
             agregar_cliente()
          elif opcion == 2:
-            consultar_cliente()
+            consultar_clientes()
          elif opcion == 3:
             eliminar_cliente()
-         elif opcion == 4:
+         elif opcion == 0:
             break
          else:
             print("Opcion invalida")
 
-
-def agregar_cliente():
+def agregar_cliente() -> None:
    nombre = input("Ingrese el nombre del cliente: ")
    dni = int(input("Ingrese el DNI del cliente sin puntos ni espacios: "))
    telefono = int(input("Ingrese el numero de telefono del cliente sin signos ni guiones: "))
@@ -150,28 +143,21 @@ def agregar_cliente():
    clientes.append({"ID":id_cliente,"Nombre":nombre,"DNI":dni,"Telefono":telefono})
    print("Cliente agregado correctamente")
 
-
-def consultar_cliente():
-    for cliente in clientes:
-        if len(clientes) > 0:
+def consultar_clientes() -> None:
+    if len(clientes) > 0:
+        for cliente in clientes:
             print(cliente)
-        else:
-            print("No hay clientes registrados")
+    else:
+        print("No hay clientes registrados")
 
-
-def eliminar_cliente():
+def eliminar_cliente() -> None:
    borrar = input("Ingrese el cliente que desea eliminar: ")
    for cliente in clientes:
       if borrar == cliente["Nombre"]:
          clientes.remove(cliente)
          print("Cliente eliminado correctamente")
 
-
-def consultar_clientes():
-    # TODO: Implementar la funcionalidad para consultar clientes
-    print("Funcionalidad para consultar clientes (pendiente de implementar)")
-
-def gestionar_reservas():
+def gestionar_reservas() -> None:
     """Funcionalidad para gestionar reservas
 
     Al ser invocada, esta funcion permite al usuario ver las opciones
@@ -197,7 +183,7 @@ def gestionar_reservas():
          else:
             print("Opcion invalida")
 
-def agregar_reserva():
+def agregar_reserva() -> None:
     """Funcionalidad para agregar reservas
 
     Al ser invocada, esta funcion permite al usuario ingresar los datos
@@ -233,7 +219,7 @@ def agregar_reserva():
 
     print("Reserva agregada correctamente")
 
-def consultar_reservas():
+def consultar_reservas() -> None:
     """Funcionalidad para buscar las reservas existentes
 
     Al ser invocada se muestra por pantalla la lista de reservas existentes
@@ -259,7 +245,7 @@ def consultar_reservas():
     else:
         print("No hay reservas existentes.")
 
-def eliminar_reserva():
+def eliminar_reserva() -> None:
     """Funcionalidad para eliminar reservas de un cliente
 
     Al ser invocada, esta funcion permite al usuario ingresar el id de una reserva
@@ -318,7 +304,7 @@ def generar_reportes() -> None:
         else:
             print("Opcion invalida")
 
-def buscar_reserva_x_cliente(): # Esta funcion fue renombrada, se usara mas adelante en la seccion de reportes. Actualmente no se invoca en ningun lado
+def buscar_reserva_x_cliente() -> None: # Esta funcion fue renombrada, se usara mas adelante en la seccion de reportes. Actualmente no se invoca en ningun lado
     """Funcionalidad para buscar las reservas de un cliente
 
     Al ser invocada, esta funcion permite al usuario ingresar el nombre
@@ -372,7 +358,7 @@ def buscar_reserva_x_hotel() -> None:
         else: # En caso de no haber reservas, lo informamos igualmente
             print("No se encontraron reservas para ese hotel")
 
-def main():
+def main() -> None:
     # Función principal que inicia la aplicación
     print("Bienvenido a SRG - Sistema de Registro de Hoteleria")
     
