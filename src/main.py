@@ -1,12 +1,22 @@
 import re
+import os # Usamos OS para limpiar la pantalla
+
+def limpiar_pantalla() -> None:
+    """Funcion para limpiar la pantalla de la consola
+    """
+    os.system("cls" if os.name == "nt" else "clear") # Si el sistema operativo es Windows, usa "cls", sino usa "clear"
 
 def menu() -> None:
-    # Muestra las opciones del menú principal
-    print("1. Gestion de Hoteles")
-    print("2. Gestion de Clientes")
-    print("3. Gestion de Reservas")
+    limpiar_pantalla()
+    print("="*40)
+    print(" SRG - Sistema de Registro de Hotelería ".center(40, " "))
+    print("="*40)
+    print("1. Gestión de Hoteles")
+    print("2. Gestión de Clientes")
+    print("3. Gestión de Reservas")
     print("4. Gestionar Reportes")
     print("0. Salir")
+    print("="*40)
 
 def validar_cliente(nombre_cliente: str) -> int:
     """Funcion para validar si un cliente existe
@@ -75,25 +85,37 @@ def validar_fecha(fecha: str) -> bool:
 
 def gestionar_hoteles() -> None:
     while True:
-        print("\n--- Gestión de Hoteles ---")
+        limpiar_pantalla()
+        print("="*40)
+        print("      --- Gestión de Hoteles ---      ".center(40, " "))
+        print("="*40)
         print("1. Agregar hotel")
         print("2. Consultar hoteles")
         print("3. Eliminar hotel")
-        print("0. Salir al menu principal")
+        print("0. Volver al menú principal")
+        print("="*40)
 
-        opcion = int(input("Ingrese la opcion que quiere llevar a cabo: "))
+        opcion = int(input("Ingrese la opción que quiere llevar a cabo: "))
         if opcion == 1:
+            limpiar_pantalla()
             agregar_hotel()
+            input("\nPresione Enter para continuar...")
         elif opcion == 2:
+            limpiar_pantalla()
             consultar_hoteles()
+            input("\nPresione Enter para continuar...")
         elif opcion == 3:
+            limpiar_pantalla()
             eliminar_hotel()
+            input("\nPresione Enter para continuar...")
         elif opcion == 0:
             break
         else:
-            print("Valor invalido")
+            print("Valor inválido")
+            input("\nPresione Enter para continuar...")
 
 def agregar_hotel() -> None:
+    print("--- Agregar Hotel ---")
     hotel = input("Ingrese el nombre del hotel: ")
     localidad = input("Ingrese la ciudad donde se encuentra el hotel: ")
     habitaciones = int(input("Ingrese la cantidad de habitaciones que tiene el hotel: "))
@@ -102,60 +124,80 @@ def agregar_hotel() -> None:
     print("Hotel agregado correctamente")
 
 def consultar_hoteles() -> None:
+    print("--- Hoteles Registrados ---")
     if len(hoteles) > 0:
         for hotel in hoteles:
-            print(hotel)
+            print(f"ID: {hotel['ID']} | Nombre: {hotel['Nombre']} | Ubicación: {hotel['Ubicacion']} | Habitaciones: {hotel['Cantidad de Habitaciones']}")
     else:
         print("No hay hoteles registrados")
 
 def eliminar_hotel() -> None:
+    print("--- Eliminar Hotel ---")
     borrar = input("Ingrese el hotel a eliminar: ")
     for hotel in hoteles:
         if borrar == hotel["Nombre"]:
             hoteles.remove(hotel)
             print("Hotel eliminado exitosamente")
+            return
+    print("No se encontró el hotel indicado.")
 
 def gestionar_clientes() -> None:
      while True:
-         print("\n--- Gestión de Clientes ---")
+         limpiar_pantalla()
+         print("="*40)
+         print("      --- Gestión de Clientes ---     ".center(40, " "))
+         print("="*40)
          print("1. Agregar Cliente")
          print("2. Consultar cliente")
          print("3. Eliminar cliente")
-         print("0. Volver al menu principal")
+         print("0. Volver al menú principal")
+         print("="*40)
 
-         opcion = int(input("Seleccione una opcion: "))
+         opcion = int(input("Seleccione una opción: "))
          if opcion == 1:
+            limpiar_pantalla()
             agregar_cliente()
+            input("\nPresione Enter para continuar...")
          elif opcion == 2:
+            limpiar_pantalla()
             consultar_clientes()
+            input("\nPresione Enter para continuar...")
          elif opcion == 3:
+            limpiar_pantalla()
             eliminar_cliente()
+            input("\nPresione Enter para continuar...")
          elif opcion == 0:
             break
          else:
-            print("Opcion invalida")
+            print("Opción inválida")
+            input("\nPresione Enter para continuar...")
 
 def agregar_cliente() -> None:
+   print("--- Agregar Cliente ---")
    nombre = input("Ingrese el nombre del cliente: ")
    dni = int(input("Ingrese el DNI del cliente sin puntos ni espacios: "))
-   telefono = int(input("Ingrese el numero de telefono del cliente sin signos ni guiones: "))
+   telefono = int(input("Ingrese el número de teléfono del cliente sin signos ni guiones: "))
    id_cliente = len(clientes) + 1
    clientes.append({"ID":id_cliente,"Nombre":nombre,"DNI":dni,"Telefono":telefono})
    print("Cliente agregado correctamente")
 
 def consultar_clientes() -> None:
+    print("--- Clientes Registrados ---")
     if len(clientes) > 0:
         for cliente in clientes:
-            print(cliente)
+            print(f"ID: {cliente['ID']} | Nombre: {cliente['Nombre']} | DNI: {cliente['DNI']} | Teléfono: {cliente['Telefono']}")
     else:
         print("No hay clientes registrados")
 
 def eliminar_cliente() -> None:
+   print("--- Eliminar Cliente ---")
    borrar = input("Ingrese el cliente que desea eliminar: ")
    for cliente in clientes:
       if borrar == cliente["Nombre"]:
          clientes.remove(cliente)
          print("Cliente eliminado correctamente")
+         return
+   print("No se encontró el cliente indicado.")
 
 def gestionar_reservas() -> None:
     """Funcionalidad para gestionar reservas
@@ -165,23 +207,34 @@ def gestionar_reservas() -> None:
     """
 
     while True:
-         print("\n--- Gestión de Reservas ---")
+         limpiar_pantalla()
+         print("="*40)
+         print("     --- Gestión de Reservas ---      ".center(40, " "))
+         print("="*40)
          print("1. Agregar Reserva")
          print("2. Consultar Reservas")
          print("3. Eliminar Reserva")
-         print("0. Volver al menu principal")
+         print("0. Volver al menú principal")
+         print("="*40)
 
-         opcion = input("Seleccione una opcion: ")
+         opcion = input("Seleccione una opción: ")
          if opcion == "1":
+            limpiar_pantalla()
             agregar_reserva()
+            input("\nPresione Enter para continuar...")
          elif opcion == "2":
+            limpiar_pantalla()
             consultar_reservas()
+            input("\nPresione Enter para continuar...")
          elif opcion == "3":
+            limpiar_pantalla()
             eliminar_reserva()
+            input("\nPresione Enter para continuar...")
          elif opcion == "0":
             break
          else:
-            print("Opcion invalida")
+            print("Opción inválida")
+            input("\nPresione Enter para continuar...")
 
 def agregar_reserva() -> None:
     """Funcionalidad para agregar reservas
@@ -189,28 +242,29 @@ def agregar_reserva() -> None:
     Al ser invocada, esta funcion permite al usuario ingresar los datos
     para crear una nueva reserva.
     """
+    print("--- Agregar Reserva ---")
     cliente = validar_cliente(input("Ingrese el nombre del cliente: "))
     if cliente == 0:
-        print("No se encontro un cliente con ese nombre. Primero debe agregar el cliente.")
+        print("No se encontró un cliente con ese nombre. Primero debe agregar el cliente.")
         return # Usamos un return para salir de la funcion
     
     hotel = validar_hotel(input("Ingrese el nombre del hotel: "))
     if hotel == 0:
-        print("No se encontro un hotel con ese nombre. Primero debe agregar el hotel.")
+        print("No se encontró un hotel con ese nombre. Primero debe agregar el hotel.")
         return # Usamos un return para salir de la funcion
 
     # TODO validar que la habitacion exista en el hotel anteriormente indicado
-    numero_habitacion = input("Ingrese el numero de habitacion: ")
+    numero_habitacion = input("Ingrese el número de habitación: ")
 
     # TODO validar que la habitacion no este reservada en las fechas indicadas
     fecha_entrada = input("Ingrese la fecha de entrada (DD/MM/AAAA): ")
     while not validar_fecha(fecha_entrada): # Validamos que la fecha tenga el formato correcto invocando la funcion validar_fecha
-        print("Fecha invalida. Intente de nuevo.")
+        print("Fecha inválida. Intente de nuevo.")
         fecha_entrada = input("Ingrese la fecha de entrada (DD/MM/AAAA): ")
 
     fecha_salida = input("Ingrese la fecha de salida (DD/MM/AAAA): ")
     while not validar_fecha(fecha_salida): # Validamos que la fecha tenga el formato correcto invocando la funcion validar_fecha
-        print("Fecha invalida. Intente de nuevo.")
+        print("Fecha inválida. Intente de nuevo.")
         fecha_salida = input("Ingrese la fecha de salida (DD/MM/AAAA): ")
 
     # Agregamos la nueva reserva a la lista de reservas si todo fue correcto
@@ -224,8 +278,8 @@ def consultar_reservas() -> None:
 
     Al ser invocada se muestra por pantalla la lista de reservas existentes
     """
+    print("--- Reservas Existentes ---")
     if reservas: # Si existen reservas, se muestran por pantalla
-        print("Reservas existentes:")
         for reserva in reservas:
             # Buscar el nombre del cliente por ID
             nombre_cliente = "Desconocido"
@@ -241,7 +295,7 @@ def consultar_reservas() -> None:
                     nombre_hotel = hotel["Nombre"]
                     break
 
-            print(f"Nro Reserva: {reserva['ID']}, Cliente: {nombre_cliente} ({reserva['ID_cliente']}), Hotel: {nombre_hotel} ({reserva['ID_hotel']}), Habitación: {reserva['Numero Habitacion']}, Fecha Inicio: {reserva['Fecha Inicio']}, Fecha Fin: {reserva['Fecha Fin']}")
+            print(f"Nro Reserva: {reserva['ID']} | Cliente: {nombre_cliente} ({reserva['ID_cliente']}) | Hotel: {nombre_hotel} ({reserva['ID_hotel']}) | Habitación: {reserva['Numero Habitacion']} | Fecha Inicio: {reserva['Fecha Inicio']} | Fecha Fin: {reserva['Fecha Fin']}")
     else:
         print("No hay reservas existentes.")
 
@@ -251,6 +305,7 @@ def eliminar_reserva() -> None:
     Al ser invocada, esta funcion permite al usuario ingresar el id de una reserva
     para eliminar la misma.
     """
+    print("--- Eliminar Reserva ---")
     confirmacion = False # Esta variable almacena la confirmacion del usuario para eliminar la reserva, por defecto False
 
     # Solicitamos el ID de la reserva a eliminar
@@ -259,13 +314,12 @@ def eliminar_reserva() -> None:
     # Recorremos reservas buscand una reserva con el ID indicado
     for reserva in reservas: 
         if id_reserva == reserva["ID"]: # Si se encuentra la reserva, se pide confirmacion al usuario para eliminarla
-            confirmacion = input(f"Esta seguro que desea eliminar la reserva {reserva}? (s/n): ")
+            confirmacion = input(f"¿Está seguro que desea eliminar la reserva {reserva}? (s/n): ")
             if confirmacion.lower() == "s": # Para evitar problemas convertimos la respuesta a minusculas, si es "s" se elimina la reserva
                 reservas.remove(reserva)
                 print("Reserva eliminada correctamente.")
-            break
-    else:
-        print("No se encontro una reserva con ese ID.")
+            return
+    print("No se encontró una reserva con ese ID.")
 
 def generar_reportes() -> None:
     """Funcionalidad para generar reportes
@@ -274,35 +328,49 @@ def generar_reportes() -> None:
     para generar reportes.
     """
     while True:
-        print("\n--- Generacion de Reportes ---")
+        limpiar_pantalla()
+        print("="*40)
+        print("   --- Generación de Reportes ---     ".center(40, " "))
+        print("="*40)
         print("1. Consultar hoteles")
         print("2. Consultar clientes")
         print("3. Consultar reservas")
         print("4. Consultar reservas por cliente")
         print("5. Consultar reservas por hotel")
         print("6. Consultar habitaciones disponibles en un hotel")
-        print("0. Volver al menu principal")
+        print("0. Volver al menú principal")
+        print("="*40)
 
-        opcion = input("Seleccione una opcion: ")
+        opcion = input("Seleccione una opción: ")
         if opcion == "1":
+            limpiar_pantalla()
             consultar_hoteles()
-            pass
+            input("\nPresione Enter para continuar...")
         elif opcion == "2":
+            limpiar_pantalla()
             consultar_clientes()
-            pass
+            input("\nPresione Enter para continuar...")
         elif opcion == "3":
+            limpiar_pantalla()
             consultar_reservas()
+            input("\nPresione Enter para continuar...")
         elif opcion == "4":
+            limpiar_pantalla()
             buscar_reserva_x_cliente()
+            input("\nPresione Enter para continuar...")
         elif opcion == "5":
+            limpiar_pantalla()
             buscar_reserva_x_hotel()
+            input("\nPresione Enter para continuar...")
         elif opcion == "6":
-            # TODO consultar_habitaciones_disponibles()
+            limpiar_pantalla()
             print("Funcionalidad en desarrollo.. :D")
+            input("\nPresione Enter para continuar...")
         elif opcion == "0":
             break
         else:
-            print("Opcion invalida")
+            print("Opción inválida")
+            input("\nPresione Enter para continuar...")
 
 def buscar_reserva_x_cliente() -> None: # Esta funcion fue renombrada, se usara mas adelante en la seccion de reportes. Actualmente no se invoca en ningun lado
     """Funcionalidad para buscar las reservas de un cliente
@@ -310,6 +378,7 @@ def buscar_reserva_x_cliente() -> None: # Esta funcion fue renombrada, se usara 
     Al ser invocada, esta funcion permite al usuario ingresar el nombre
     de un cliente para buscar reservas a su nombre.
     """
+    print("--- Buscar Reservas por Cliente ---")
     reservas_cliente = [] # Lista que almacenara las reservas del cliente
 
     # Solicitamos el nombre del cliente
@@ -317,7 +386,7 @@ def buscar_reserva_x_cliente() -> None: # Esta funcion fue renombrada, se usara 
     ID_cliente = validar_cliente(nombre_cliente)
 
     if ID_cliente == 0: # Si no encontramos al cliente, informamos por pantalla
-        print("No se encontro un cliente con ese nombre")
+        print("No se encontró un cliente con ese nombre")
     else: # Si encontramos al cliente, buscamos por reservas con su ID
         for reserva in reservas:
             if ID_cliente == reserva["ID_cliente"]:
@@ -337,6 +406,7 @@ def buscar_reserva_x_hotel() -> None:
     Al ser invocada, esta funcion permite al usuario ingresar el nombre
     de un hotel para buscar reservas asociadas a ese hotel.
     """
+    print("--- Buscar Reservas por Hotel ---")
     reservas_hotel = [] # Lista que almacenara las reservas del hotel
 
     # Solicitamos el nombre del hotel
@@ -344,7 +414,7 @@ def buscar_reserva_x_hotel() -> None:
     ID_hotel = validar_hotel(nombre_hotel)
 
     if ID_hotel == 0: # Si no encontramos al hotel, informamos por pantalla
-        print("No se encontro un hotel con ese nombre")
+        print("No se encontró un hotel con ese nombre")
     else: # Si encontramos al hotel, buscamos por reservas con su ID
         for reserva in reservas:
             if ID_hotel == reserva["ID_hotel"]:
@@ -360,10 +430,11 @@ def buscar_reserva_x_hotel() -> None:
 
 def main() -> None:
     # Función principal que inicia la aplicación
-    print("Bienvenido a SRG - Sistema de Registro de Hoteleria")
+    limpiar_pantalla()
+    print("Bienvenido a SRG - Sistema de Registro de Hotelería")
     
     menu()
-    opcion = input("Seleccione una opcion: ")
+    opcion = input("Seleccione una opción: ")
 
     while True:
         if opcion == '1':
@@ -378,10 +449,11 @@ def main() -> None:
             print("Saliendo del sistema...")
             break
         else:
-            print("Opcion no valida. Intente de nuevo.")
+            print("Opción no válida. Intente de nuevo.")
+            input("\nPresione Enter para continuar...")
         
         menu()
-        opcion = input("Seleccione una opcion: ")
+        opcion = input("Seleccione una opción: ")
 
 # Datos de ejemplo para pruebas
 hoteles = [
