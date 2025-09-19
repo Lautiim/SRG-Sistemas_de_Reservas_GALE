@@ -1,0 +1,8 @@
+- Verificar si el cliente ya existe antes de agregarlo.
+- Al agregar una reserva, si el cliente no existe, preguntar si se desea crearlo.
+- Guardar las fechas en formato ISO8601.
+- Utilizar la librería datetime.
+- Exportar los datos en archivos .csv.
+- Usar las librerías colorize y tabulate para mejorar la presentación del texto.
+- Optimizar la búsqueda al eliminar registros.
+- Modularizar las funciones del programa.
