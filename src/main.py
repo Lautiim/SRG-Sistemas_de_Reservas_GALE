@@ -117,6 +117,10 @@ def eliminar_hotel():
             hoteles.remove(hotel)
             print("Hotel eliminado exitosamente")
 
+def consultar_hoteles():
+    # TODO: Implementar la funcionalidad para consultar hoteles
+    print("Funcionalidad para consultar hoteles (pendiente de implementar)")
+
 def gestionar_clientes():
      while True:
          print("\n--- Gestión de Clientes ---")
@@ -162,6 +166,10 @@ def eliminar_cliente():
          clientes.remove(cliente)
          print("Cliente eliminado correctamente")
 
+
+def consultar_clientes():
+    # TODO: Implementar la funcionalidad para consultar clientes
+    print("Funcionalidad para consultar clientes (pendiente de implementar)")
 
 def gestionar_reservas():
     """Funcionalidad para gestionar reservas
@@ -225,6 +233,91 @@ def agregar_reserva():
 
     print("Reserva agregada correctamente")
 
+def consultar_reservas():
+    """Funcionalidad para buscar las reservas existentes
+
+    Al ser invocada se muestra por pantalla la lista de reservas existentes
+    """
+    if reservas: # Si existen reservas, se muestran por pantalla
+        print("Reservas existentes:")
+        for reserva in reservas:
+            # Buscar el nombre del cliente por ID
+            nombre_cliente = "Desconocido"
+            for cliente in clientes:
+                if cliente["ID"] == reserva["ID_cliente"]:
+                    nombre_cliente = cliente["Nombre"]
+                    break
+
+            # Buscar el nombre del hotel por ID
+            nombre_hotel = "Desconocido"
+            for hotel in hoteles:
+                if hotel["ID"] == reserva["ID_hotel"]:
+                    nombre_hotel = hotel["Nombre"]
+                    break
+
+            print(f"Nro Reserva: {reserva['ID']}, Cliente: {nombre_cliente} ({reserva['ID_cliente']}), Hotel: {nombre_hotel} ({reserva['ID_hotel']}), Habitación: {reserva['Numero Habitacion']}, Fecha Inicio: {reserva['Fecha Inicio']}, Fecha Fin: {reserva['Fecha Fin']}")
+    else:
+        print("No hay reservas existentes.")
+
+def eliminar_reserva():
+    """Funcionalidad para eliminar reservas de un cliente
+
+    Al ser invocada, esta funcion permite al usuario ingresar el id de una reserva
+    para eliminar la misma.
+    """
+    confirmacion = False # Esta variable almacena la confirmacion del usuario para eliminar la reserva, por defecto False
+
+    # Solicitamos el ID de la reserva a eliminar
+    id_reserva = int(input("Ingrese el ID de la reserva que desea eliminar: "))
+
+    # Recorremos reservas buscand una reserva con el ID indicado
+    for reserva in reservas: 
+        if id_reserva == reserva["ID"]: # Si se encuentra la reserva, se pide confirmacion al usuario para eliminarla
+            confirmacion = input(f"Esta seguro que desea eliminar la reserva {reserva}? (s/n): ")
+            if confirmacion.lower() == "s": # Para evitar problemas convertimos la respuesta a minusculas, si es "s" se elimina la reserva
+                reservas.remove(reserva)
+                print("Reserva eliminada correctamente.")
+            break
+    else:
+        print("No se encontro una reserva con ese ID.")
+
+def generar_reportes() -> None:
+    """Funcionalidad para generar reportes
+    
+    Al ser invocada, esta funcion permite al usuario ver las opciones
+    para generar reportes.
+    """
+    while True:
+        print("\n--- Generacion de Reportes ---")
+        print("1. Consultar hoteles")
+        print("2. Consultar clientes")
+        print("3. Consultar reservas")
+        print("4. Consultar reservas por cliente")
+        print("5. Consultar reservas por hotel")
+        print("6. Consultar habitaciones disponibles en un hotel")
+        print("0. Volver al menu principal")
+
+        opcion = input("Seleccione una opcion: ")
+        if opcion == "1":
+            consultar_hoteles()
+            pass
+        elif opcion == "2":
+            consultar_clientes()
+            pass
+        elif opcion == "3":
+            consultar_reservas()
+        elif opcion == "4":
+            buscar_reserva_x_cliente()
+        elif opcion == "5":
+            buscar_reserva_x_hotel()
+        elif opcion == "6":
+            # TODO consultar_habitaciones_disponibles()
+            print("Funcionalidad en desarrollo.. :D")
+        elif opcion == "0":
+            break
+        else:
+            print("Opcion invalida")
+
 def buscar_reserva_x_cliente(): # Esta funcion fue renombrada, se usara mas adelante en la seccion de reportes. Actualmente no se invoca en ningun lado
     """Funcionalidad para buscar las reservas de un cliente
 
@@ -252,57 +345,32 @@ def buscar_reserva_x_cliente(): # Esta funcion fue renombrada, se usara mas adel
         else: # En caso de no haber reservas, lo informamos igualmente
             print("No se encontraron reservas para ese cliente")
 
-def consultar_reservas():
-    """Funcionalidad para buscar las reservas existentes
+def buscar_reserva_x_hotel() -> None:
+    """Funcionalidad para buscar las reservas de un hotel
 
-    Al ser invocada se muestra por pantalla la lista de reservas existentes
+    Al ser invocada, esta funcion permite al usuario ingresar el nombre
+    de un hotel para buscar reservas asociadas a ese hotel.
     """
-    if reservas: # Si existen reservas, se muestran por pantalla
-        print("Reservas existentes:")
+    reservas_hotel = [] # Lista que almacenara las reservas del hotel
+
+    # Solicitamos el nombre del hotel
+    nombre_hotel = input("Ingrese el nombre del hotel para buscar sus reservas: ")
+    ID_hotel = validar_hotel(nombre_hotel)
+
+    if ID_hotel == 0: # Si no encontramos al hotel, informamos por pantalla
+        print("No se encontro un hotel con ese nombre")
+    else: # Si encontramos al hotel, buscamos por reservas con su ID
         for reserva in reservas:
-            # Buscar el nombre del cliente por ID
-            nombre_cliente = "Desconocido"
-            for cliente in clientes:
-                if cliente["ID"] == reserva["ID_cliente"]:
-                    nombre_cliente = cliente["Nombre"]
-                    break
+            if ID_hotel == reserva["ID_hotel"]:
+                reservas_hotel.append(reserva) # Si encontramos una reserva que coincida, la agregamos a la lista
 
-            # Buscar el nombre del hotel por ID
-            nombre_hotel = "Desconocido"
-            for hotel in hoteles:
-                if hotel["ID"] == reserva["ID_hotel"]:
-                    nombre_hotel = hotel["Nombre"]
-                    break
-
-            print(f"Cliente: {nombre_cliente} ({reserva['ID_cliente']}), Hotel: {nombre_hotel} ({reserva['ID_hotel']}), Habitación: {reserva['Numero Habitacion']}, Fecha Inicio: {reserva['Fecha Inicio']}, Fecha Fin: {reserva['Fecha Fin']}")
-    else:
-        print("No hay reservas existentes.")
-
-def eliminar_reserva():
-    """Funcionalidad para eliminar reservas de un cliente
-
-    Al ser invocada, esta funcion permite al usuario ingresar el id de una reserva
-    para eliminar la misma.
-    """
-    confirmacion = False # Esta variable almacena la confirmacion del usuario para eliminar la reserva, por defecto False
-
-    # Solicitamos el ID de la reserva a eliminar
-    id_reserva = int(input("Ingrese el ID de la reserva que desea eliminar: "))
-
-    # Recorremos reservas buscand una reserva con el ID indicado
-    for reserva in reservas: 
-        if id_reserva == reserva["ID"]: # Si se encuentra la reserva, se pide confirmacion al usuario para eliminarla
-            confirmacion = input(f"Esta seguro que desea eliminar la reserva {reserva}? (s/n): ")
-            if confirmacion.lower() == "s": # Para evitar problemas convertimos la respuesta a minusculas, si es "s" se elimina la reserva
-                reservas.remove(reserva)
-                print("Reserva eliminada correctamente.")
-            break
-    else:
-        print("No se encontro una reserva con ese ID.")
-
-def generar_reportes():
-    # TODO: Implementar la funcionalidad para generar reportes
-    print("Funcionalidad para generar reportes (pendiente de implementar)")
+        # Si hay reservas, las mostramos por pantalla
+        if reservas_hotel:
+            print(f"Reservas encontradas para {nombre_hotel}:")
+            for reserva in reservas_hotel:
+                print(reserva)
+        else: # En caso de no haber reservas, lo informamos igualmente
+            print("No se encontraron reservas para ese hotel")
 
 def main():
     # Función principal que inicia la aplicación
