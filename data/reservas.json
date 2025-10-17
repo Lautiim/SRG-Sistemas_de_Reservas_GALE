@@ -1,42 +1,42 @@
 [
-    {
-        "id": 1,
-        "id_cliente": 1,
-        "id_hotel": 1,
-        "numero_habitacion": 101,
-        "fecha_inicio": "2024-01-01",
-        "fecha_fin": "2024-01-05"
-    },
-    {
-        "id": 2,
-        "id_cliente": 2,
-        "id_hotel": 2,
-        "numero_habitacion": 202,
-        "fecha_inicio": "2024-01-10",
-        "fecha_fin": "2024-01-15"
-    },
-    {
-        "id": 3,
-        "id_cliente": 3,
-        "id_hotel": 1,
-        "numero_habitacion": 103,
-        "fecha_inicio": "2024-01-15",
-        "fecha_fin": "2024-01-20"
-    },
-    {
-        "id": 4,
-        "id_cliente": 1,
-        "id_hotel": 3,
-        "numero_habitacion": 304,
-        "fecha_inicio": "2024-02-22",
-        "fecha_fin": "2024-02-25"
-    },
-    {
-        "id": 5,
-        "id_cliente": 1,
-        "id_hotel": 4,
-        "numero_habitacion": 405,
-        "fecha_inicio": "2024-03-01",
-        "fecha_fin": "2024-03-10"
-    }
+  {
+    "id": 1,
+    "id_cliente": 1,
+    "id_hotel": 1,
+    "numero_habitacion": 101,
+    "fecha_inicio": "2024-01-01",
+    "fecha_fin": "2024-01-05"
+  },
+  {
+    "id": 2,
+    "id_cliente": 2,
+    "id_hotel": 2,
+    "numero_habitacion": 202,
+    "fecha_inicio": "2024-01-10",
+    "fecha_fin": "2024-01-15"
+  },
+  {
+    "id": 3,
+    "id_cliente": 3,
+    "id_hotel": 1,
+    "numero_habitacion": 103,
+    "fecha_inicio": "2024-01-15",
+    "fecha_fin": "2024-01-20"
+  },
+  {
+    "id": 4,
+    "id_cliente": 1,
+    "id_hotel": 3,
+    "numero_habitacion": 304,
+    "fecha_inicio": "2024-02-22",
+    "fecha_fin": "2024-02-25"
+  },
+  {
+    "id": 5,
+    "id_cliente": 1,
+    "id_hotel": 4,
+    "numero_habitacion": 405,
+    "fecha_inicio": "2024-03-01",
+    "fecha_fin": "2024-03-10"
+  }
 ]

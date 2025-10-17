@@ -6,14 +6,14 @@ def gestionar_clientes() -> None:
     """
     while True:
         limpiar_pantalla()
-        print("="*40)
+        print("=" * 40)
         print("      --- Gestión de Clientes ---     ".center(40, " "))
-        print("="*40)
+        print("=" * 40)
         print("1. Agregar Cliente")
         print("2. Consultar cliente")
         print("3. Eliminar cliente")
         print("0. Volver al menú principal")
-        print("="*40)
+        print("=" * 40)
 
         opcion = int(input("Seleccione una opción: "))
         if opcion == 1:
