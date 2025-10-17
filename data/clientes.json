@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "nombre": "Juan Perez",
+        "dni": "12345678",
+        "telefono": "1111-1111"
+    },
+    {
+        "id": 2,
+        "nombre": "Maria Rodriguez",
+        "dni": "87654321",
+        "telefono": "2222-2222"
+    },
+    {
+        "id": 3,
+        "nombre": "Carlos Gomez",
+        "dni": "45678912",
+        "telefono": "3333-3333"
+    },
+    {
+        "id": 4,
+        "nombre": "Laura Torres",
+        "dni": "98765432",
+        "telefono": "4444-4444"
+    }
+]
