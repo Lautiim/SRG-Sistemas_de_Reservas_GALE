@@ -455,5 +455,26 @@ def main() -> None:
         menu()
         opcion = input("Seleccione una opción: ")
 
+# Datos de ejemplo para pruebas
+hoteles = [
+    {"ID": 1, "Nombre": "Hotel Sol", "Ubicacion": "Ciudad", "Cantidad de Habitaciones": 20},
+    {"ID": 2, "Nombre": "Hotel Luna", "Ubicacion": "Playa", "Cantidad de Habitaciones": 30},
+    {"ID": 3, "Nombre": "Hotel Montaña", "Ubicacion": "Montaña", "Cantidad de Habitaciones": 15},
+    {"ID": 4, "Nombre": "Hotel Costa", "Ubicacion": "Costa", "Cantidad de Habitaciones": 25}
+]
+clientes = [
+    {"ID": 1, "Nombre": "Juan Perez", "DNI": "12345678", "Telefono": "1111-1111"},
+    {"ID": 2, "Nombre": "Maria Rodriguez", "DNI": "87654321", "Telefono": "2222-2222"},
+    {"ID": 3, "Nombre": "Carlos Gomez", "DNI": "45678912", "Telefono": "3333-3333"},
+    {"ID": 4, "Nombre": "Laura Torres", "DNI": "98765432", "Telefono": "4444-4444"}
+]
+reservas = [
+    {"ID": 1, "ID_cliente": 1, "ID_hotel": 1, "Numero Habitacion": 101, "Fecha Inicio": "01/01/2024", "Fecha Fin": "05/01/2024"},
+    {"ID": 2, "ID_cliente": 2, "ID_hotel": 2, "Numero Habitacion": 202, "Fecha Inicio": "10/01/2024", "Fecha Fin": "15/01/2024"},
+    {"ID": 3, "ID_cliente": 3, "ID_hotel": 1, "Numero Habitacion": 103, "Fecha Inicio": "15/01/2024", "Fecha Fin": "20/01/2024"},
+    {"ID": 4, "ID_cliente": 1, "ID_hotel": 3, "Numero Habitacion": 304, "Fecha Inicio": "22/02/2024", "Fecha Fin": "25/02/2024"},
+    {"ID": 5, "ID_cliente": 1, "ID_hotel": 4, "Numero Habitacion": 405, "Fecha Inicio": "01/03/2024", "Fecha Fin": "10/03/2024"}
+]
+
 if __name__ == "__main__":
     main()
