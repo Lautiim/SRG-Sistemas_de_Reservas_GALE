@@ -127,47 +127,9 @@ def gestionar_hoteles() -> None:
             print("Valor inválido")
             input("\nPresione Enter para continuar...")
 
-
-def agregar_hotel() -> None:
-    print("--- Agregar Hotel ---")
-    hotel = input("Ingrese el nombre del hotel: ")
-    localidad = input("Ingrese la ciudad donde se encuentra el hotel: ")
-    habitaciones = int(
-        input("Ingrese la cantidad de habitaciones que tiene el hotel: ")
-    )
-    id_hotel = len(hoteles) + 1
-    hoteles.append(
-        {
-            "ID": id_hotel,
-            "Nombre": hotel,
-            "Ubicacion": localidad,
-            "Cantidad de Habitaciones": habitaciones,
-        }
-    )
-    print("Hotel agregado correctamente")
-
-
-def consultar_hoteles() -> None:
-    print("--- Hoteles Registrados ---")
-    if len(hoteles) > 0:
-        for hotel in hoteles:
-            print(
-                f"ID: {hotel['ID']} | Nombre: {hotel['Nombre']} | Ubicación: {hotel['Ubicacion']} | Habitaciones: {hotel['Cantidad de Habitaciones']}"
-            )
-    else:
-        print("No hay hoteles registrados")
-
-
-def eliminar_hotel() -> None:
-    print("--- Eliminar Hotel ---")
-    borrar = input("Ingrese el hotel a eliminar: ")
-    for hotel in hoteles:
-        if borrar == hotel["Nombre"]:
-            hoteles.remove(hotel)
-            print("Hotel eliminado exitosamente")
-            return
-    print("No se encontró el hotel indicado.")
-
+# Agregar hoteles ya esta
+# def consultar_hoteles() ya esta
+    # def eliminar_hotel() -> None:
 
 def gestionar_clientes() -> None:
     while True:
