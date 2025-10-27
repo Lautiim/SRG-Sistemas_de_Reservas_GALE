@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "nombre": "Hotel Sol",
+    "ubicacion": "Ciudad",
+    "habitaciones": [
+      { "numero": 101, "capacidad": 2, "precio": 7500 },
+      { "numero": 102, "capacidad": 2, "precio": 7500 },
+      { "numero": 103, "capacidad": 4, "precio": 12000 }
+    ]
+  },
+  {
+    "id": 2,
+    "nombre": "Hotel Luna",
+    "ubicacion": "Playa",
+    "habitaciones": [
+      { "numero": 201, "capacidad": 2, "precio": 9000 },
+      { "numero": 202, "capacidad": 3, "precio": 11000 }
+    ]
+  },
+  {
+    "id": 3,
+    "nombre": "Hotel Montaña",
+    "ubicacion": "Montaña",
+    "habitaciones": [
+      { "numero": 301, "capacidad": 2, "precio": 8500 },
+      { "numero": 302, "capacidad": 2, "precio": 8500 },
+      { "numero": 303, "capacidad": 2, "precio": 8500 },
+      { "numero": 304, "capacidad": 5, "precio": 15000 }
+    ]
+  },
+  {
+    "id": 4,
+    "nombre": "Hotel Costa",
+    "ubicacion": "Costa",
+    "habitaciones": [
+      { "numero": 401, "capacidad": 2, "precio": 9500 },
+      { "numero": 405, "capacidad": 4, "precio": 14000 }
+    ]
+  }
+]
