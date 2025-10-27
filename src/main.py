@@ -2,11 +2,7 @@ import re
 import os  # Usamos OS para limpiar la pantalla
 
 
-def limpiar_pantalla() -> None:
-    """Funcion para limpiar la pantalla de la consola"""
-    os.system(
-        "cls" if os.name == "nt" else "clear"
-    )  # Si el sistema operativo es Windows, usa "cls", sino usa "clear"
+# Limpiar a pantalla esta en utils.py
 
 
 def menu() -> None:
@@ -38,98 +34,8 @@ def validar_cliente(nombre_cliente: str) -> int:
             return cliente["ID"]
     return 0
 
-
-def validar_hotel(nombre_hotel: str) -> int:
-    """Funcion para validar si un hotel existe
-
-    Pre: Recibe un string con el nombre del hotel que se debe buscar
-
-    Post: Retorna el ID del hotel si se encontro, o 0 si no se encontro
-
-    """
-    # Recorremos la lista de hoteles buscando un hotel con dicho nombre
-    for hotel in hoteles:
-        if (
-            hotel["Nombre"] == nombre_hotel
-        ):  # Si se encuentra el hotel, la funcion devuelve su ID
-            return hotel["ID"]
-    return 0
-
-
-def validar_fecha(fecha: str) -> bool:
-    """Funcion para validar que una fecha tenga el formato correcto
-
-    Pre: Recibe un string con la fecha a validar
-
-    Post: Retorna un booleano de valor True si la fecha es valida, o False si no lo es
-
-    Se realiza a partir de expresiones regulares, que se basan en las siguientes reglas:
-    El formato debe ser DD/MM/AAAA
-        Teniendo en cuenta que:
-        DD puede ser un numero del 01 al 31 -
-        MM puede ser un numero del 01 al 12 -
-        AAAA puede ser un numero del 1000 al 9999
-    """
-    # Definimos el patron que debe cumplir la fecha
-    patron = r"^(0[1-9]|[12]\d|3[01])/(0[1-9]|1[0-2])/[1-9]\d{3}$"
-    if not re.match(patron, fecha):
-        return False
-
-    # Validamos dias segun mes y año bisiesto
-    dia, mes, anio = map(int, fecha.split("/"))
-
-    if mes == 2:  # Febrero, puede variar si es bisiesto o no
-        # Un año es bisiesto si es divisible por 4, pero no por 100, a menos que sea divisible por 400
-        es_bisiesto = anio % 4 == 0 and (anio % 100 != 0 or anio % 400 == 0)
-
-        if es_bisiesto and dia > 29:  # Si es bisiesto, febrero tiene 29 dias
-            return False
-        if not es_bisiesto and dia > 28:  # Si no es bisiesto, febrero tiene 28 dias
-            return False
-
-    elif (
-        mes in [4, 6, 9, 11] and dia > 30
-    ):  # Abril, Junio, Septiembre y Noviembre tienen 30 dias
-        return False
-    elif dia > 31:  # Los demas meses tienen 31 dias
-        return False
-    return True
-
-
-def gestionar_hoteles() -> None:
-    while True:
-        limpiar_pantalla()
-        print("=" * 40)
-        print("      --- Gestión de Hoteles ---      ".center(40, " "))
-        print("=" * 40)
-        print("1. Agregar hotel")
-        print("2. Consultar hoteles")
-        print("3. Eliminar hotel")
-        print("0. Volver al menú principal")
-        print("=" * 40)
-
-        opcion = int(input("Ingrese la opción que quiere llevar a cabo: "))
-        if opcion == 1:
-            limpiar_pantalla()
-            agregar_hotel()
-            input("\nPresione Enter para continuar...")
-        elif opcion == 2:
-            limpiar_pantalla()
-            consultar_hoteles()
-            input("\nPresione Enter para continuar...")
-        elif opcion == 3:
-            limpiar_pantalla()
-            eliminar_hotel()
-            input("\nPresione Enter para continuar...")
-        elif opcion == 0:
-            break
-        else:
-            print("Valor inválido")
-            input("\nPresione Enter para continuar...")
-
-# Agregar hoteles ya esta
-# def consultar_hoteles() ya esta
-    # def eliminar_hotel() -> None:
+# Validar fechas paso a utils.py
+# Gestionar Hoteles paso a gestion_hoteles.py
 
 def gestionar_clientes() -> None:
     while True:
