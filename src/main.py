@@ -1,11 +1,13 @@
-import re
-import os  # Usamos OS para limpiar la pantalla
+# Importamos los módulos del sistema
+import datos
+import gestion_hoteles
+import gestion_clientes
+import gestion_reservas
+import reportes
+from utils import limpiar_pantalla
 
-
-# Limpiar a pantalla esta en utils.py
-
-
-def menu() -> None:
+def menu():
+    """Función que muestra el menú principal del sistema."""
     limpiar_pantalla()
     print("=" * 40)
     print(" SRG - Sistema de Registro de Hotelería ".center(40, " "))
@@ -13,43 +15,45 @@ def menu() -> None:
     print("1. Gestión de Hoteles")
     print("2. Gestión de Clientes")
     print("3. Gestión de Reservas")
-    print("4. Gestionar Reportes")
+    print("4. Generar Reportes")
     print("0. Salir")
     print("=" * 40)
 
-# Validar fechas paso a utils.py
-# Gestionar Hoteles paso a gestion_hoteles.py
-# Gestionar Clientes paso a gestion_clientes.py
-# Gestionar Reservas paso a gestion_reservas.py
-# Generar Reportes paso a reportes.py
+def main():
+    """Función principal que inicia y controla el flujo del sistema."""
+    # Se cargan los datos iniciales desde el módulo de datos.
+    hoteles, clientes, reservas = datos.cargar_datos()
 
-
-def main() -> None:
-    # Función principal que inicia la aplicación
-    limpiar_pantalla()
     print("Bienvenido a SRG - Sistema de Registro de Hotelería")
-
-    menu()
-    opcion = input("Seleccione una opción: ")
+    input("Presione Enter para comenzar...") # Pausa inicial
 
     while True:
+        menu() # Mostramos el menú
+        opcion = input("Seleccione una opción: ")
+
         if opcion == "1":
-            gestionar_hoteles()
+            # Llamamos a la función principal del módulo de hoteles,
+            # pasándole las listas de datos para que pueda usarlas y modificarlas.
+            gestion_hoteles.gestionar_hoteles(hoteles, clientes, reservas)
         elif opcion == "2":
-            gestionar_clientes()
+            # Hacemos lo mismo para el módulo de clientes.
+            gestion_clientes.gestionar_clientes(hoteles, clientes, reservas)
         elif opcion == "3":
-            gestionar_reservas()
+            # Y para el módulo de reservas.
+            gestion_reservas.gestionar_reservas(hoteles, clientes, reservas)
         elif opcion == "4":
-            generar_reportes()
+            # Y para el módulo de reportes.
+            reportes.generar_reportes(hoteles, clientes, reservas)
         elif opcion == "0":
-            print("Saliendo del sistema...")
-            break
+            limpiar_pantalla()
+            print("=" * 40)
+            print(" Gracias por usar SRG ".center(40, "="))
+            print(" Saliendo del sistema... ".center(40, " "))
+            print("=" * 40)
+            break # Salimos del bucle y terminamos el programa
         else:
             print("Opción no válida. Intente de nuevo.")
             input("\nPresione Enter para continuar...")
-
-        menu()
-        opcion = input("Seleccione una opción: ")
 
 if __name__ == "__main__":
     main()
