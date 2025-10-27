@@ -3,6 +3,17 @@ from utils import limpiar_pantalla
 from tabulate import tabulate
 import datos  # Importamos el módulo completo para acceder a guardar_datos
 
+def buscar_cliente_por_id(id_cliente: int, clientes: list) -> dict | None:
+    """Función para buscar un cliente por su ID.
+
+    Pre: Recibe un entero con el ID del cliente y una lista de clientes.
+
+    Post: Devuelve el diccionario del cliente si se encuentra, o None si no existe.
+    """
+    for cliente in clientes:  # Recorremos la lista de clientes
+        if cliente["id"] == id_cliente:
+            return cliente  # Devolvemos el cliente encontrado
+    return None  # Si no se encuentra, devolvemos None
 
 def cliente_existente(dni: str, clientes: list) -> bool:
     """Función para validar si un cliente con el DNI dado ya existe.

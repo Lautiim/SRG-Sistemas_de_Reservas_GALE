@@ -1,6 +1,17 @@
 from utils import limpiar_pantalla
 import datos  # Importamos el módulo completo para acceder a guardar_datos
 
+def buscar_hotel_por_id(id_hotel: int, hoteles: list) -> dict | None:
+    """Función para buscar un hotel por su ID.
+
+    Pre: Recibe el ID del hotel a buscar y la lista de hoteles.
+
+    Post: Retorna el diccionario del hotel si se encuentra, o None si no se encuentra.
+    """
+    for hotel in hoteles:  # Recorremos la lista de hoteles
+        if hotel["id"] == id_hotel:  # Si el ID del hotel coincide con el buscado
+            return hotel  # Retornamos el hotel encontrado
+    return None  # Si no se encuentra, retornamos None
 
 def agregar_hotel(hoteles, clientes, reservas) -> None:
     """Funcion para agregar un nuevo hotel a la lista de hoteles y guarda los cambios.
