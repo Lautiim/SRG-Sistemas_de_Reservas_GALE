@@ -5,6 +5,8 @@ from gestion_clientes import consultar_clientes, buscar_cliente_por_id
 from gestion_reservas import consultar_reservas
 from tabulate import tabulate
 from datos import cargar_datos
+import os 
+import csv
 
 
 def buscar_reserva_x_cliente(hoteles: list, clientes: list, reservas: list):
@@ -188,3 +190,27 @@ def generar_reportes(hoteles: list, clientes: list, reservas: list) -> None:
 if __name__ == "__main__":
     hoteles, clientes, reservas = cargar_datos()
     generar_reportes(hoteles, clientes, reservas)
+
+def exportar_clientes_csv(clientes: list, ruta_archivo: str) -> None:
+    """Función para exportar la lista de clientes a un archivo CSV.
+
+    Pre: Recibe la lista de clientes y la ruta del archivo CSV donde se guardarán los datos.
+
+    Post: Crea un archivo CSV con los datos de los clientes.
+    """
+
+def exportar_reservas_csv(reservas: list, ruta_archivo: str) -> None:
+    """Función para exportar la lista de reservas a un archivo CSV.
+
+    Pre: Recibe la lista de reservas y la ruta del archivo CSV donde se guardarán los datos.
+
+    Post: Crea un archivo CSV con los datos de las reservas.
+    """
+
+def exportar_hoteles_csv(hoteles: list, ruta_hoteles: str, ruta_habitaciones: str) -> None:
+    """Función para exportar la lista de hoteles a un archivo CSV.
+
+    Pre: Recibe la lista de hoteles y la ruta del archivo CSV donde se guardarán los datos.
+
+    Post: Crea un archivo CSV con los datos de los hoteles.
+    """
