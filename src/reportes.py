@@ -227,6 +227,24 @@ def exportar_reservas_csv(reservas: list, ruta_archivo: str) -> None:
 
     Post: Crea un archivo CSV con los datos de las reservas.
     """
+    if not reservas:
+        print("No hay reservas para exportar.")
+        return
+    #Creamos los encabezados que deseamos exportar en el csv
+    fieldnames = ['id', 'id_cliente', 'id_hotel', 'numero_habitacion', 'fecha_inicio', 'fecha_fin']
+
+    try:
+        with open(ruta_archivo, 'w', newline='', encoding='utf-8') as file:
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(reservas)
+
+        print(f"Archivo '{ruta_archivo}' creado con éxito.")
+
+    except IOError as e:
+        print(f"Error al escribir el archivo CSV: {e}")
+    except Exception as e:
+        print(f"Un error inesperado ocurrió: {e}")
 
 def exportar_hoteles_csv(hoteles: list, ruta_hoteles: str, ruta_habitaciones: str) -> None:
     """Función para exportar la lista de hoteles a un archivo CSV.
