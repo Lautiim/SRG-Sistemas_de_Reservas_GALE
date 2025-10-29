@@ -215,6 +215,10 @@ def exportar_clientes_csv(clientes: list, ruta_archivo: str) -> None:
 
         print(f"Archivo '{ruta_archivo}' creado con éxito.")
     
+    except IOError as e:
+        print(f"Error al escribir el archivo CSV: {e}")
+    except Exception as e:
+        print(f"Un error inesperado ocurrió: {e}")
     
 def exportar_reservas_csv(reservas: list, ruta_archivo: str) -> None:
     """Función para exportar la lista de reservas a un archivo CSV.
