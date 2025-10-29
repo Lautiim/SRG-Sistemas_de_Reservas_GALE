@@ -199,6 +199,14 @@ def exportar_clientes_csv(clientes: list, ruta_archivo: str) -> None:
     Post: Crea un archivo CSV con los datos de los clientes.
     """
 
+    # Si no existen clientes, no se crea el archivo
+    if not clientes:
+        print("No hay clientes para exportar.")
+        return
+    # Creamos el archivo CSV y escribimos las columnas que deseamos exportar
+    fieldnames = ['id', 'nombre', 'dni', 'telefono']
+   
+    
 def exportar_reservas_csv(reservas: list, ruta_archivo: str) -> None:
     """Función para exportar la lista de reservas a un archivo CSV.
 
