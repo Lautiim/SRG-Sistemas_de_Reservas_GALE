@@ -7,11 +7,11 @@ name = "srg-sistemas-reservas-gale"
 version = "0.1.0"
 description = "Sistema de reservas para hoteles desarrollado en Python como TPO de AyED1 en UADE."
 readme = "README.md"
-requires-python = ">=3.8" # Especificamos una versión mínima razonable de Python
-license = {text = "MIT License"} # Podés elegir otra si querés, MIT es común para proyectos abiertos
+requires-python = ">=3.8" # Versión mínima razonable de Python
+license = {text = "MIT License"}
 authors = [
   { name = "Axel Aguilar"},
-  { name = "Emanuel Grossi"}, # Asumo el apellido por el usuario de Trello
+  { name = "Emanuel Grossi"},
   { name = "Gianluca Chia"},
   { name = "Lautaro Salto"}
 ]
