@@ -205,7 +205,16 @@ def exportar_clientes_csv(clientes: list, ruta_archivo: str) -> None:
         return
     # Creamos el archivo CSV y escribimos las columnas que deseamos exportar
     fieldnames = ['id', 'nombre', 'dni', 'telefono']
-   
+    try:
+        # Usamos 'w' (write) y newline='' para evitar saltos de línea extra
+        with open(ruta_archivo, 'w', newline='', encoding='utf-8') as file:
+            # Creamos el escritor de diccionarios
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            writer.writeheader()      # Escribe la fila de encabezado (id, nombre, dni, telefono)
+            writer.writerows(clientes)
+
+        print(f"Archivo '{ruta_archivo}' creado con éxito.")
+    
     
 def exportar_reservas_csv(reservas: list, ruta_archivo: str) -> None:
     """Función para exportar la lista de reservas a un archivo CSV.
