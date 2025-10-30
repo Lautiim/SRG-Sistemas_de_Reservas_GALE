@@ -278,13 +278,50 @@ def exportar_hoteles_csv(hoteles: list, ruta_hoteles: str, ruta_habitaciones: st
 
     try:
         # Usamos 'w' (write) y newline='' para evitar saltos de línea extra
-        with open(ruta_hoteles, 'w', newline='', encoding='utf-8') as f:
+        with open(ruta_hoteles, 'w', newline='', encoding='utf-8') as file:
             # Creamos el escritor de diccionarios
-            writer = csv.DictWriter(f, fieldnames=fieldnames_hoteles)
+            writer = csv.DictWriter(file, fieldnames=fieldnames_hoteles)
             writer.writeheader()
             writer.writerows(hoteles_csv)
         print(f"Archivo '{ruta_hoteles}' creado con éxito.")
     except IOError as e:
         print(f"Error al escribir el archivo {ruta_hoteles}: {e}")
+
+    # Ahora exportamos las habitaciones de cada hotel a otro archivo CSV
+    print(f"Exportando habitaciones a {ruta_habitaciones}...")
+    fieldnames_habitaciones = ['id_hotel', 'numero', 'capacidad', 'precio']
+    # Creamos una lista para almacenar las habitaciones en formato CSV
+    habitaciones_csv = []
+
+    # Recorremos la lista de hoteles para extraer las habitaciones
+    for hotel in hoteles:
+        # Obtenemos el ID del hotel actual
+        id_hotel = hotel.get('id')
+        # Recorremos las habitaciones del hotel actual
+        for habitaciones in hotel.get('habitaciones', []):
+            # Por cada habitación que encuentra, crea un nuevo diccionario y lo agrega a la lista habitaciones_csv.
+            habitaciones_csv.append({
+                # Agregamos los datos de la habitación correspondiente  
+                'id_hotel': id_hotel,
+                'numero': habitaciones.get('numero'),
+                'capacidad': habitaciones.get('capacidad'),
+                'precio': habitaciones.get('precio')
+            })
+            
+    if not habitaciones_csv:
+        print("No se encontraron habitaciones para exportar.")
+        return
+    
+    try:
+        # Usamos 'w' (write) y newline='' para evitar saltos de línea extra
+        with open(ruta_habitaciones, 'w', newline='', encoding='utf-8') as file:
+            # Creamos el escritor de diccionarios
+            writer = csv.DictWriter(file, fieldnames=fieldnames_habitaciones)
+            writer.writeheader()
+            writer.writerows(habitaciones_csv)
+        print(f"Archivo '{ruta_habitaciones}' creado con éxito.")
+    except IOError as e:
+        print(f"Error al escribir el archivo {ruta_habitaciones}: {e}")
+
 
 
