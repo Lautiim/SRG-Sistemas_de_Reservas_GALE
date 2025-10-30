@@ -5,6 +5,7 @@ import gestion_clientes
 import gestion_reservas
 import reportes
 from utils import limpiar_pantalla
+import os
 
 def menu():
     """Función que muestra el menú principal del sistema."""
@@ -16,6 +17,7 @@ def menu():
     print("2. Gestión de Clientes")
     print("3. Gestión de Reservas")
     print("4. Generar Reportes")
+    print("5. Exportar datos a CSV")
     print("0. Salir")
     print("=" * 40)
 
@@ -44,6 +46,9 @@ def main():
         elif opcion == "4":
             # Y para el módulo de reportes.
             reportes.generar_reportes(hoteles, clientes, reservas)
+        elif opcion == "5":
+            # Y para la exportación a CSV.
+            reportes.exportar_datos_csv(hoteles, clientes, reservas)
         elif opcion == "0":
             limpiar_pantalla()
             print("=" * 40)
