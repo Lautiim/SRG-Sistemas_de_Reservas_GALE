@@ -192,12 +192,14 @@ if __name__ == "__main__":
     generar_reportes(hoteles, clientes, reservas)
 
 def exportar_clientes_csv(clientes: list, ruta_archivo: str) -> None:
-    """Función para exportar la lista de clientes a un archivo CSV.
+    """
+    Función para exportar la lista de clientes a un archivo CSV.
 
     Pre: Recibe la lista de clientes y la ruta del archivo CSV donde se guardarán los datos.
 
     Post: Crea un archivo CSV con los datos de los clientes.
     """
+
     print(f"Exportando clientes a {ruta_archivo}...")
     # Si no existen clientes, no se crea el archivo
     if not clientes:
@@ -221,7 +223,8 @@ def exportar_clientes_csv(clientes: list, ruta_archivo: str) -> None:
         print(f"Un error inesperado ocurrió: {e}")
     
 def exportar_reservas_csv(reservas: list, ruta_archivo: str) -> None:
-    """Función para exportar la lista de reservas a un archivo CSV.
+    """
+    Función para exportar la lista de reservas a un archivo CSV.
 
     Pre: Recibe la lista de reservas y la ruta del archivo CSV donde se guardarán los datos.
 
@@ -235,9 +238,11 @@ def exportar_reservas_csv(reservas: list, ruta_archivo: str) -> None:
     fieldnames = ['id', 'id_cliente', 'id_hotel', 'numero_habitacion', 'fecha_inicio', 'fecha_fin']
 
     try:
+         # Usamos 'w' (write) y newline='' para evitar saltos de línea extra
         with open(ruta_archivo, 'w', newline='', encoding='utf-8') as file:
+             # Creamos el escritor de diccionarios
             writer = csv.DictWriter(file, fieldnames=fieldnames)
-            writer.writeheader()
+            writer.writeheader()# Escribe la fila de encabezado (id, id_cliente, id_hotel, numero_habitacion, fecha_inicio, fecha_fin)
             writer.writerows(reservas)
 
         print(f"Archivo '{ruta_archivo}' creado con éxito.")
@@ -248,7 +253,8 @@ def exportar_reservas_csv(reservas: list, ruta_archivo: str) -> None:
         print(f"Un error inesperado ocurrió: {e}")
 
 def exportar_hoteles_csv(hoteles: list, ruta_hoteles: str, ruta_habitaciones: str) -> None:
-    """Función para exportar la lista de hoteles a un archivo CSV.
+    """
+    Función para exportar la lista de hoteles a un archivo CSV.
 
     Pre: Recibe la lista de hoteles y la ruta del archivo CSV donde se guardarán los datos.
 
@@ -262,11 +268,23 @@ def exportar_hoteles_csv(hoteles: list, ruta_hoteles: str, ruta_habitaciones: st
     fieldnames_hoteles = ['id', 'nombre', 'ubicacion']
     # Creamos una lista solo con los datos principales del hotel
     hoteles_csv = []
+    #Recorremos la lista de hoteles para extraer los datos principales
     for hotel in hoteles:
         hoteles_csv.append({
             'id': hotel.get('id'),
             'nombre': hotel.get('nombre'),
             'ubicacion': hotel.get('ubicacion')
         })
+
+    try:
+        # Usamos 'w' (write) y newline='' para evitar saltos de línea extra
+        with open(ruta_hoteles, 'w', newline='', encoding='utf-8') as f:
+            # Creamos el escritor de diccionarios
+            writer = csv.DictWriter(f, fieldnames=fieldnames_hoteles)
+            writer.writeheader()
+            writer.writerows(hoteles_csv)
+        print(f"Archivo '{ruta_hoteles}' creado con éxito.")
+    except IOError as e:
+        print(f"Error al escribir el archivo {ruta_hoteles}: {e}")
 
 
