@@ -258,3 +258,15 @@ def exportar_hoteles_csv(hoteles: list, ruta_hoteles: str, ruta_habitaciones: st
     if not hoteles:
         print("No hay hoteles para exportar.")
         return
+    # Creamos los encabezados principales de hoteles para exportar
+    fieldnames_hoteles = ['id', 'nombre', 'ubicacion']
+    # Creamos una lista solo con los datos principales del hotel
+    hoteles_csv = []
+    for hotel in hoteles:
+        hoteles_csv.append({
+            'id': hotel.get('id'),
+            'nombre': hotel.get('nombre'),
+            'ubicacion': hotel.get('ubicacion')
+        })
+
+
