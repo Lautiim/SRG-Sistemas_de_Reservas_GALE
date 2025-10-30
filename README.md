@@ -13,7 +13,7 @@ Primera entrega: sin persistencia (no base de datos, no JSON), manejo de estruct
 
 ## Integrantes
 - Axel Aguilar
-- Emanuel  
+- Emanuel Grossi 
 - Gianluca Chia
 - Lautaro Salto
 
