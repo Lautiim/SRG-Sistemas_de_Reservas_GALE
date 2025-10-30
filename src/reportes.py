@@ -198,7 +198,7 @@ def exportar_clientes_csv(clientes: list, ruta_archivo: str) -> None:
 
     Post: Crea un archivo CSV con los datos de los clientes.
     """
-
+    print(f"Exportando clientes a {ruta_archivo}...")
     # Si no existen clientes, no se crea el archivo
     if not clientes:
         print("No hay clientes para exportar.")
@@ -227,6 +227,7 @@ def exportar_reservas_csv(reservas: list, ruta_archivo: str) -> None:
 
     Post: Crea un archivo CSV con los datos de las reservas.
     """
+    print(f"Exportando reservas a {ruta_archivo}...")
     if not reservas:
         print("No hay reservas para exportar.")
         return
@@ -253,3 +254,7 @@ def exportar_hoteles_csv(hoteles: list, ruta_hoteles: str, ruta_habitaciones: st
 
     Post: Crea un archivo CSV con los datos de los hoteles.
     """
+    print(f"Exportando hoteles a {ruta_hoteles}...")
+    if not hoteles:
+        print("No hay hoteles para exportar.")
+        return
