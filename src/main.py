@@ -7,6 +7,7 @@ import reportes
 from utils import limpiar_pantalla
 import os
 
+
 def menu():
     """Función que muestra el menú principal del sistema."""
     limpiar_pantalla()
@@ -48,7 +49,7 @@ def main():
             reportes.generar_reportes(hoteles, clientes, reservas)
         elif opcion == "5":
             # Y para la exportación a CSV.
-            reportes.exportar_datos_csv(hoteles, clientes, reservas)
+            datos.exportar_datos_csv(hoteles, clientes, reservas)
         elif opcion == "0":
             limpiar_pantalla()
             print("=" * 40)
