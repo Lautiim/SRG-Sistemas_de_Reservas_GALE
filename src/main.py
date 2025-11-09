@@ -49,7 +49,7 @@ def main():
             reportes.generar_reportes(hoteles, clientes, reservas)
         elif opcion == "5":
             # Y para la exportación a CSV.
-            datos.exportar_datos_csv(hoteles, clientes, reservas)
+            reportes.exportar_datos_csv(hoteles, clientes, reservas)
         elif opcion == "0":
             limpiar_pantalla()
             print("=" * 40)
