@@ -5,6 +5,9 @@ from gestion_hoteles import consultar_hoteles, buscar_hotel_por_id
 from gestion_clientes import consultar_clientes, buscar_cliente_por_id
 from gestion_reservas import consultar_reservas
 from tabulate import tabulate
+import os 
+import datos
+
 
 
 def buscar_reserva_x_cliente(hoteles: list, clientes: list, reservas: list):
@@ -269,6 +272,171 @@ def generar_reportes(hoteles: list, clientes: list, reservas: list) -> None:
             print("Opción inválida. Intente de nuevo.")
 
         input("\nPresione Enter para continuar...")
+
+
+
+def exportar_clientes_csv(clientes: list, ruta_archivo: str) -> None:
+    """
+    Función para exportar la lista de clientes a un archivo CSV.
+
+    Pre: Recibe la lista de clientes y la ruta del archivo CSV donde se guardarán los datos.
+
+    Post: Crea un archivo CSV con los datos de los clientes.
+    """
+
+    print(f"Exportando clientes a {ruta_archivo}...")
+    # Si no existen clientes, no se crea el archivo
+    if not clientes:
+        print("No hay clientes para exportar.")
+        return
+    # Creamos el archivo CSV y escribimos las columnas que deseamos exportar
+    fieldnames = ['id', 'nombre', 'dni', 'telefono']
+    delimitador = ',' # Delimitador estándar para CSV
+    try:
+        # Usamos 'w' (write) y newline='' para evitar saltos de línea extra
+        with open(ruta_archivo, 'w', encoding='utf-8') as file:
+            # Escribimos el encabezado manualmente
+            # Une la lista de fieldnames: "id,nombre,dni,telefono"
+            file.write(delimitador.join(fieldnames) + '\n')
+
+            for cliente in clientes:
+                # Creamos una lista de strings para esta fila
+                fila_lista = [
+                    str(cliente.get('id', '')),
+                    str(cliente.get('nombre', '')),
+                    str(cliente.get('dni', '')),
+                    str(cliente.get('telefono', ''))
+                ]
+                # Unimos la lista con comas y agregamos un salto de línea
+                file.write(delimitador.join(fila_lista) + '\n')
+
+        print(f"Archivo '{ruta_archivo}' creado con éxito.")
+    
+    except IOError as e:
+        print(f"Error al escribir el archivo CSV: {e}")
+    except Exception as e:
+        print(f"Un error inesperado ocurrió: {e}")
+    
+def exportar_reservas_csv(reservas: list, ruta_archivo: str) -> None:
+    """
+    Función para exportar la lista de reservas a un archivo CSV.
+
+    Pre: Recibe la lista de reservas y la ruta del archivo CSV donde se guardarán los datos.
+
+    Post: Crea un archivo CSV con los datos de las reservas.
+    """
+    print(f"Exportando reservas a {ruta_archivo}...")
+    if not reservas:
+        print("No hay reservas para exportar.")
+        return
+    #Creamos los encabezados que deseamos exportar en el csv
+    fieldnames = ['id', 'id_cliente', 'id_hotel', 'numero_habitacion', 'fecha_inicio', 'fecha_fin']
+    delimitador = ',' # Delimitador estándar para CSV
+
+    try:
+         # Usamos 'w' (write) y newline='' para evitar saltos de línea extra
+        with open(ruta_archivo, 'w', encoding='utf-8') as file:
+            # Escribimos el encabezado manualmente
+            file.write(delimitador.join(fieldnames) + '\n')
+            for reserva in reservas:
+                # Creamos una lista de strings para esta fila
+                fila_lista = [
+                    str(reserva.get('id', '')),
+                    str(reserva.get('id_cliente', '')),
+                    str(reserva.get('id_hotel', '')),
+                    str(reserva.get('numero_habitacion', '')),
+                    str(reserva.get('fecha_inicio', '')),
+                    str(reserva.get('fecha_fin', ''))
+                ]
+                # Unimos la lista con comas y agregamos un salto de línea
+                file.write(delimitador.join(fila_lista) + '\n')
+        print(f"Archivo '{ruta_archivo}' creado con éxito.")
+
+    except IOError as e:
+        print(f"Error al escribir el archivo CSV: {e}")
+    except Exception as e:
+        print(f"Un error inesperado ocurrió: {e}")
+
+def exportar_hoteles_csv(hoteles: list, ruta_hoteles: str, ruta_habitaciones: str) -> None:
+    """
+    Función para exportar la lista de hoteles a un archivo CSV.
+
+    Pre: Recibe la lista de hoteles y la ruta del archivo CSV donde se guardarán los datos.
+
+    Post: Crea un archivo CSV con los datos de los hoteles.
+    """
+    print(f"Exportando hoteles a {ruta_hoteles}...")
+    if not hoteles:
+        print("No hay hoteles para exportar.")
+        return
+    # Creamos los encabezados principales de hoteles para exportar
+    fieldnames_hoteles = ['id', 'nombre', 'ubicacion']
+    delimitador = ',' # Delimitador estándar para CSV
+
+    #Recorremos la lista de hoteles para extraer los datos principales
+    try:
+        # Usamos 'w' (write) y newline='' para evitar saltos de línea extra
+        with open(ruta_hoteles, 'w', encoding='utf-8') as file:
+            file.write(delimitador.join(fieldnames_hoteles) + '\n')
+            for hotel in hoteles:
+                # Creamos una lista de strings para esta fila
+                fila_lista = [
+                    str(hotel.get('id', '')),
+                    str(hotel.get('nombre', '')),
+                    str(hotel.get('ubicacion', ''))
+                ]
+                # Unimos la lista con comas y agregamos un salto de línea
+                file.write(delimitador.join(fila_lista) + '\n')
+
+        print(f"Archivo '{ruta_hoteles}' creado con éxito.")
+
+    except IOError as e:
+        print(f"Error al escribir el archivo {ruta_hoteles}: {e}")
+
+    # Ahora exportamos las habitaciones de cada hotel a otro archivo CSV
+    print(f"Exportando habitaciones a {ruta_habitaciones}...")
+    fieldnames_habitaciones = ['id_hotel', 'numero', 'capacidad', 'precio']
+    # Creamos una lista para almacenar las habitaciones en formato CSV
+    habitaciones_csv = []
+
+    # Recorremos la lista de hoteles para extraer las habitaciones
+    for hotel in hoteles:
+        # Obtenemos el ID del hotel actual
+        id_hotel = hotel.get('id')
+        # Recorremos las habitaciones del hotel actual
+        for habitaciones in hotel.get('habitaciones', []):
+            # Por cada habitación que encuentra, crea un nuevo diccionario y lo agrega a la lista habitaciones_csv.
+            habitaciones_csv.append({
+                # Agregamos los datos de la habitación correspondiente  
+                'id_hotel': id_hotel,
+                'numero': habitaciones.get('numero'),
+                'capacidad': habitaciones.get('capacidad'),
+                'precio': habitaciones.get('precio')
+            })
+
+    if not habitaciones_csv:
+        print("No se encontraron habitaciones para exportar.")
+        return
+    
+    try:
+        # Usamos 'w' (write) y newline='' para evitar saltos de línea extra
+        with open(ruta_habitaciones, 'w', encoding='utf-8') as file:
+            file.write(delimitador.join(fieldnames_habitaciones) + '\n')
+            for habitacion in habitaciones_csv:
+                # Creamos una lista de strings para esta fila
+                fila_lista = [
+                    str(habitacion.get('id_hotel', '')),
+                    str(habitacion.get('numero', '')),
+                    str(habitacion.get('capacidad', '')),
+                    str(habitacion.get('precio', ''))
+                ]
+                # Unimos la lista con comas y agregamos un salto de línea
+                file.write(delimitador.join(fila_lista) + '\n')
+       
+        print(f"Archivo '{ruta_habitaciones}' creado con éxito.")
+    except IOError as e:
+        print(f"Error al escribir el archivo {ruta_habitaciones}: {e}")
+
 
 
 if __name__ == "__main__":
