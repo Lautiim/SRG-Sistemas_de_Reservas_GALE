@@ -5,7 +5,6 @@ from gestion_clientes import consultar_clientes, buscar_cliente_por_id
 from gestion_reservas import consultar_reservas
 from tabulate import tabulate
 import os 
-import csv
 import datos
 
 
@@ -205,13 +204,24 @@ def exportar_clientes_csv(clientes: list, ruta_archivo: str) -> None:
         return
     # Creamos el archivo CSV y escribimos las columnas que deseamos exportar
     fieldnames = ['id', 'nombre', 'dni', 'telefono']
+    delimitador = ',' # Delimitador estándar para CSV
     try:
         # Usamos 'w' (write) y newline='' para evitar saltos de línea extra
-        with open(ruta_archivo, 'w', newline='', encoding='utf-8') as file:
-            # Creamos el escritor de diccionarios
-            writer = csv.DictWriter(file, fieldnames=fieldnames)
-            writer.writeheader()      # Escribe la fila de encabezado (id, nombre, dni, telefono)
-            writer.writerows(clientes)
+        with open(ruta_archivo, 'w', encoding='utf-8') as file:
+            # Escribimos el encabezado manualmente
+            # Une la lista de fieldnames: "id,nombre,dni,telefono"
+            file.write(delimitador.join(fieldnames) + '\n')
+
+            for cliente in clientes:
+                # Creamos una lista de strings para esta fila
+                fila_lista = [
+                    str(cliente.get('id', '')),
+                    str(cliente.get('nombre', '')),
+                    str(cliente.get('dni', '')),
+                    str(cliente.get('telefono', ''))
+                ]
+                # Unimos la lista con comas y agregamos un salto de línea
+                file.write(delimitador.join(fila_lista) + '\n')
 
         print(f"Archivo '{ruta_archivo}' creado con éxito.")
     
