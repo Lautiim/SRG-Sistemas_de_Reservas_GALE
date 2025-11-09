@@ -4,13 +4,14 @@ from utils import limpiar_pantalla, validar_fecha
 import datos  # Para guardar los cambios
 from gestion_clientes import consultar_clientes
 from gestion_hoteles import consultar_hoteles
+from tabulate import tabulate
+from colorama import Fore, Style, init
+
+# Funciones de búsqueda (Helpers)
 
 
 def buscar_cliente_por_id(id_cliente: int, clientes: list) -> dict:
-    """Función para buscar un cliente por su ID.
-
-    Pre: Recibe el ID del cliente y la lista de clientes.
-    """
+    """Función para buscar un cliente por su ID."""
     for cliente in clientes:
         if cliente["id"] == id_cliente:
             return cliente
@@ -18,14 +19,14 @@ def buscar_cliente_por_id(id_cliente: int, clientes: list) -> dict:
 
 
 def buscar_hotel_por_id(id_hotel: int, hoteles: list) -> dict:
-    """Función para buscar un hotel por su ID.
-
-    Pre: Recibe el ID del hotel y la lista de hoteles.
-    """
+    """Función para buscar un hotel por su ID."""
     for hotel in hoteles:
         if hotel["id"] == id_hotel:
             return hotel
     return None
+
+
+# Función de validación de disponibilidad
 
 
 def validar_disponibilidad_habitacion(
@@ -36,25 +37,14 @@ def validar_disponibilidad_habitacion(
     reservas: list,
     hoteles: list,
 ) -> bool:
-    """Funcion para validar si una habitacion de un hotel está disponible en un rango de fechas dado.
+    """Valida si una habitacion está disponible (con colores en los errores)."""
 
-    Pre:
-        id_hotel (int): ID del hotel.
-        num_habitacion (int): Número de la habitación a verificar.
-        fecha_inicio_dt (datetime): Fecha de inicio de la reserva deseada.
-        fecha_fin_dt (datetime): Fecha de fin de la reserva deseada.
-        reservas (list): Lista de todas las reservas existentes.
-        hoteles (list): Lista de todos los hoteles (para verificar que la habitación exista).
-
-    Post: Devuelve True si la habitación existe en el hotel y está disponible, False en caso contrario.
-    """
     # Verificamos que la habitación exista en el hotel
     hotel = buscar_hotel_por_id(id_hotel, hoteles)
     if not hotel:
-        print(f"Error interno: No se encontró el hotel con ID {id_hotel}.")
-        return False  # Hotel no encontrado
+        print(Fore.RED + f"Error interno: No se encontró el hotel con ID {id_hotel}.")
+        return False
 
-    # Verificamos si la habitación existe en el hotel
     habitacion_existe = False
     for habitacion in hotel.get("habitaciones", []):
         if habitacion.get("numero") == num_habitacion:
@@ -62,152 +52,186 @@ def validar_disponibilidad_habitacion(
             break
     if not habitacion_existe:
         print(
-            f"Error: La habitación número {num_habitacion} no existe en el hotel '{hotel['nombre']}'."
+            Fore.RED
+            + f"Error: La habitación número {num_habitacion} no existe en el hotel '{hotel['nombre']}'."
         )
-        return False  # Habitación no encontrada en este hotel
+        return False
 
-    # Verificamos si hay reservas que se solapen con las fechas deseadas para esa habitación
+    # Verificamos si hay reservas que se solapen
     for reserva in reservas:
-        # Consideramos reservas de la misma habitación en el mismo hotel
         if (
             reserva["id_hotel"] == id_hotel
             and reserva["numero_habitacion"] == num_habitacion
-        ):  # Si coincide hotel y habitación
-            # Convertimos las fechas de la reserva existente a datetime para comparar las fechas
+        ):
             reserva_inicio_dt = datetime.strptime(reserva["fecha_inicio"], "%Y-%m-%d")
             reserva_fin_dt = datetime.strptime(reserva["fecha_fin"], "%Y-%m-%d")
 
-            # Comprobamos si hay solapamiento de fechas
-            # Si fecha de inicio es antes de fin existente y fecha de fin es después de inicio existente
             if (fecha_inicio_dt < reserva_fin_dt) and (
                 fecha_fin_dt > reserva_inicio_dt
             ):
                 print(
-                    f"Error: La habitación {num_habitacion} ya está reservada entre {reserva['fecha_inicio']} y {reserva['fecha_fin']}."
+                    Fore.RED
+                    + Style.BRIGHT
+                    + f"Error: La habitación {num_habitacion} ya está reservada entre {reserva['fecha_inicio']} y {reserva['fecha_fin']}."
                 )
-                return False  # Se cruzan las fechas, no está disponible
+                return False
 
-    # Si pasa todas las verificaciones, la habitación existe y está disponible
     return True
 
 
+# Funciones principales del módulo
+
+
 def agregar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
-    """Función para agregar una nueva reserva al sistema.
+    """Función para agregar una nueva reserva al sistema."""
+    print(Fore.CYAN + Style.BRIGHT + "--- Agregar Reserva ---" + Style.RESET_ALL)
 
-    Pre: Recibe las listas de hoteles, clientes y reservas.
-    """
-    print("--- Agregar Reserva ---")
-
-    # --- Selección de Cliente ---
-    consultar_clientes(clientes)  # Mostramos clientes para ayudar a la selección
+    # Selección de Cliente
+    consultar_clientes(clientes)
     if not clientes:
-        print("No hay clientes registrados. Debe agregar un cliente primero.")
+        print(
+            Fore.YELLOW
+            + "No hay clientes registrados. Debe agregar un cliente primero."
+        )
         return
     while True:
-        try:  # Bucle hasta que se seleccione un cliente válido
+        try:
             id_cliente_seleccionado = int(
-                input("Ingrese el ID del cliente para la reserva: ")
+                input(
+                    Fore.GREEN
+                    + "\nIngrese el ID del cliente para la reserva: "
+                    + Style.RESET_ALL
+                )
             )
             cliente_seleccionado = buscar_cliente_por_id(
                 id_cliente_seleccionado, clientes
             )
             if cliente_seleccionado:
-                print(f"Cliente seleccionado: {cliente_seleccionado['nombre']}")
+                print(
+                    Fore.CYAN
+                    + f"Cliente seleccionado: {cliente_seleccionado['nombre']}"
+                    + Style.RESET_ALL
+                )
                 break
             else:
-                print("ID de cliente no válido. Intente de nuevo.")
+                print(Fore.RED + "ID de cliente no válido. Intente de nuevo.")
         except ValueError:
-            print("Error: Ingrese un ID numérico válido.")
+            print(Fore.RED + "Error: Ingrese un ID numérico válido.")
 
-    # --- Selección de Hotel ---
-    consultar_hoteles(hoteles)  # Mostramos hoteles
+    # Selección de Hotel
+    print("\n")
+    consultar_hoteles(hoteles)
     if not hoteles:
-        print("No hay hoteles registrados. Debe agregar un hotel primero.")
+        print(
+            Fore.YELLOW + "No hay hoteles registrados. Debe agregar un hotel primero."
+        )
         return
     while True:
-        try:  # Bucle hasta que se seleccione un hotel válido
+        try:
             id_hotel_seleccionado = int(
-                input("Ingrese el ID del hotel para la reserva: ")
+                input(
+                    Fore.GREEN
+                    + "\nIngrese el ID del hotel para la reserva: "
+                    + Style.RESET_ALL
+                )
             )
             hotel_seleccionado = buscar_hotel_por_id(id_hotel_seleccionado, hoteles)
             if hotel_seleccionado:
-                print(f"Hotel seleccionado: {hotel_seleccionado['nombre']}")
+                print(
+                    Fore.CYAN
+                    + f"Hotel seleccionado: {hotel_seleccionado['nombre']}"
+                    + Style.RESET_ALL
+                )
                 break
             else:
-                print("ID de hotel no válido. Intente de nuevo.")
+                print(Fore.RED + "ID de hotel no válido. Intente de nuevo.")
         except ValueError:
-            print("Error: Ingrese un ID numérico válido.")
+            print(Fore.RED + "Error: Ingrese un ID numérico válido.")
 
-    # --- Selección de Habitación ---
-    print("\nHabitaciones disponibles en este hotel:")
-    if hotel_seleccionado["habitaciones"]:  # Verificamos que haya habitaciones
-        for hab in hotel_seleccionado["habitaciones"]:  # Si hay, las listamos
-            print(
-                f"  - Número: {hab['numero']}, Capacidad: {hab['capacidad']}, Precio: ${hab['precio']:.2f}"
-            )
+    # Selección de habitación
+    print(Fore.CYAN + "\nHabitaciones disponibles en este hotel:" + Style.RESET_ALL)
+    if hotel_seleccionado["habitaciones"]:
+        headers_hab = [
+            Fore.GREEN + "N° Hab" + Style.RESET_ALL,
+            Fore.GREEN + "Capacidad" + Style.RESET_ALL,
+            Fore.GREEN + "Precio ($)" + Style.RESET_ALL,
+        ]
+        tabla_hab = [
+            [h["numero"], h["capacidad"], f"{h['precio']:.2f}"]
+            for h in hotel_seleccionado["habitaciones"]
+        ]
+        print(
+            tabulate(tabla_hab, headers=headers_hab, tablefmt="grid", stralign="center")
+        )
     else:
-        print("Este hotel no tiene habitaciones registradas.")
+        print(Fore.YELLOW + "Este hotel no tiene habitaciones registradas.")
         return
 
     while True:
         try:
             num_habitacion_seleccionada = int(
-                input("Ingrese el número de la habitación deseada: ")
+                input(
+                    Fore.GREEN
+                    + "\nIngrese el número de la habitación deseada: "
+                    + Style.RESET_ALL
+                )
             )
-            # Verificamos si el número de habitación existe en el hotel seleccionado
-            habitacion_valida = False
-            for hab in hotel_seleccionado[
-                "habitaciones"
-            ]:  # Recorremos las habitaciones
-                if hab["numero"] == num_habitacion_seleccionada:  # Si coincide
-                    habitacion_valida = True
-                    break
+            habitacion_valida = any(
+                hab["numero"] == num_habitacion_seleccionada
+                for hab in hotel_seleccionado["habitaciones"]
+            )
             if habitacion_valida:
                 break
             else:
                 print(
-                    "Número de habitación no válido para este hotel. Intente de nuevo."
+                    Fore.RED
+                    + "Número de habitación no válido para este hotel. Intente de nuevo."
                 )
         except ValueError:
-            print("Error: Ingrese un número válido.")
+            print(Fore.RED + "Error: Ingrese un número válido.")
 
-    # --- Selección de Fechas ---
-    while True:  # Bucle hasta que se ingresen fechas válidas
-        fecha_inicio_str = input("Ingrese la fecha de inicio (AAAA-MM-DD): ")
+    # Selección de fechas
+    while True:
+        fecha_inicio_str = input(
+            Fore.GREEN + "Ingrese la fecha de inicio (AAAA-MM-DD): " + Style.RESET_ALL
+        )
         if validar_fecha(fecha_inicio_str):
-            fecha_inicio_dt = datetime.strptime(
-                fecha_inicio_str, "%Y-%m-%d"
-            )  # Convertimos a datetime para comparaciones
+            fecha_inicio_dt = datetime.strptime(fecha_inicio_str, "%Y-%m-%d")
             break
         else:
-            print("Formato de fecha incorrecto. Use AAAA-MM-DD.")
-    
-    # Calculamos la fecha límite (un año después de la fecha de inicio)
+            print(Fore.RED + "Formato de fecha incorrecto. Use AAAA-MM-DD.")
+
     try:
         fecha_limite_dt = fecha_inicio_dt.replace(year=fecha_inicio_dt.year + 1)
     except ValueError:
-        # Maneja el caso de año bisiesto
-        fecha_limite_dt = fecha_inicio_dt.replace(
-            year=fecha_inicio_dt.year + 1, day=28
-        )
+        fecha_limite_dt = fecha_inicio_dt.replace(year=fecha_inicio_dt.year + 1, day=28)
 
     while True:
-        fecha_fin_str = input("Ingrese la fecha de fin (AAAA-MM-DD): ")
+        fecha_fin_str = input(
+            Fore.GREEN + "Ingrese la fecha de fin (AAAA-MM-DD): " + Style.RESET_ALL
+        )
         if validar_fecha(fecha_fin_str):
-            fecha_fin_dt = datetime.strptime(
-                fecha_fin_str, "%Y-%m-%d"
-            )  # Convertimos a datetime para comparaciones
+            fecha_fin_dt = datetime.strptime(fecha_fin_str, "%Y-%m-%d")
             if fecha_fin_dt <= fecha_inicio_dt:
-                print("Error: La fecha de fin debe ser posterior a la fecha de inicio.")
+                print(
+                    Fore.RED
+                    + "Error: La fecha de fin debe ser posterior a la fecha de inicio."
+                )
             elif fecha_fin_dt > fecha_limite_dt:
-                print(f"Error: La reserva no puede exceder un año desde la fecha de inicio.")
-                print(f"La fecha de fin máxima permitida es: {fecha_limite_dt.strftime('%Y-%m-%d')}")
+                print(
+                    Fore.RED
+                    + f"Error: La reserva no puede exceder un año desde la fecha de inicio."
+                )
+                print(
+                    Fore.RED
+                    + f"La fecha de fin máxima permitida es: {fecha_limite_dt.strftime('%Y-%m-%d')}"
+                )
             else:
-                break  # Las fechas son válidas
+                break
         else:
-            print("Formato de fecha incorrecto. Use AAAA-MM-DD.")
+            print(Fore.RED + "Formato de fecha incorrecto. Use AAAA-MM-DD.")
 
-    # --- Validar Disponibilidad ---
+    # Validar disponibilidad
     if not validar_disponibilidad_habitacion(
         id_hotel_seleccionado,
         num_habitacion_seleccionada,
@@ -216,12 +240,11 @@ def agregar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
         reservas,
         hoteles,
     ):
-        # El mensaje de error ya se mostró dentro de la función validar_disponibilidad
         return  # Salimos si no está disponible
 
-    # --- Crear y Guardar Reserva ---
+    # Crear y guardar reserva
     if reservas:
-        id_reserva = reservas[-1]["id"] + 1  # Nuevo ID es el último + 1
+        id_reserva = reservas[-1]["id"] + 1
     else:
         id_reserva = 1
 
@@ -235,39 +258,51 @@ def agregar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
     }
     reservas.append(nueva_reserva)
     datos.guardar_datos(hoteles, clientes, reservas)
-    print("\n¡Reserva agregada correctamente!")
+    print(
+        Fore.GREEN
+        + Style.BRIGHT
+        + "\n¡Reserva agregada correctamente!"
+        + Style.RESET_ALL
+    )
 
 
 def consultar_reservas(hoteles, clientes, reservas):
-    """Función para mostrar todas las reservas existentes.
-
-    Pre: Recibe las listas de hoteles, clientes y reservas.
-    """
-    print("--- Reservas Existentes ---")
+    """Función para mostrar todas las reservas existentes."""
+    print(Fore.CYAN + Style.BRIGHT + "--- Reservas Existentes ---" + Style.RESET_ALL)
     if reservas:
         reservas_para_tabla = []
-        headers = ["ID", "Cliente", "Hotel", "Habitación", "Fecha Inicio", "Fecha Fin"]
+        headers = [
+            Fore.GREEN + "ID",
+            Fore.GREEN + "Cliente",
+            Fore.GREEN + "Hotel",
+            Fore.GREEN + "Habitación",
+            Fore.GREEN + "Fecha Inicio",
+            Fore.GREEN + "Fecha Fin" + Style.RESET_ALL,
+        ]
 
-        for reserva in reservas:  # Recorremos las reservas
-            # Buscamos nombres para mostrar
+        for reserva in reservas:
             cliente = buscar_cliente_por_id(reserva["id_cliente"], clientes)
-
-            if cliente:
-                nombre_cliente = cliente[
-                    "nombre"
-                ]  # Usamos el nombre si encontramos el cliente
-            else:
-                nombre_cliente = f"ID {reserva.get('id_cliente', 'No encontrado')}"  # Usamos ID si no encontramos el cliente
+            # Si el cliente fue eliminado, mostramos el ID en rojo
+            nombre_cliente = (
+                cliente["nombre"]
+                if cliente
+                else (
+                    Fore.RED
+                    + f"ID {reserva['id_cliente']} (Eliminado)"
+                    + Style.RESET_ALL
+                )
+            )
 
             hotel = buscar_hotel_por_id(reserva["id_hotel"], hoteles)
-            if hotel:
-                nombre_hotel = hotel[
-                    "nombre"
-                ]  # Usamos el nombre si encontramos el hotel
-            else:
-                nombre_hotel = f"ID {reserva.get('id_hotel', 'No encontrado')}"  # Usamos ID si no encontramos el hotel
+            # Si el hotel fue eliminado, mostramos el ID en rojo
+            nombre_hotel = (
+                hotel["nombre"]
+                if hotel
+                else (
+                    Fore.RED + f"ID {reserva['id_hotel']} (Eliminado)" + Style.RESET_ALL
+                )
+            )
 
-            # Preparamos la fila para la tabla
             reservas_para_tabla.append(
                 [
                     reserva["id"],
@@ -279,50 +314,39 @@ def consultar_reservas(hoteles, clientes, reservas):
                 ]
             )
 
-        try:
-            # Intentamos usar tabulate para mostrar la tabla de forma bonita
-            from tabulate import tabulate
-
-            print(tabulate(reservas_para_tabla, headers=headers, tablefmt="grid"))
-        except ImportError:  # Si no está instalado, mostramos de forma simple
-            print("(Librería 'tabulate' no encontrada. Mostrando en formato simple.)")
-            for fila in reservas_para_tabla:
-                # Imprime cada elemento de la fila separado por " | "
-                print(
-                    " | ".join(map(str, fila))
-                )  # Convertimos todo a str para evitar errores, y unimos con " | "
+        # Mostramos la tabla
+        print(tabulate(reservas_para_tabla, headers=headers, tablefmt="grid"))
     else:
-        print("No hay reservas registradas.")
+        print(Fore.YELLOW + "No hay reservas registradas.")
 
 
 def eliminar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
-    """Elimina una reserva de la lista por su ID y guarda los cambios.
+    """Elimina una reserva de la lista por su ID y guarda los cambios."""
+    print(Fore.CYAN + Style.BRIGHT + "--- Eliminar Reserva ---" + Style.RESET_ALL)
+    consultar_reservas(hoteles, clientes, reservas)
 
-    Pre: Recibe las listas de hoteles, clientes y reservas.
-    """
-    print("--- Eliminar Reserva ---")
-    consultar_reservas(
-        hoteles, clientes, reservas
-    )  # Mostramos las reservas para ver IDs
-
-    if not reservas:  # Si no hay reservas, no tiene sentido continuar
-        print("No hay reservas para eliminar.")
+    if not reservas:
+        # El mensaje de "No hay reservas" ya lo da consultar_reservas
         return
 
-    while True:  # Bucle hasta que se ingrese un ID válido
+    while True:
         try:
             id_a_eliminar = int(
-                input("Ingrese el ID de la reserva que desea eliminar: ")
-            )  # Pedimos ID de la reserva a eliminar
+                input(
+                    Fore.GREEN
+                    + "\nIngrese el ID de la reserva que desea eliminar: "
+                    + Style.RESET_ALL
+                )
+            )
             break
         except ValueError:
-            print("Error: Ingrese un ID numérico válido.")
+            print(Fore.RED + "Error: Ingrese un ID numérico válido.")
 
     reserva_encontrada = None
     indice_reserva = -1
 
-    for i, reserva in enumerate(reservas):  # Buscamos la reserva por ID
-        if reserva["id"] == id_a_eliminar:  # Si coincide
+    for i, reserva in enumerate(reservas):
+        if reserva["id"] == id_a_eliminar:
             reserva_encontrada = reserva
             indice_reserva = i
             break
@@ -330,10 +354,18 @@ def eliminar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
     if reserva_encontrada:
         cliente = buscar_cliente_por_id(reserva_encontrada["id_cliente"], clientes)
         hotel = buscar_hotel_por_id(reserva_encontrada["id_hotel"], hoteles)
-        nombre_cliente = cliente["nombre"] if cliente else "Desconocido"
-        nombre_hotel = hotel["nombre"] if hotel else "Desconocido"
+        nombre_cliente = (
+            cliente["nombre"]
+            if cliente
+            else (Fore.RED + "Cliente Desconocido/Eliminado" + Style.RESET_ALL)
+        )
+        nombre_hotel = (
+            hotel["nombre"]
+            if hotel
+            else (Fore.RED + "Hotel Desconocido/Eliminado" + Style.RESET_ALL)
+        )
 
-        print(f"\nReserva a eliminar:")
+        print(Fore.YELLOW + f"\nReserva a eliminar:")
         print(f"  Cliente: {nombre_cliente}")
         print(f"  Hotel: {nombre_hotel}")
         print(f"  Habitación: {reserva_encontrada['numero_habitacion']}")
@@ -342,49 +374,66 @@ def eliminar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
         )
 
         confirmacion = input(
-            f"¿Está seguro que desea eliminar esta reserva (ID: {id_a_eliminar})? (s/n): "
+            Fore.RED
+            + Style.BRIGHT
+            + f"\n¿Está seguro que desea eliminar esta reserva (ID: {id_a_eliminar})? (s/n): "
+            + Style.RESET_ALL
         )
         if confirmacion.lower() == "s":
-            reservas.pop(indice_reserva)  # Eliminamos la reserva de la lista
-            datos.guardar_datos(hoteles, clientes, reservas)  # Guardamos los cambios
-            print("Reserva eliminada correctamente.")
+            reservas.pop(indice_reserva)
+            datos.guardar_datos(hoteles, clientes, reservas)
+            print(Fore.GREEN + Style.BRIGHT + "Reserva eliminada correctamente.")
         else:
-            print("Eliminación cancelada.")
+            print(Fore.YELLOW + "Eliminación cancelada.")
     else:
-        print(f"No se encontró ninguna reserva con el ID {id_a_eliminar}.")
+        print(Fore.RED + f"No se encontró ninguna reserva con el ID {id_a_eliminar}.")
 
 
 def gestionar_reservas(hoteles, clientes, reservas):
-    """Función principal para interactuar con el menú de gestión de reservas.
+    """Función principal para interactuar con el menú de gestión de reservas."""
 
-    Pre: Recibe las listas de hoteles, clientes y reservas.
-    """
+    # Inicializamos colorama para este módulo
+    init(autoreset=True)
+
     while True:
         limpiar_pantalla()
-        print("=" * 40)
-        print("     --- Gestión de Reservas ---      ".center(40, " "))
-        print("=" * 40)
-        print("1. Agregar Reserva")
-        print("2. Consultar Reservas")
-        print("3. Eliminar Reserva")
-        print("0. Volver al menú principal")
-        print("=" * 40)
 
-        opcion = input("Seleccione una opción: ")
+        # Título
+        titulo = " --- Gestión de Reservas --- "
+        print(Fore.CYAN + Style.BRIGHT + "=" * 50)
+        print(titulo.center(50, " "))
+        print("=" * 50 + Style.RESET_ALL)
+
+        # Datos del menú para tabulate
+        menu_data = [
+            [Fore.YELLOW + "1" + Style.RESET_ALL, "Agregar Reserva"],
+            [Fore.YELLOW + "2" + Style.RESET_ALL, "Consultar Reservas"],
+            [Fore.YELLOW + "3" + Style.RESET_ALL, "Eliminar Reserva"],
+            [Fore.RED + "0" + Style.RESET_ALL, "Volver al menú principal"],
+        ]
+
+        # Headers para la tabla
+        headers = [Fore.GREEN + "Opción", Fore.GREEN + "Acción" + Style.RESET_ALL]
+
+        # Imprimir la tabla
+        print(tabulate(menu_data, headers=headers, tablefmt="heavy_outline"))
+
+        opcion = input(Fore.GREEN + "\nSeleccione una opción: " + Style.RESET_ALL)
+
         if opcion == "1":
             limpiar_pantalla()
             agregar_reserva(hoteles, clientes, reservas)
-            input("\nPresione Enter para continuar...")
+            input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
         elif opcion == "2":
             limpiar_pantalla()
             consultar_reservas(hoteles, clientes, reservas)
-            input("\nPresione Enter para continuar...")
+            input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
         elif opcion == "3":
             limpiar_pantalla()
             eliminar_reserva(hoteles, clientes, reservas)
-            input("\nPresione Enter para continuar...")
+            input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
         elif opcion == "0":
             break
         else:
-            print("Opción inválida. Intente de nuevo.")
-            input("\nPresione Enter para continuar...")
+            print(Fore.RED + "Opción inválida. Intente de nuevo.")
+            input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)

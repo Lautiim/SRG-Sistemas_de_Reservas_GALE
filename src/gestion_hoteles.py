@@ -1,291 +1,294 @@
 from utils import limpiar_pantalla
 import datos  # Importamos el módulo completo para acceder a guardar_datos
+from tabulate import tabulate
+from colorama import Fore, Style, init
+
 
 def buscar_hotel_por_id(id_hotel: int, hoteles: list) -> dict | None:
-    """Función para buscar un hotel por su ID.
+    """Función para buscar un hotel por su ID."""
+    for hotel in hoteles:
+        if hotel["id"] == id_hotel:
+            return hotel
+    return None
 
-    Pre: Recibe el ID del hotel a buscar y la lista de hoteles.
-
-    Post: Retorna el diccionario del hotel si se encuentra, o None si no se encuentra.
-    """
-    for hotel in hoteles:  # Recorremos la lista de hoteles
-        if hotel["id"] == id_hotel:  # Si el ID del hotel coincide con el buscado
-            return hotel  # Retornamos el hotel encontrado
-    return None  # Si no se encuentra, retornamos None
 
 def agregar_hotel(hoteles, clientes, reservas) -> None:
-    """Funcion para agregar un nuevo hotel a la lista de hoteles y guarda los cambios.
+    """Funcion para agregar un nuevo hotel a la lista de hoteles y guarda los cambios."""
 
-    Pre: Recibe las listas actuales de hoteles, clientes y reservas.
-
-    Post: Agrega un nuevo hotel a la lista y guarda los datos actualizados.
-    """
-    print("--- Agregar Hotel ---")
-    nombre_hotel = input("Ingrese el nombre del hotel: ")  # Pedimos el nombre del hotel
-    nombre_hotel = (
-        nombre_hotel.lower().title()
-    )  # Formateamos el nombre del hotel para que la primera letra de cada palabra sea mayúscula
+    print(Fore.CYAN + Style.BRIGHT + "--- Agregar Hotel ---" + Style.RESET_ALL)
+    nombre_hotel = input(Fore.GREEN + "Ingrese el nombre del hotel: " + Style.RESET_ALL)
+    nombre_hotel = nombre_hotel.lower().title()
     ubicacion = input(
-        "Ingrese la ciudad donde se encuentra el hotel: "
-    )  # Pedimos la ubicación del hotel
+        Fore.GREEN + "Ingrese la ciudad donde se encuentra el hotel: " + Style.RESET_ALL
+    )
 
-    # Pedimos las habitaciones del hotel, para eso vamos a necesitar una lista de habitaciones
     lista_habitaciones = []
 
     while True:
         try:
-            # Pedimos la cantidad de habitaciones a agregar
             num_habitaciones_a_agregar = int(
-                input("¿Cuántas habitaciones desea agregar a este hotel?: ")
+                input(
+                    Fore.GREEN
+                    + "¿Cuántas habitaciones desea agregar a este hotel?: "
+                    + Style.RESET_ALL
+                )
             )
-
-            if (
-                num_habitaciones_a_agregar < 0
-            ):  # Si la cantidad es negativa, mostramos un error
-                print("Por favor, ingrese un número positivo.")
+            if num_habitaciones_a_agregar < 0:
+                print(Fore.RED + "Por favor, ingrese un número positivo.")
                 continue
             break
-        except (
-            ValueError
-        ):  # Si el usuario ingresa algo que no sea un número, mostramos un error
-            print("Error: Ingrese un número válido.")
+        except ValueError:
+            print(Fore.RED + "Error: Ingrese un número válido.")
 
-    for i in range(
-        num_habitaciones_a_agregar
-    ):  # Recorremos la cantidad de habitaciones a agregar
-        print(f"\n--- Agregando Habitación {i+1} ---")
+    for i in range(num_habitaciones_a_agregar):
+        print(Fore.CYAN + f"\n--- Agregando Habitación {i+1} ---" + Style.RESET_ALL)
 
-        # Pedimos el nuumero de la habitación
+        # Número de la habitación
         while True:
             try:
                 numero = int(
-                    input(f"Número de la habitación {i+1}: ")
-                )  # Pedimos el número de la habitación
-
-                # Verificamos que no exista otra habitación con el mismo número en el hotel
-                if any(
-                    h["numero"] == numero for h in lista_habitaciones
-                ):  # Si existe una habitación con el mismo número, mostramos un error
+                    input(
+                        Fore.GREEN
+                        + f"Número de la habitación {i+1}: "
+                        + Style.RESET_ALL
+                    )
+                )
+                if any(h["numero"] == numero for h in lista_habitaciones):
                     print(
-                        f"Error: Ya existe una habitación con el número {numero} en este hotel."
+                        Fore.RED
+                        + f"Error: Ya existe una habitación con el número {numero} en este hotel."
                     )
                     continue
                 break
             except ValueError:
-                print("Error: Ingrese un número válido.")
+                print(Fore.RED + "Error: Ingrese un número válido.")
 
-        # Pedimos la capacidad de la habitación
+        # Capacidad de la habitación
         while True:
             try:
                 capacidad = int(
-                    input(f"Capacidad de la habitación {numero}: ")
-                )  # Se pide la capacidad de la habitación
-                if (
-                    capacidad <= 0
-                ):  # Si la capacidad es menor o igual a cero, mostramos un error
-                    print("La capacidad debe ser mayor a cero.")
+                    input(
+                        Fore.GREEN
+                        + f"Capacidad de la habitación {numero}: "
+                        + Style.RESET_ALL
+                    )
+                )
+                if capacidad <= 0:
+                    print(Fore.RED + "La capacidad debe ser mayor a cero.")
                     continue
                 break
             except ValueError:
-                print("Error: Ingrese un número válido.")
+                print(Fore.RED + "Error: Ingrese un número válido.")
 
-        # Pedimos el precio por noche de la habitación
+        # Precio por noche
         while True:
             try:
                 precio = float(
-                    input(f"Precio por noche de la habitación {numero}: ")
-                )  # Se pide el precio por noche de la habitación
-                if (
-                    precio <= 0
-                ):  # Si el precio es menor o igual a cero, mostramos un error
-                    print("El precio debe ser mayor a cero.")
+                    input(
+                        Fore.GREEN
+                        + f"Precio por noche de la habitación {numero}: "
+                        + Style.RESET_ALL
+                    )
+                )
+                if precio <= 0:
+                    print(Fore.RED + "El precio debe ser mayor a cero.")
                     continue
                 break
             except ValueError:
-                print("Error: Ingrese un número válido.")
+                print(Fore.RED + "Error: Ingrese un número válido.")
 
-        # Agregamos la habitación a la lista de habitaciones del hotel
         lista_habitaciones.append(
             {"numero": numero, "capacidad": capacidad, "precio": precio}
         )
 
     # Calculamos el próximo ID disponible
     if hoteles:
-        id_hotel = (
-            max(h["id"] for h in hoteles) + 1
-        )  # El ID va a ser el máximo ID actual + 1
+        id_hotel = max(h["id"] for h in hoteles) + 1
     else:
-        id_hotel = 1  # Si no hay hoteles, el id es uno
+        id_hotel = 1
 
-    # Se crea el nuevo hotel con su información
     nuevo_hotel = {
         "id": id_hotel,
         "nombre": nombre_hotel,
         "ubicacion": ubicacion,
         "habitaciones": lista_habitaciones,
     }
-    hoteles.append(nuevo_hotel)  # Agregamos el nuevo hotel a la lista de hoteles
+    hoteles.append(nuevo_hotel)
 
-    datos.guardar_datos(hoteles, clientes, reservas)  # Guardamos los cambios
-    print("\n¡Hotel agregado correctamente!")
+    datos.guardar_datos(hoteles, clientes, reservas)
+    print(
+        Fore.GREEN + Style.BRIGHT + "\n¡Hotel agregado correctamente!" + Style.RESET_ALL
+    )
 
 
 def consultar_hoteles(hoteles: list) -> None:
-    """Funcion para mostrar la lista de hoteles registrados.
-
-    Pre: Recibe la lista actual de hoteles.
-    """
-    print("--- Hoteles Registrados ---")
-    if hoteles:  # Si hay hoteles registrados
-        for hotel in hoteles:  # Recorremos la lista de hoteles
+    """Funcion para mostrar la lista de hoteles registrados."""
+    print(Fore.CYAN + Style.BRIGHT + "--- Hoteles Registrados ---" + Style.RESET_ALL)
+    if hoteles:
+        for hotel in hoteles:
+            # Imprimimos la cabecera del hotel
             print(
-                f"\nID: {hotel['id']} | Nombre: {hotel['nombre']} | Ubicación: {hotel['ubicacion']}"
-            )  # Mostramos la información básica del hotel
-            print("  Habitaciones:")
-            if hotel["habitaciones"]:  # Si el hotel tiene habitaciones registradas
-                for hab in hotel[
-                    "habitaciones"
-                ]:  # Mostramos la información de cada habitación
-                    print(
-                        f"    - Número: {hab['numero']}, Capacidad: {hab['capacidad']}, Precio: ${hab['precio']:.2f}"
+                Fore.CYAN
+                + Style.BRIGHT
+                + f"\nID: {hotel['id']} | Nombre: {hotel['nombre']} | Ubicación: {hotel['ubicacion']}"
+                + Style.RESET_ALL
+            )
+
+            if hotel["habitaciones"]:
+                # Preparamos los datos y cabeceras para tabulate
+                headers = [
+                    Fore.GREEN + "N° Hab" + Style.RESET_ALL,
+                    Fore.GREEN + "Capacidad" + Style.RESET_ALL,
+                    Fore.GREEN + "Precio ($)" + Style.RESET_ALL,
+                ]
+                tabla_hab = [
+                    [h["numero"], h["capacidad"], f"{h['precio']:.2f}"]
+                    for h in hotel["habitaciones"]
+                ]
+                # Imprimimos la tabla de habitaciones
+                print(
+                    tabulate(
+                        tabla_hab, headers=headers, tablefmt="grid", stralign="center"
                     )
+                )
             else:
-                print("El hotel no tiene habitaciones registradas.")
+                print(Fore.YELLOW + "  El hotel no tiene habitaciones registradas.")
     else:
-        print("No hay hoteles registrados.")
+        print(Fore.YELLOW + "No hay hoteles registrados.")
 
 
 def eliminar_hotel(hoteles: list, clientes: list, reservas: list) -> None:
-    """Funcion para eliminar un hotel de la lista por su ID o nombre y guardar los cambios.
+    """Funcion para eliminar un hotel de la lista por su ID o nombre y guardar los cambios."""
+    print(Fore.CYAN + Style.BRIGHT + "--- Eliminar Hotel ---" + Style.RESET_ALL)
+    consultar_hoteles(hoteles)
 
-    Pre: Recibe las listas actuales de hoteles, clientes y reservas.
-    """
-    print("--- Eliminar Hotel ---")
-    consultar_hoteles(hoteles)  # Mostramos los hoteles para que el usuario vea los IDs
-
-    if not hoteles:  # Si no hay hoteles, no tiene sentido seguir
-        print("No hay hoteles para eliminar.")
-        return  # Devuelve None
+    if not hoteles:
+        # El mensaje de "No hay hoteles" ya lo da consultar_hoteles
+        return
 
     entrada = input(
-        "Ingrese el ID o el nombre del hotel que desea eliminar: "
-    )  # Pedimos el ID o nombre del hotel a eliminar, se elimina espacios en blanco al inicio y final
-    if not entrada:  # Si la entrada está vacía, mostramos un error
-        print("Entrada vacía. Operación cancelada.")
-        return  # Devuelve None
+        Fore.GREEN
+        + "\nIngrese el ID o el nombre del hotel que desea eliminar: "
+        + Style.RESET_ALL
+    )
+    if not entrada:
+        print(Fore.RED + "Entrada vacía. Operación cancelada.")
+        return
 
-    # Intentamos interpretar como ID numérico
     hotel_encontrado = None
 
     try:
-        id_a_eliminar = int(entrada)  # Convertimos la entrada a entero
-        for hotel in hoteles:  # Recorremos la lista de hoteles
-            if (
-                hotel["id"] == id_a_eliminar
-            ):  # Si encontramos el hotel con el ID ingresado
-                hotel_encontrado = hotel  # Lo guardamos
-                break
-        if not hotel_encontrado:  # Si no, se le informa al usuario
-            print(f"No se encontró ningún hotel con el ID {id_a_eliminar}.")
-            return  # Devuelve None
-    except ValueError:  # Si no se puede convertir a entero
-        # Buscamos por nombre, sin diferenciar entre mayusculas y minusculas, no case-sensitive
-        nombre_buscar = (
-            entrada.lower()
-        )  # Convertimos la entrada a minusculas y la guardamos
-        coincidencias = [
-            h for h in hoteles if h["nombre"].lower() == nombre_buscar
-        ]  # Buscamos por coincidencias en la lista hoteles y las almacenamos
+        id_a_eliminar = int(entrada)
+        hotel_encontrado = buscar_hotel_por_id(id_a_eliminar, hoteles)
+        if not hotel_encontrado:
+            print(Fore.RED + f"No se encontró ningún hotel con el ID {id_a_eliminar}.")
+            return
+    except ValueError:
+        nombre_buscar = entrada.lower()
+        coincidencias = [h for h in hoteles if h["nombre"].lower() == nombre_buscar]
 
-        if len(coincidencias) == 0:  # Si no hay coincidencias. Informamos al usuario
-            print(f"No se encontró ningún hotel con el nombre '{entrada}'.")
-            return  # Devuelve None
-        elif len(coincidencias) == 1:  # Si hay una sola coincidencia
+        if len(coincidencias) == 0:
+            print(Fore.RED + f"No se encontró ningún hotel con el nombre '{entrada}'.")
+            return
+        elif len(coincidencias) == 1:
             hotel_encontrado = coincidencias[0]
         else:
-            # Si hay varias coincidencias, mostramos opciones para que el usuario elija por ID
             print(
-                f"Se encontraron {len(coincidencias)} hoteles con el nombre '{entrada}':"
-            )  # Informamos la cantidad de hoteles encontrados
+                Fore.YELLOW
+                + f"Se encontraron {len(coincidencias)} hoteles con el nombre '{entrada}':"
+                + Style.RESET_ALL
+            )
             for h in coincidencias:
                 print(
                     f"  ID: {h['id']} | Nombre: {h['nombre']} | Ubicación: {h.get('ubicacion', 'N/A')}"
-                )  # Mostramos la informacion de los hoteles encontrados
+                )
 
             while True:
                 try:
-                    # Solicitamos al usuario que ingrese el ID del hotel que desea eliminar
                     id_elegido = int(
                         input(
-                            "Ingrese el ID del hotel que desea eliminar de las opciones anteriores: "
+                            Fore.GREEN
+                            + "Ingrese el ID del hotel que desea eliminar de las opciones anteriores: "
+                            + Style.RESET_ALL
                         )
                     )
-                except ValueError:  # Si el usuario ingresa algo que no es un número
-                    print("Error: Ingrese un ID numérico válido.")
+                except ValueError:
+                    print(Fore.RED + "Error: Ingrese un ID numérico válido.")
                     continue
 
-                # Buscamos el hotel con el ID elegido entre las coincidencias encontradas
                 hotel_encontrado = next(
                     (h for h in coincidencias if h["id"] == id_elegido), None
                 )
 
-                # Si encontramos el hotel, salimos del bucle
                 if hotel_encontrado:
                     break
-                else:  # Si no, se informa al usuario el ID no valido y se vuelve a solicitar
-                    print("ID no válido. Elija un ID de la lista mostrada.")
+                else:
+                    print(Fore.RED + "ID no válido. Elija un ID de la lista mostrada.")
 
-    # Solicitamos confirmación antes de eliminar el hotel
+    # Confirmación
     confirmacion = input(
-        f"¿Está seguro que desea eliminar el hotel '{hotel_encontrado['nombre']}' (ID: {hotel_encontrado['id']})? (s/n): "
+        Fore.RED
+        + Style.BRIGHT
+        + f"\n¿Está seguro que desea eliminar el hotel '{hotel_encontrado['nombre']}' (ID: {hotel_encontrado['id']})? (s/n): "
+        + Style.RESET_ALL
     )
-    if confirmacion.lower() == "s":  # Si el usuario confirma
-        hoteles.remove(hotel_encontrado)  # Eliminamos el hotel de la lista
-        datos.guardar_datos(
-            hoteles, clientes, reservas
-        )  # Guardamos los cambios en el archivo
-        print("Hotel eliminado correctamente.")
+    if confirmacion.lower() == "s":
+        hoteles.remove(hotel_encontrado)
+        datos.guardar_datos(hoteles, clientes, reservas)
+        print(Fore.GREEN + Style.BRIGHT + "Hotel eliminado correctamente.")
     else:
-        print("Eliminación cancelada.")
+        print(Fore.YELLOW + "Eliminación cancelada.")
 
 
 def gestionar_hoteles(hoteles: list, clientes: list, reservas: list) -> None:
-    """Función principal para interactuar con el menú de gestión de hoteles.
+    """Función principal para interactuar con el menú de gestión de hoteles."""
 
-    Pre: Recibe las listas actuales de hoteles, clientes y reservas.
-    """
+    # Inicializamos colorama para este módulo
+    init(autoreset=True)
+
     while True:
         limpiar_pantalla()
-        print("=" * 40)
-        print("      --- Gestión de Hoteles ---      ".center(40, " "))
-        print("=" * 40)
-        print("1. Agregar hotel")
-        print("2. Consultar hoteles")
-        print("3. Eliminar hotel")
-        print("0. Volver al menú principal")
-        print("=" * 40)
 
-        opcion = input("Ingrese la opción que quiere ejecutar: ")
+        # Título
+        titulo = " --- Gestión de Hoteles --- "
+        print(Fore.CYAN + Style.BRIGHT + "=" * 50)
+        print(titulo.center(50, " "))
+        print("=" * 50 + Style.RESET_ALL)
+
+        # Datos del menú para tabulate
+        menu_data = [
+            [Fore.YELLOW + "1" + Style.RESET_ALL, "Agregar Hotel"],
+            [Fore.YELLOW + "2" + Style.RESET_ALL, "Consultar Hoteles"],
+            [Fore.YELLOW + "3" + Style.RESET_ALL, "Eliminar Hotel"],
+            [Fore.RED + "0" + Style.RESET_ALL, "Volver al menú principal"],
+        ]
+
+        # Headers para la tabla
+        headers = [Fore.GREEN + "Opción", Fore.GREEN + "Acción" + Style.RESET_ALL]
+
+        # Imprimir la tabla
+        print(tabulate(menu_data, headers=headers, tablefmt="heavy_outline"))
+
+        opcion = input(Fore.GREEN + "\nSeleccione una opción: " + Style.RESET_ALL)
+
         if opcion == "1":
             limpiar_pantalla()
-            # Llamamos a agregar_hotel pasando las listas existentes
             agregar_hotel(hoteles, clientes, reservas)
-            input("\nPresione Enter para continuar...")
+            input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
 
         elif opcion == "2":
             limpiar_pantalla()
-            consultar_hoteles(hoteles)  # Solo necesita la lista de hoteles
-            input("\nPresione Enter para continuar...")
+            consultar_hoteles(hoteles)
+            input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
 
         elif opcion == "3":
             limpiar_pantalla()
-            # Pasamos las listas para que eliminar_hotel pueda guardarlas
             eliminar_hotel(hoteles, clientes, reservas)
-            input("\nPresione Enter para continuar...")
+            input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
 
         elif opcion == "0":
             break
 
         else:
-            print("Opción inválida. Intente de nuevo.")
-            input("\nPresione Enter para continuar...")
+            print(Fore.RED + "Opción inválida. Intente de nuevo.")
+            input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
