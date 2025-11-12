@@ -1,7 +1,8 @@
 # Importamos funciones necesarias de otros módulos
 import os
 import datos
-from utils import limpiar_pantalla
+from datetime import datetime
+from utils import limpiar_pantalla, validar_fecha
 from gestion_hoteles import consultar_hoteles, buscar_hotel_por_id
 from gestion_clientes import consultar_clientes, buscar_cliente_por_id
 from gestion_reservas import consultar_reservas
@@ -139,10 +140,96 @@ def buscar_reserva_x_hotel(hoteles: list, clientes: list, reservas: list):
 
 
 def consultar_habitaciones_disponibles(hoteles: list, reservas: list):
+    """Funcion las habitaciones disponibles en un hotel para un rango de fechas.
+
+    Pre:
+        hoteles (list): Lista de todos los hoteles.
+        reservas (list): Lista de todas las reservas.
     """
-    (Futura implementación) Muestra las habitaciones disponibles en un hotel para un rango de fechas.
-    """
-    print("Funcionalidad de consulta de habitaciones disponibles próximamente.")
+    print("--- Consultar Habitaciones Disponibles ---")
+    consultar_hoteles(hoteles) # Mostramos hoteles para facilitar selección
+    if not hoteles:
+        print("No hay hoteles registrados.")
+        return
+
+    # --- Selección de Hotel ---
+    while True:
+        try:
+            id_hotel_buscar = int(input("Ingrese el ID del hotel para consultar disponibilidad: "))
+            hotel_seleccionado = buscar_hotel_por_id(id_hotel_buscar, hoteles)
+            if hotel_seleccionado:
+                print(f"Consultando disponibilidad para: {hotel_seleccionado['nombre']} (ID: {id_hotel_buscar})")
+                break
+            else:
+                print("ID de hotel no válido. Intente de nuevo.")
+        except ValueError:
+            print("Error: Ingrese un ID numérico válido.")
+
+    if not hotel_seleccionado.get('habitaciones'):
+        print(f"El hotel '{hotel_seleccionado['nombre']}' no tiene habitaciones registradas.")
+        return
+
+    # --- Selección de Fechas ---
+    while True:
+        fecha_inicio_str = input("Ingrese la fecha de inicio deseada (AAAA-MM-DD): ")
+        if validar_fecha(fecha_inicio_str):
+            fecha_inicio_dt = datetime.strptime(fecha_inicio_str, '%Y-%m-%d')
+            # Validar que no sea una fecha pasada
+            if fecha_inicio_dt.date() >= datetime.now().date():
+                 break
+            else:
+                 print("Error: La fecha de inicio no puede ser una fecha pasada.")
+        else:
+            print("Formato de fecha incorrecto. Use AAAA-MM-DD.")
+
+    while True:
+        fecha_fin_str = input("Ingrese la fecha de fin deseada (AAAA-MM-DD): ")
+        if validar_fecha(fecha_fin_str):
+            fecha_fin_dt = datetime.strptime(fecha_fin_str, '%Y-%m-%d')
+            if fecha_fin_dt > fecha_inicio_dt:
+                break
+            else:
+                print("Error: La fecha de fin debe ser posterior a la fecha de inicio.")
+        else:
+            print("Formato de fecha incorrecto. Use AAAA-MM-DD.")
+
+    # --- Encontrar Habitaciones Ocupadas en esas Fechas ---
+    habitaciones_ocupadas_numeros = set() # Usamos un set para guardar los números de habitación ocupados
+
+    for r in reservas:
+        # Solo consideramos reservas del hotel seleccionado
+        if r['id_hotel'] == id_hotel_buscar:
+            reserva_inicio_dt = datetime.strptime(r['fecha_inicio'], '%Y-%m-%d')
+            reserva_fin_dt = datetime.strptime(r['fecha_fin'], '%Y-%m-%d')
+
+            # Comprobamos si hay solapamiento (si la reserva existente choca con las fechas buscadas)
+            if (fecha_inicio_dt < reserva_fin_dt) and (fecha_fin_dt > reserva_inicio_dt):
+                habitaciones_ocupadas_numeros.add(r['numero_habitacion'])
+
+    # --- Determinar Habitaciones Disponibles ---
+    habitaciones_disponibles = []
+    todas_las_habitaciones_hotel = hotel_seleccionado.get('habitaciones', [])
+
+    for hab in todas_las_habitaciones_hotel:
+        # Si el número de la habitación NO está en el set de ocupadas, está disponible
+        if hab['numero'] not in habitaciones_ocupadas_numeros:
+            habitaciones_disponibles.append(hab)
+
+    # --- Mostrar Resultados ---
+    print(f"\n--- Habitaciones Disponibles en '{hotel_seleccionado['nombre']}' entre {fecha_inicio_str} y {fecha_fin_str} ---")
+    if habitaciones_disponibles:
+        try:
+            from tabulate import tabulate # Intentamos importar tabulate aquí
+            headers = ["Número", "Capacidad", "Precio x Noche"]
+            tabla_disponibles = [[h['numero'], h['capacidad'], f"${h['precio']:.2f}"] for h in habitaciones_disponibles]
+            print(tabulate(tabla_disponibles, headers=headers, tablefmt="grid"))
+        except ImportError: # Si falla la importación de tabulate
+            print("(Librería 'tabulate' no encontrada. Mostrando en formato simple.)")
+            print("Número | Capacidad | Precio x Noche")
+            for h in habitaciones_disponibles:
+                print(f"{h['numero']:<6} | {h['capacidad']:<9} | ${h['precio']:.2f}")
+    else:
+        print("No hay habitaciones disponibles en las fechas seleccionadas.")
 
 
 def generar_reportes(hoteles: list, clientes: list, reservas: list) -> None:
@@ -160,7 +247,7 @@ def generar_reportes(hoteles: list, clientes: list, reservas: list) -> None:
         print("3. Listar todas las reservas")
         print("4. Buscar reservas por cliente")
         print("5. Buscar reservas por hotel")
-        print("6. Consultar habitaciones disponibles (Próximamente)")
+        print("6. Consultar habitaciones disponibles")
         print("0. Volver al menú principal")
         print("=" * 40)
 

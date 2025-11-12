@@ -181,6 +181,15 @@ def agregar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
             break
         else:
             print("Formato de fecha incorrecto. Use AAAA-MM-DD.")
+    
+    # Calculamos la fecha límite (un año después de la fecha de inicio)
+    try:
+        fecha_limite_dt = fecha_inicio_dt.replace(year=fecha_inicio_dt.year + 1)
+    except ValueError:
+        # Maneja el caso de año bisiesto
+        fecha_limite_dt = fecha_inicio_dt.replace(
+            year=fecha_inicio_dt.year + 1, day=28
+        )
 
     while True:
         fecha_fin_str = input("Ingrese la fecha de fin (AAAA-MM-DD): ")
@@ -188,11 +197,13 @@ def agregar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
             fecha_fin_dt = datetime.strptime(
                 fecha_fin_str, "%Y-%m-%d"
             )  # Convertimos a datetime para comparaciones
-
-            if fecha_fin_dt > fecha_inicio_dt:  # Si es correcta
-                break
-            else:
+            if fecha_fin_dt <= fecha_inicio_dt:
                 print("Error: La fecha de fin debe ser posterior a la fecha de inicio.")
+            elif fecha_fin_dt > fecha_limite_dt:
+                print(f"Error: La reserva no puede exceder un año desde la fecha de inicio.")
+                print(f"La fecha de fin máxima permitida es: {fecha_limite_dt.strftime('%Y-%m-%d')}")
+            else:
+                break  # Las fechas son válidas
         else:
             print("Formato de fecha incorrecto. Use AAAA-MM-DD.")
 
