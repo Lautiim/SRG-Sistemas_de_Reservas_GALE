@@ -2,6 +2,9 @@ import json
 import os
 
 
+
+
+
 def leer_archivo(ruta: str) -> list:
     """Función para leer un archivo JSON
 
@@ -98,3 +101,5 @@ if __name__ == "__main__":
     print("RUTA_ARCHIVO_HOTELES:", RUTA_ARCHIVO_HOTELES)
     print("RUTA_ARCHIVO_CLIENTES:", RUTA_ARCHIVO_CLIENTES)
     print("RUTA_ARCHIVO_RESERVAS:", RUTA_ARCHIVO_RESERVAS)
+
+    
