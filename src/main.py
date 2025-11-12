@@ -8,35 +8,58 @@ from utils import limpiar_pantalla
 import os
 
 
+# Nuevas importaciones para la estética
+from tabulate import tabulate
+from colorama import Fore, Style, init
+
+
 def menu():
-    """Función que muestra el menú principal del sistema."""
+    """Función que muestra el menú principal del sistema con formato."""
     limpiar_pantalla()
-    print("=" * 40)
-    print(" SRG - Sistema de Registro de Hotelería ".center(40, " "))
-    print("=" * 40)
-    print("1. Gestión de Hoteles")
-    print("2. Gestión de Clientes")
-    print("3. Gestión de Reservas")
-    print("4. Generar Reportes")
-    print("5. Exportar datos a CSV")
-    print("0. Salir")
-    print("=" * 40)
+
+    # Título
+    titulo = " SRG - Sistema de Registro de Hotelería "
+    print(Fore.CYAN + Style.BRIGHT + "=" * 50)
+    print(titulo.center(50, " "))
+    print("=" * 50 + Style.RESET_ALL)
+
+    # Datos del menú para tabulate
+    menu_data = [
+        [Fore.YELLOW + "1" + Style.RESET_ALL, "Gestión de Hoteles"],
+        [Fore.YELLOW + "2" + Style.RESET_ALL, "Gestión de Clientes"],
+        [Fore.YELLOW + "3" + Style.RESET_ALL, "Gestión de Reservas"],
+        [Fore.YELLOW + "4" + Style.RESET_ALL, "Generar Reportes"],
+        [Fore.RED + "0" + Style.RESET_ALL, "Salir del Sistema"],
+    ]
+
+    # Headers para la tabla
+    headers = [Fore.GREEN + "Opción", Fore.GREEN + "Acción" + Style.RESET_ALL]
+
+    # Imprimir la tabla
+    print(tabulate(menu_data, headers=headers, tablefmt="heavy_outline"))
+
 
 def main():
     """Función principal que inicia y controla el flujo del sistema."""
+    # Inicializar colorama (autoreset=True reinicia el color después de cada print)
+    init(autoreset=True)
+
     # Se cargan los datos iniciales desde el módulo de datos.
     hoteles, clientes, reservas = datos.cargar_datos()
 
-    print("Bienvenido a SRG - Sistema de Registro de Hotelería")
-    input("Presione Enter para comenzar...") # Pausa inicial
+    print(
+        Fore.CYAN + Style.BRIGHT + "Bienvenido a SRG - Sistema de Registro de Hotelería"
+    )
+    input(
+        Fore.YELLOW + "Presione Enter para comenzar..." + Style.RESET_ALL
+    )  # Pausa inicial
 
     while True:
-        menu() # Mostramos el menú
-        opcion = input("Seleccione una opción: ")
+        menu()  # Mostramos el menú
+        opcion = input(Fore.GREEN + "\nSeleccione una opción: " + Style.RESET_ALL)
 
         if opcion == "1":
-            # Llamamos a la función principal del módulo de hoteles,
-            # pasándole las listas de datos para que pueda usarlas y modificarlas.
+            # Llamamos a la función principal del módulo de hoteles
             gestion_hoteles.gestionar_hoteles(hoteles, clientes, reservas)
         elif opcion == "2":
             # Hacemos lo mismo para el módulo de clientes.
@@ -52,14 +75,15 @@ def main():
             reportes.exportar_datos_csv(hoteles, clientes, reservas)
         elif opcion == "0":
             limpiar_pantalla()
-            print("=" * 40)
+            print(Fore.CYAN + Style.BRIGHT + "=" * 40)
             print(" Gracias por usar SRG ".center(40, "="))
             print(" Saliendo del sistema... ".center(40, " "))
             print("=" * 40)
-            break # Salimos del bucle y terminamos el programa
+            break  # Salimos del bucle y terminamos el programa
         else:
-            print("Opción no válida. Intente de nuevo.")
-            input("\nPresione Enter para continuar...")
+            print(Fore.RED + Style.BRIGHT + "Opción no válida. Intente de nuevo.")
+            input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
+
 
 if __name__ == "__main__":
     main()
