@@ -1,12 +1,12 @@
 # Importamos funciones necesarias de otros módulos
+import os
+import datos
 from datetime import datetime
 from utils import limpiar_pantalla, validar_fecha
 from gestion_hoteles import consultar_hoteles, buscar_hotel_por_id
 from gestion_clientes import consultar_clientes, buscar_cliente_por_id
 from gestion_reservas import consultar_reservas
 from tabulate import tabulate
-import os 
-import datos
 
 
 
@@ -437,10 +437,41 @@ def exportar_hoteles_csv(hoteles: list, ruta_hoteles: str, ruta_habitaciones: st
     except IOError as e:
         print(f"Error al escribir el archivo {ruta_habitaciones}: {e}")
 
+def exportar_datos_csv(hoteles: list, clientes: list, reservas: list) -> None:
+   
+    """
+    Función principal para gestionar la exportación de todos los datos a CSV.
+    Maneja la lógica de rutas y llama a las funciones de exportación.
+    Pre: Recibe las listas de hoteles, clientes y reservas.
+    
+    Post: Exporta los datos a archivos CSV en las rutas especificadas.
+    """
+    limpiar_pantalla()
+    print("=" * 40)
+    print("   --- Exportando datos a CSV ---     ".center(40, " "))
+    print("=" * 40)
+    
+    try:
+        # 1. Definir las rutas (usando datos.RUTA_DATA)
+        ruta_clientes_csv = os.path.join(datos.RUTA_DATA, "clientes_export.csv")
+        ruta_reservas_csv = os.path.join(datos.RUTA_DATA, "reservas_export.csv")
+        ruta_hoteles_csv = os.path.join(datos.RUTA_DATA, "hoteles_export.csv")
+        ruta_habitaciones_csv = os.path.join(datos.RUTA_DATA, "habitaciones_export.csv")
+
+        # 2. Llamar a las funciones de exportación (que están en este mismo archivo)
+        exportar_clientes_csv(clientes, ruta_clientes_csv)
+        exportar_reservas_csv(reservas, ruta_reservas_csv)
+        exportar_hoteles_csv(hoteles, ruta_hoteles_csv, ruta_habitaciones_csv)
+        
+        print(f"\n¡Datos exportados exitosamente en la carpeta '{datos.RUTA_DATA}'!")
+    
+    except Exception as e:
+        print(f"\nOcurrió un error general al exportar: {e}")
+    
+    input("\nPresione Enter para continuar...")
+
 
 
 if __name__ == "__main__":
-    from datos import cargar_datos
-
-    hoteles, clientes, reservas = cargar_datos()
+    hoteles, clientes, reservas = datos.cargar_datos()
     generar_reportes(hoteles, clientes, reservas)
