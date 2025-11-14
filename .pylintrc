@@ -1,0 +1,45 @@
+[MASTER]
+ignore=build,dist,.venv,src/__pycache__
+extension-pkg-whitelist=
+jobs=0
+unsafe-load-any-extension=no
+init-hook='import os, sys; sys.path.insert(0, os.path.abspath("."))'
+
+[MESSAGES CONTROL]
+disable=
+    missing-module-docstring,
+    missing-class-docstring,
+    missing-function-docstring,
+    too-few-public-methods,
+    invalid-name,
+    redefined-outer-name
+
+[REPORTS]
+output-format=colorized
+reports=no
+score=yes
+
+[BASIC]
+good-names=i,j,k,_,id,ok
+max-line-length=100
+class-attribute-naming-style=any
+
+[FORMAT]
+max-line-length=100
+indent-string='    '
+
+[DESIGN]
+max-args=8
+max-attributes=12
+max-locals=25
+max-branches=20
+max-statements=80
+
+[TYPECHECK]
+ignored-modules=colorama,tabulate
+
+[SIMILARITIES]
+min-similarity-lines=6
+ignore-comments=yes
+ignore-docstrings=yes
+ignore-imports=yes

@@ -1,0 +1,25 @@
+[
+    {
+        "id": 1,
+        "nombre": "Hotel Sol",
+        "ubicacion": "Ciudad",
+        "habitaciones": [
+            {
+                "numero": 101,
+                "capacidad": 2,
+                "precio": 100.0
+            },
+            {
+                "numero": 102,
+                "capacidad": 2,
+                "precio": 110.0
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "nombre": "Hotel Mar",
+        "ubicacion": "Playa",
+        "habitaciones": []
+    }
+]

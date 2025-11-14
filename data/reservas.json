@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "id_cliente": 1,
+        "id_hotel": 1,
+        "numero_habitacion": 101,
+        "fecha_inicio": "2024-01-10",
+        "fecha_fin": "2024-01-15"
+    },
+    {
+        "id": 2,
+        "id_cliente": 2,
+        "id_hotel": 1,
+        "numero_habitacion": 102,
+        "fecha_inicio": "2024-01-12",
+        "fecha_fin": "2024-01-14"
+    }
+]
