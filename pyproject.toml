@@ -7,7 +7,7 @@ name = "srg-sistemas-reservas-gale"
 version = "0.1.0"
 description = "Sistema de reservas para hoteles desarrollado en Python como TPO de AyED1 en UADE."
 readme = "README.md"
-requires-python = ">=3.12,<3.13" # Solo soporta Python 3.12.x; Python 3.13 y posteriores no están soportados
+requires-python = ">=3.12" # Soporta Python 3.12 y versiones posteriores
 license = {text = "MIT License"}
 authors = [
   { name = "Axel Aguilar"},
