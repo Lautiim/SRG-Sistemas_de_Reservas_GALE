@@ -7,84 +7,19 @@
             {
                 "numero": 101,
                 "capacidad": 2,
-                "precio": 7500
+                "precio": 100.0
             },
             {
                 "numero": 102,
                 "capacidad": 2,
-                "precio": 7500
-            },
-            {
-                "numero": 103,
-                "capacidad": 4,
-                "precio": 12000
+                "precio": 110.0
             }
         ]
     },
     {
         "id": 2,
-        "nombre": "Hotel Luna",
+        "nombre": "Hotel Mar",
         "ubicacion": "Playa",
-        "habitaciones": [
-            {
-                "numero": 201,
-                "capacidad": 2,
-                "precio": 9000
-            },
-            {
-                "numero": 202,
-                "capacidad": 3,
-                "precio": 11000
-            }
-        ]
-    },
-    {
-        "id": 3,
-        "nombre": "Hotel Montaña",
-        "ubicacion": "Montaña",
-        "habitaciones": [
-            {
-                "numero": 301,
-                "capacidad": 2,
-                "precio": 8500
-            },
-            {
-                "numero": 302,
-                "capacidad": 2,
-                "precio": 8500
-            },
-            {
-                "numero": 303,
-                "capacidad": 2,
-                "precio": 8500
-            },
-            {
-                "numero": 304,
-                "capacidad": 5,
-                "precio": 15000
-            },
-            {
-                "numero": 305,
-                "capacidad": 2,
-                "precio": 20000.0
-            }
-        ]
-    },
-    {
-        "id": 4,
-        "nombre": "Hotel Costa",
-        "ubicacion": "Costa",
-        "habitaciones": [
-            {
-                "numero": 401,
-                "capacidad": 2,
-                "precio": 9500
-            },
-            {
-                "numero": 405,
-                "capacidad": 4,
-                "precio": 14000
-            }
-        ]
+        "habitaciones": []
     }
 ]
