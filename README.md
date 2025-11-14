@@ -1,24 +1,85 @@
 # SRG (Sistemas de Reservas GALE)
+
 Trabajo final de **Algoritmia y Estructura de Datos**  
-Universidad: UADE Costa Argentina - Algoritmia y Estructura de Datos 2025
+UADE Costa Argentina - 2025
 
 ## Descripción
-SRG es un sistema de reservas para hoteles desarrollado en **Python**.
-Primera entrega: sin persistencia (no base de datos, no JSON), manejo de estructuras en memoria.
+Sistema de gestión de reservas para hoteles en **Python**. Mantiene datos en memoria (sin BD). Incluye creación, consulta, modificación y exportación de información de hoteles, clientes y reservas.
 
-## Estructura del Repositorio
-- **/src** → código fuente en Python
-- **/docs** → documentación y diagramas
-- **/tests** → pruebas básicas (funciones aisladas, etc)
+## Requisitos
+- Python 3.14.x (el proyecto exige >=3.14,<3.15)
+- Entorno virtual recomendado
+
+## Funcionalidades Principales
+- Clientes: alta, listado, búsqueda, modificación.
+- Hoteles: alta, listado, modificación.
+- Habitaciones por hotel: agregar, actualizar, eliminar (protege si hay reservas).
+- Reservas: crear, listar, buscar por cliente/hotel, modificar (fechas, habitación, cliente, hotel).
+- Reportes: habitaciones disponibles, búsquedas combinadas.
+- Exportación CSV: clientes, hoteles, reservas (carpeta `csv/`).
+- Validaciones: fechas (YYYY-MM-DD), conflictos de reservas, unicidad de DNI y número de habitación.
+- Menús interactivos por consola.
+
+## Estructura
+```
+src/
+  datos.py
+  gestion_clientes.py
+  gestion_hoteles.py
+  gestion_reservas.py
+  reportes.py
+  utils.py
+tests/
+  test_main.py
+  test_modificaciones.py
+.github/workflows/ci.yml
+```
+
+## Calidad de Código
+- Formateo: Black (línea 100/130 según módulos).
+- Linter: Pylint (se corrigen import order, else redundantes, excepciones amplias).
+- CI: GitHub Actions (Ubuntu, Windows, macOS) ejecuta black --check, pylint y pytest.
+
+## Instalación Rápida
+```powershell
+python -m venv .venv
+. .\.venv\Scripts\Activate.ps1
+python -m pip install -U pip
+python -m pip install -e ".[dev]"
+```
+
+## Uso
+```powershell
+python src\main.py
+```
+
+## Pruebas
+```powershell
+python -m pytest -q
+```
+
+## Lint/Formato
+```powershell
+black src tests
+pylint src tests
+```
+
+## Exportación CSV
+Genera archivos en carpeta `csv/`. Se crea automáticamente si no existe.
+
+## Contribución
+1. Crear rama.
+2. Ejecutar lint y tests.
+3. Commit y pull request.
 
 ## Integrantes
 - Axel Aguilar
-- Emanuel Grossi 
+- Emanuel Grossi
 - Gianluca Chia
 - Lautaro Salto
 
-## Links Útiles
-- **Trello del Proyecto:** [https://github.com/Lautiim/SRG-Sistemas_de_Reservas_GALE](https://trello.com/b/LePKo6J6/srg-sistemas-de-reservas-gale)
-- **Carpeta Compartida en Google Drive:** [https://drive.google.com/drive/u/0/folders/1_R_JRjaMFSzTjN6Y907UZiyd5XfOL9k6](https://drive.google.com/drive/u/0/folders/1_R_JRjaMFSzTjN6Y907UZiyd5XfOL9k6)
-- **Repositorio en GitHub:** [https://github.com/Lautiim/SRG-Sistemas_de_Reservas_GALE](https://github.com/Lautiim/SRG-Sistemas_de_Reservas_GALE)
-- **Documentación de Python:** [https://docs.python.org/3](https://docs.python.org/3)
+## Enlaces
+- Trello: https://trello.com/b/LePKo6J6/srg-sistemas-de-reservas-gale
+- Drive: https://drive.google.com/drive/u/0/folders/1_R_JRjaMFSzTjN6Y907UZiyd5XfOL9k6
+- Repo: https://github.com/Lautiim/SRG-Sistemas_de_Reservas_GALE
+- Python Docs: https://docs.python.org/3
