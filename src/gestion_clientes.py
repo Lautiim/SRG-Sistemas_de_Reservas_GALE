@@ -27,6 +27,43 @@ def cliente_existente(dni: str, clientes: list) -> bool:
 # Funciones principales del módulo
 
 
+def actualizar_cliente(
+    clientes: list,
+    id_cliente: int,
+    hoteles: list | None = None,
+    reservas: list | None = None,
+    nombre: str | None = None,
+    dni: str | None = None,
+    telefono: str | None = None,
+) -> bool:
+    """Actualiza los datos de un cliente existente.
+
+    - Valida unicidad de DNI (excluyendo el cliente actual).
+    - Campos None no se modifican.
+
+    Retorna True si actualizó, False si hubo problema (no existe o DNI duplicado).
+    """
+    cliente = buscar_cliente_por_id(id_cliente, clientes)
+    if not cliente:
+        return False
+
+    if dni is not None:
+        if any(c["dni"] == dni and c["id"] != id_cliente for c in clientes):
+            return False
+
+    if nombre is not None and nombre != "":
+        cliente["nombre"] = nombre
+    if dni is not None and dni != "":
+        cliente["dni"] = str(dni)
+    if telefono is not None and telefono != "":
+        cliente["telefono"] = str(telefono)
+
+    # Guardar si nos dieron listas completas
+    if hoteles is not None and reservas is not None:
+        datos.guardar_datos(hoteles, clientes, reservas)
+    return True
+
+
 def agregar_cliente(hoteles: list, clientes: list, reservas: list) -> None:
     """Funcion para agregar un nuevo cliente a la lista de clientes."""
     print(Fore.CYAN + Style.BRIGHT + "--- Agregar Cliente ---" + Style.RESET_ALL)
@@ -115,6 +152,66 @@ def consultar_clientes(clientes: list) -> None:
                 )
     else:
         print(Fore.YELLOW + "No hay clientes registrados.")
+
+
+def modificar_cliente(hoteles: list, clientes: list, reservas: list) -> None:
+    """Interfaz interactiva para modificar un cliente."""
+    print(Fore.CYAN + Style.BRIGHT + "--- Modificar Cliente ---" + Style.RESET_ALL)
+    consultar_clientes(clientes)
+    if not clientes:
+        return
+
+    while True:
+        try:
+            id_mod = int(
+                input(
+                    Fore.GREEN
+                    + "\nIngrese el ID del cliente a modificar: "
+                    + Style.RESET_ALL
+                )
+            )
+            break
+        except ValueError:
+            print(Fore.RED + "Error: Ingrese un ID numérico válido.")
+
+    cliente = buscar_cliente_por_id(id_mod, clientes)
+    if not cliente:
+        print(Fore.RED + f"No se encontró cliente con ID {id_mod}.")
+        return
+
+    print(Fore.CYAN + f"Editando a: {cliente['nombre']} (DNI {cliente['dni']})")
+    nuevo_nombre = input(
+        Fore.GREEN + f"Nuevo nombre [{cliente['nombre']}] (Enter = dejar): " + Style.RESET_ALL
+    ).strip()
+    nuevo_dni = input(
+        Fore.GREEN + f"Nuevo DNI [{cliente['dni']}] (Enter = dejar): " + Style.RESET_ALL
+    ).strip()
+    nuevo_tel = input(
+        Fore.GREEN + f"Nuevo Teléfono [{cliente['telefono']}] (Enter = dejar): " + Style.RESET_ALL
+    ).strip()
+
+    # Normalizar entradas vacías a None para no modificar
+    nombre_val = nuevo_nombre if nuevo_nombre != "" else None
+    dni_val = nuevo_dni if nuevo_dni != "" else None
+    tel_val = nuevo_tel if nuevo_tel != "" else None
+
+    if dni_val is not None and not dni_val.isdigit():
+        print(Fore.RED + "El DNI debe contener solo números.")
+        return
+
+    ok = actualizar_cliente(
+        clientes,
+        id_mod,
+        hoteles=hoteles,
+        reservas=reservas,
+        nombre=nombre_val,
+        dni=dni_val,
+        telefono=tel_val,
+    )
+    if ok:
+        print(Fore.GREEN + Style.BRIGHT + "Cliente actualizado correctamente.")
+    else:
+        print(Fore.RED + "No se pudo actualizar (ID inválido o DNI duplicado).")
 
 
 def eliminar_cliente(hoteles: list, clientes: list, reservas: list) -> None:
@@ -211,6 +308,7 @@ def gestionar_clientes(hoteles: list, clientes: list, reservas: list) -> None:
             [Fore.YELLOW + "1" + Style.RESET_ALL, "Agregar Cliente"],
             [Fore.YELLOW + "2" + Style.RESET_ALL, "Consultar Clientes"],
             [Fore.YELLOW + "3" + Style.RESET_ALL, "Eliminar Cliente"],
+            [Fore.YELLOW + "4" + Style.RESET_ALL, "Modificar Cliente"],
             [Fore.RED + "0" + Style.RESET_ALL, "Volver al menú principal"],
         ]
 
@@ -233,6 +331,10 @@ def gestionar_clientes(hoteles: list, clientes: list, reservas: list) -> None:
         elif opcion == "3":
             limpiar_pantalla()
             eliminar_cliente(hoteles, clientes, reservas)
+            input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
+        elif opcion == "4":
+            limpiar_pantalla()
+            modificar_cliente(hoteles, clientes, reservas)
             input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
         elif opcion == "0":
             break

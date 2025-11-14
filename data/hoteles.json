@@ -62,6 +62,11 @@
                 "numero": 304,
                 "capacidad": 5,
                 "precio": 15000
+            },
+            {
+                "numero": 305,
+                "capacidad": 2,
+                "precio": 20000.0
             }
         ]
     },
