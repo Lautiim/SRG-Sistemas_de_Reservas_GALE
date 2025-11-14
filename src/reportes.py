@@ -1,20 +1,62 @@
-# Importamos funciones necesarias de otros módulos
-import os
-import datos
+# Importaciones organizadas por grupos: estándar, terceros, locales
 from datetime import datetime
-from utils import limpiar_pantalla, validar_fecha
-from gestion_hoteles import consultar_hoteles, buscar_hotel_por_id
-from gestion_clientes import consultar_clientes, buscar_cliente_por_id
-from gestion_reservas import consultar_reservas
-from tabulate import tabulate
+import os
+
 from colorama import Fore, Style, init
+from tabulate import tabulate
+
+import datos
+from gestion_clientes import buscar_cliente_por_id, consultar_clientes
+from gestion_hoteles import buscar_hotel_por_id, consultar_hoteles
+from gestion_reservas import consultar_reservas
+from utils import limpiar_pantalla, validar_fecha
+
+
+def _pedir_fecha_inicio() -> tuple[str, datetime]:
+    """Solicita una fecha de inicio válida (no pasada)."""
+    while True:
+        fecha_str = input(
+            Fore.GREEN
+            + "Ingrese la fecha de inicio (AAAA-MM-DD): "
+            + Style.RESET_ALL
+        )
+        if not validar_fecha(fecha_str):
+            print(Fore.RED + "Formato de fecha incorrecto. Use AAAA-MM-DD.")
+            continue
+        fecha_dt = datetime.strptime(fecha_str, "%Y-%m-%d")
+        if fecha_dt.date() < datetime.now().date():
+            print(Fore.RED + "Error: La fecha de inicio no puede ser una fecha pasada.")
+            continue
+        return fecha_str, fecha_dt
+
+
+def _pedir_fecha_fin(fecha_inicio_dt: datetime) -> tuple[str, datetime]:
+    """Solicita una fecha de fin válida (posterior al inicio)."""
+    while True:
+        fecha_str = input(
+            Fore.GREEN
+            + "Ingrese la fecha de fin (AAAA-MM-DD): "
+            + Style.RESET_ALL
+        )
+        if not validar_fecha(fecha_str):
+            print(Fore.RED + "Formato de fecha incorrecto. Use AAAA-MM-DD.")
+            continue
+        fecha_dt = datetime.strptime(fecha_str, "%Y-%m-%d")
+        if fecha_dt <= fecha_inicio_dt:
+            print(
+                Fore.RED + "Error: La fecha de fin debe ser posterior a la fecha de inicio."
+            )
+            continue
+        return fecha_str, fecha_dt
 
 
 def buscar_reserva_x_cliente(hoteles: list, clientes: list, reservas: list):
     """Busca y muestra todas las reservas asociadas a un cliente específico por su ID.
 
     Pre: Recibe la lista de hoteles, clientes y reservas.
-    Post: Muestra por pantalla las reservas del cliente seleccionado o un mensaje si no hay reservas.
+    
+    Post: Muestra por pantalla las reservas del cliente
+    o un mensaje si no hay reservas.
     """
     print(Fore.CYAN + Style.BRIGHT + "--- Buscar Reservas por Cliente ---" + Style.RESET_ALL)
     consultar_clientes(clientes)
@@ -33,14 +75,13 @@ def buscar_reserva_x_cliente(hoteles: list, clientes: list, reservas: list):
             )
             cliente_seleccionado = buscar_cliente_por_id(id_cliente_buscar, clientes)
             if cliente_seleccionado:
-                print(
-                    Fore.CYAN
-                    + f"Buscando reservas para: {cliente_seleccionado['nombre']} (ID: {id_cliente_buscar})"
-                    + Style.RESET_ALL
+                msg_buscar_cliente = (
+                    f"Buscando reservas para: {cliente_seleccionado['nombre']} "
+                    f"(ID: {id_cliente_buscar})"
                 )
+                print(Fore.CYAN + msg_buscar_cliente + Style.RESET_ALL)
                 break
-            else:
-                print(Fore.RED + "ID de cliente no válido. Intente de nuevo.")
+            print(Fore.RED + "ID de cliente no válido. Intente de nuevo.")
         except ValueError:
             print(Fore.RED + "Error: Ingrese un ID numérico válido.")
 
@@ -77,12 +118,15 @@ def buscar_reserva_x_cliente(hoteles: list, clientes: list, reservas: list):
             )
 
     if reservas_encontradas:
+        msg_reservas_cliente = f"\nReservas encontradas para {cliente_seleccionado['nombre']}:"
+        print(Fore.CYAN + msg_reservas_cliente + Style.RESET_ALL)
         print(
-            Fore.CYAN
-            + f"\nReservas encontradas para {cliente_seleccionado['nombre']}:"
-            + Style.RESET_ALL
+            tabulate(
+                reservas_encontradas,
+                headers=headers,
+                tablefmt="grid",
+            )
         )
-        print(tabulate(reservas_encontradas, headers=headers, tablefmt="grid"))
     else:
         print(
             Fore.YELLOW
@@ -109,14 +153,13 @@ def buscar_reserva_x_hotel(hoteles: list, clientes: list, reservas: list):
             )
             hotel_seleccionado = buscar_hotel_por_id(id_hotel_buscar, hoteles)
             if hotel_seleccionado:
-                print(
-                    Fore.CYAN
-                    + f"Buscando reservas para: {hotel_seleccionado['nombre']} (ID: {id_hotel_buscar})"
-                    + Style.RESET_ALL
+                msg_buscar_hotel = (
+                    f"Buscando reservas para: {hotel_seleccionado['nombre']} "
+                    f"(ID: {id_hotel_buscar})"
                 )
+                print(Fore.CYAN + msg_buscar_hotel + Style.RESET_ALL)
                 break
-            else:
-                print(Fore.RED + "ID de hotel no válido. Intente de nuevo.")
+            print(Fore.RED + "ID de hotel no válido. Intente de nuevo.")
         except ValueError:
             print(Fore.RED + "Error: Ingrese un ID numérico válido.")
 
@@ -152,12 +195,15 @@ def buscar_reserva_x_hotel(hoteles: list, clientes: list, reservas: list):
             )
 
     if reservas_encontradas:
+        msg_reservas_hotel = f"\nReservas encontradas para {hotel_seleccionado['nombre']}:"
+        print(Fore.CYAN + msg_reservas_hotel + Style.RESET_ALL)
         print(
-            Fore.CYAN
-            + f"\nReservas encontradas para {hotel_seleccionado['nombre']}:"
-            + Style.RESET_ALL
+            tabulate(
+                reservas_encontradas,
+                headers=headers,
+                tablefmt="grid",
+            )
         )
-        print(tabulate(reservas_encontradas, headers=headers, tablefmt="grid"))
     else:
         print(
             Fore.YELLOW
@@ -185,50 +231,26 @@ def consultar_habitaciones_disponibles(hoteles: list, reservas: list):
             )
             hotel_seleccionado = buscar_hotel_por_id(id_hotel_buscar, hoteles)
             if hotel_seleccionado:
-                print(
-                    Fore.CYAN
-                    + f"Consultando disponibilidad para: {hotel_seleccionado['nombre']} (ID: {id_hotel_buscar})"
-                    + Style.RESET_ALL
+                msg_consulta_disp = (
+                    f"Consultando disponibilidad para: {hotel_seleccionado['nombre']} "
+                    f"(ID: {id_hotel_buscar})"
                 )
+                print(Fore.CYAN + msg_consulta_disp + Style.RESET_ALL)
                 break
-            else:
-                print(Fore.RED + "ID de hotel no válido. Intente de nuevo.")
+            print(Fore.RED + "ID de hotel no válido. Intente de nuevo.")
         except ValueError:
             print(Fore.RED + "Error: Ingrese un ID numérico válido.")
 
     if not hotel_seleccionado.get("habitaciones"):
-        print(
-            Fore.YELLOW
-            + f"El hotel '{hotel_seleccionado['nombre']}' no tiene habitaciones registradas."
+        msg_sin_habs = (
+            "El hotel '" + hotel_seleccionado['nombre'] + "' no tiene habitaciones registradas."
         )
+        print(Fore.YELLOW + msg_sin_habs)
         return
 
     # Selección de fechas
-    while True:
-        fecha_inicio_str = input(
-            Fore.GREEN + "Ingrese la fecha de inicio deseada (AAAA-MM-DD): " + Style.RESET_ALL
-        )
-        if validar_fecha(fecha_inicio_str):
-            fecha_inicio_dt = datetime.strptime(fecha_inicio_str, "%Y-%m-%d")
-            if fecha_inicio_dt.date() >= datetime.now().date():
-                break
-            else:
-                print(Fore.RED + "Error: La fecha de inicio no puede ser una fecha pasada.")
-        else:
-            print(Fore.RED + "Formato de fecha incorrecto. Use AAAA-MM-DD.")
-
-    while True:
-        fecha_fin_str = input(
-            Fore.GREEN + "Ingrese la fecha de fin deseada (AAAA-MM-DD): " + Style.RESET_ALL
-        )
-        if validar_fecha(fecha_fin_str):
-            fecha_fin_dt = datetime.strptime(fecha_fin_str, "%Y-%m-%d")
-            if fecha_fin_dt > fecha_inicio_dt:
-                break
-            else:
-                print(Fore.RED + "Error: La fecha de fin debe ser posterior a la fecha de inicio.")
-        else:
-            print(Fore.RED + "Formato de fecha incorrecto. Use AAAA-MM-DD.")
+    fecha_inicio_str, fecha_inicio_dt = _pedir_fecha_inicio()
+    fecha_fin_str, fecha_fin_dt = _pedir_fecha_fin(fecha_inicio_dt)
 
     # Encontrar habitaciones ocupadas en esas fechas
     habitaciones_ocupadas_numeros = set()
@@ -250,11 +272,16 @@ def consultar_habitaciones_disponibles(hoteles: list, reservas: list):
             habitaciones_disponibles.append(hab)
 
     # Mostrar resultados
-    print(
-        Fore.CYAN
-        + f"\n--- Habitaciones Disponibles en '{hotel_seleccionado['nombre']}' entre {fecha_inicio_str} y {fecha_fin_str} ---"
-        + Style.RESET_ALL
+    titulo_disponibles = (
+        "\n--- Habitaciones Disponibles en '"
+        + hotel_seleccionado['nombre']
+        + "' entre "
+        + fecha_inicio_str
+        + " y "
+        + fecha_fin_str
+        + " ---"
     )
+    print(Fore.CYAN + titulo_disponibles + Style.RESET_ALL)
     if habitaciones_disponibles:
         headers = [
             Fore.GREEN + "Número" + Style.RESET_ALL,
@@ -264,7 +291,13 @@ def consultar_habitaciones_disponibles(hoteles: list, reservas: list):
         tabla_disponibles = [
             [h["numero"], h["capacidad"], f"${h['precio']:.2f}"] for h in habitaciones_disponibles
         ]
-        print(tabulate(tabla_disponibles, headers=headers, tablefmt="grid"))
+        print(
+            tabulate(
+                tabla_disponibles,
+                headers=headers,
+                tablefmt="grid",
+            )
+        )
     else:
         print(Fore.YELLOW + "No hay habitaciones disponibles en las fechas seleccionadas.")
 
@@ -306,10 +339,8 @@ def exportar_clientes_csv(clientes: list, ruta_archivo: str) -> None:
 
         print(f"Archivo '{ruta_archivo}' creado con éxito.")
 
-    except IOError as e:
+    except OSError as e:  # Errores de acceso al archivo
         print(f"Error al escribir el archivo CSV: {e}")
-    except Exception as e:
-        print(f"Un error inesperado ocurrió: {e}")
 
 
 def exportar_reservas_csv(reservas: list, ruta_archivo: str) -> None:
@@ -347,10 +378,8 @@ def exportar_reservas_csv(reservas: list, ruta_archivo: str) -> None:
                 file.write(delimitador.join(fila_lista) + "\n")
         print(f"Archivo '{ruta_archivo}' creado con éxito.")
 
-    except IOError as e:
+    except OSError as e:
         print(f"Error al escribir el archivo CSV: {e}")
-    except Exception as e:
-        print(f"Un error inesperado ocurrió: {e}")
 
 
 def exportar_hoteles_csv(hoteles: list, ruta_hoteles: str, ruta_habitaciones: str) -> None:
@@ -386,7 +415,7 @@ def exportar_hoteles_csv(hoteles: list, ruta_hoteles: str, ruta_habitaciones: st
 
         print(f"Archivo '{ruta_hoteles}' creado con éxito.")
 
-    except IOError as e:
+    except OSError as e:
         print(f"Error al escribir el archivo {ruta_hoteles}: {e}")
 
     # Ahora exportamos las habitaciones de cada hotel a otro archivo CSV
@@ -401,7 +430,8 @@ def exportar_hoteles_csv(hoteles: list, ruta_hoteles: str, ruta_habitaciones: st
         id_hotel = hotel.get("id")
         # Recorremos las habitaciones del hotel actual
         for habitaciones in hotel.get("habitaciones", []):
-            # Por cada habitación que encuentra, crea un nuevo diccionario y lo agrega a la lista habitaciones_csv.
+            # Por cada habitación que encuentra, crea un nuevo diccionario
+            # y lo agrega a la lista habitaciones_csv.
             habitaciones_csv.append(
                 {
                     # Agregamos los datos de la habitación correspondiente
@@ -432,7 +462,7 @@ def exportar_hoteles_csv(hoteles: list, ruta_hoteles: str, ruta_habitaciones: st
                 file.write(delimitador.join(fila_lista) + "\n")
 
         print(f"Archivo '{ruta_habitaciones}' creado con éxito.")
-    except IOError as e:
+    except OSError as e:
         print(f"Error al escribir el archivo {ruta_habitaciones}: {e}")
 
 
@@ -466,16 +496,16 @@ def exportar_datos_csv(hoteles: list, clientes: list, reservas: list) -> None:
         exportar_reservas_csv(reservas, ruta_reservas_csv)
         exportar_hoteles_csv(hoteles, ruta_hoteles_csv, ruta_habitaciones_csv)
 
-        print(f"\n¡Datos exportados exitosamente en la carpeta 'data/csv/'!")
+        print("\n¡Datos exportados exitosamente en la carpeta 'data/csv/'!")
 
-    except Exception as e:
-        print(f"\nOcurrió un error general al exportar: {e}")
+    except OSError as e:  # Errores de filesystem
+        print(f"\nError de E/S al exportar: {e}")
 
     input("\nPresione Enter para continuar...")
 
 
 def generar_reportes(hoteles: list, clientes: list, reservas: list) -> None:
-    """Función principal para interactuar con el menú de generación de reportes (con color en solo los números)."""
+    """Función principal para interactuar con el menú de generación de reportes."""
 
     init(autoreset=True)
 
@@ -507,7 +537,13 @@ def generar_reportes(hoteles: list, clientes: list, reservas: list) -> None:
         ]
 
         # Imprimir la tabla
-        print(tabulate(menu_data, headers=headers, tablefmt="heavy_outline"))
+        print(
+            tabulate(
+                menu_data,
+                headers=headers,
+                tablefmt="heavy_outline",
+            )
+        )
 
         opcion = input(Fore.GREEN + "\nSeleccione una opción: " + Style.RESET_ALL)
         limpiar_pantalla()
@@ -531,9 +567,13 @@ def generar_reportes(hoteles: list, clientes: list, reservas: list) -> None:
         else:
             print(Fore.RED + "Opción inválida. Intente de nuevo.")
 
-        input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
+        input(
+            Fore.YELLOW
+            + "\nPresione Enter para continuar..."
+            + Style.RESET_ALL
+        )
 
 
-if __name__ == "__main__":
-    hoteles, clientes, reservas = datos.cargar_datos()
-    generar_reportes(hoteles, clientes, reservas)
+if __name__ == "__main__":  # Ejecutable directo para pruebas manuales
+    _hoteles, _clientes, _reservas = datos.cargar_datos()
+    generar_reportes(_hoteles, _clientes, _reservas)

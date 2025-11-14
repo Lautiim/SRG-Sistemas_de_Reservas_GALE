@@ -1,11 +1,13 @@
-# Importamos funciones y módulos necesarios
+# Importaciones organizadas por grupos: estándar, terceros, locales
 from datetime import datetime
-from utils import limpiar_pantalla, validar_fecha
-import datos  # Para guardar los cambios
-from gestion_clientes import consultar_clientes, buscar_cliente_por_id
-from gestion_hoteles import consultar_hoteles, buscar_hotel_por_id
-from tabulate import tabulate
+
 from colorama import Fore, Style, init
+from tabulate import tabulate
+
+import datos  # Para guardar los cambios
+from gestion_clientes import buscar_cliente_por_id, consultar_clientes
+from gestion_hoteles import buscar_hotel_por_id, consultar_hoteles
+from utils import limpiar_pantalla, validar_fecha
 
 # Función de validación de disponibilidad
 

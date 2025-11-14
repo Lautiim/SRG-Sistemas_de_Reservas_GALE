@@ -1,9 +1,9 @@
-# Importamos las funciones necesarias de otros módulos
-from utils import limpiar_pantalla
-from tabulate import tabulate
-import datos  # Importamos el módulo completo para acceder a guardar_datos
-
+# Importaciones organizadas por grupos: terceros, locales
 from colorama import Fore, Style, init
+from tabulate import tabulate
+
+import datos  # Importamos el módulo completo para acceder a guardar_datos
+from utils import limpiar_pantalla
 
 # Funciones de búsqueda y validación (Helpers)
 

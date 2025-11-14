@@ -1,5 +1,5 @@
-from utils import limpiar_pantalla
 import datos  # Importamos el módulo completo para acceder a guardar_datos
+from utils import limpiar_pantalla
 from tabulate import tabulate
 from colorama import Fore, Style, init
 
@@ -112,6 +112,7 @@ def agregar_hotel(hoteles, clientes, reservas) -> None:
 def actualizar_hotel(
     hoteles: list,
     id_hotel: int,
+    *,
     clientes: list | None = None,
     reservas: list | None = None,
     nombre: str | None = None,
@@ -218,6 +219,7 @@ def agregar_habitacion_a_hotel(
     numero: int,
     capacidad: int,
     precio: float,
+    *,
     clientes: list | None = None,
     reservas: list | None = None,
 ) -> bool:
@@ -244,6 +246,7 @@ def actualizar_habitacion_de_hotel(
     hoteles: list,
     id_hotel: int,
     numero: int,
+    *,
     capacidad: int | None = None,
     precio: float | None = None,
     clientes: list | None = None,
@@ -277,6 +280,7 @@ def eliminar_habitacion_de_hotel(
     hoteles: list,
     id_hotel: int,
     numero: int,
+    *,
     clientes: list | None = None,
     reservas: list | None = None,
 ) -> bool:
@@ -376,7 +380,7 @@ def modificar_habitaciones_hotel(hoteles: list, clientes: list, reservas: list) 
             print(Fore.RED + "Valores inválidos. Operación cancelada.")
             return
         if agregar_habitacion_a_hotel(
-            hoteles, id_hotel, numero, capacidad, precio, clientes, reservas
+            hoteles, id_hotel, numero, capacidad, precio, clientes=clientes, reservas=reservas
         ):
             print(Fore.GREEN + Style.BRIGHT + "Habitación agregada correctamente.")
         else:
@@ -438,7 +442,7 @@ def modificar_habitaciones_hotel(hoteles: list, clientes: list, reservas: list) 
             print(Fore.RED + "Número inválido.")
             return
 
-        if eliminar_habitacion_de_hotel(hoteles, id_hotel, numero, clientes, reservas):
+        if eliminar_habitacion_de_hotel(hoteles, id_hotel, numero, clientes=clientes, reservas=reservas):
             print(Fore.GREEN + Style.BRIGHT + "Habitación eliminada correctamente.")
         else:
             print(

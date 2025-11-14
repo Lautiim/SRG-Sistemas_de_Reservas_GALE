@@ -1,15 +1,13 @@
-# Importamos los módulos del sistema
+# Importaciones organizadas por grupos: terceros, locales
+from colorama import Fore, Style, init
+from tabulate import tabulate
+
 import datos
-import gestion_hoteles
 import gestion_clientes
+import gestion_hoteles
 import gestion_reservas
 import reportes
 from utils import limpiar_pantalla
-
-
-# Nuevas importaciones para la estética
-from tabulate import tabulate
-from colorama import Fore, Style, init
 
 
 def menu():

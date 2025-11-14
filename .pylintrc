@@ -3,6 +3,7 @@ ignore=build,dist,.venv,src/__pycache__
 extension-pkg-whitelist=
 jobs=0
 unsafe-load-any-extension=no
+init-hook='import sys; sys.path.append("./src")'
 
 [MESSAGES CONTROL]
 disable=
