@@ -2,9 +2,6 @@ import json
 import os
 
 
-
-
-
 def leer_archivo(ruta: str) -> list:
     """Función para leer un archivo JSON
 
@@ -79,27 +76,15 @@ def guardar_datos(hoteles: list, clientes: list, reservas: list) -> None:
 
 
 # Definimos las rutas de los archivos de datos
-BASE_DIR = os.path.dirname(
-    os.path.abspath(__file__)
-)  # Directorio de este archivo, src/
-RUTA_DATA = os.path.normpath(
-    os.path.join(BASE_DIR, "..", "data")
-)  # Ruta del directorio /data
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Directorio de este archivo, src/
+RUTA_DATA = os.path.normpath(os.path.join(BASE_DIR, "..", "data"))  # Ruta del directorio /data
 
-RUTA_ARCHIVO_HOTELES = os.path.join(
-    RUTA_DATA, "hoteles.json"
-)  # Ruta del archivo hoteles.json
-RUTA_ARCHIVO_CLIENTES = os.path.join(
-    RUTA_DATA, "clientes.json"
-)  # Ruta del archivo clientes.json
-RUTA_ARCHIVO_RESERVAS = os.path.join(
-    RUTA_DATA, "reservas.json"
-)  # Ruta del archivo reservas.json
+RUTA_ARCHIVO_HOTELES = os.path.join(RUTA_DATA, "hoteles.json")  # Ruta del archivo hoteles.json
+RUTA_ARCHIVO_CLIENTES = os.path.join(RUTA_DATA, "clientes.json")  # Ruta del archivo clientes.json
+RUTA_ARCHIVO_RESERVAS = os.path.join(RUTA_DATA, "reservas.json")  # Ruta del archivo reservas.json
 
 if __name__ == "__main__":
     print("RUTA_DATA:", RUTA_DATA)
     print("RUTA_ARCHIVO_HOTELES:", RUTA_ARCHIVO_HOTELES)
     print("RUTA_ARCHIVO_CLIENTES:", RUTA_ARCHIVO_CLIENTES)
     print("RUTA_ARCHIVO_RESERVAS:", RUTA_ARCHIVO_RESERVAS)
-
-    

@@ -47,11 +47,7 @@ def agregar_hotel(hoteles, clientes, reservas) -> None:
         while True:
             try:
                 numero = int(
-                    input(
-                        Fore.GREEN
-                        + f"Número de la habitación {i+1}: "
-                        + Style.RESET_ALL
-                    )
+                    input(Fore.GREEN + f"Número de la habitación {i+1}: " + Style.RESET_ALL)
                 )
                 if any(h["numero"] == numero for h in lista_habitaciones):
                     print(
@@ -67,11 +63,7 @@ def agregar_hotel(hoteles, clientes, reservas) -> None:
         while True:
             try:
                 capacidad = int(
-                    input(
-                        Fore.GREEN
-                        + f"Capacidad de la habitación {numero}: "
-                        + Style.RESET_ALL
-                    )
+                    input(Fore.GREEN + f"Capacidad de la habitación {numero}: " + Style.RESET_ALL)
                 )
                 if capacidad <= 0:
                     print(Fore.RED + "La capacidad debe ser mayor a cero.")
@@ -97,9 +89,7 @@ def agregar_hotel(hoteles, clientes, reservas) -> None:
             except ValueError:
                 print(Fore.RED + "Error: Ingrese un número válido.")
 
-        lista_habitaciones.append(
-            {"numero": numero, "capacidad": capacidad, "precio": precio}
-        )
+        lista_habitaciones.append({"numero": numero, "capacidad": capacidad, "precio": precio})
 
     # Calculamos el próximo ID disponible
     if hoteles:
@@ -116,9 +106,7 @@ def agregar_hotel(hoteles, clientes, reservas) -> None:
     hoteles.append(nuevo_hotel)
 
     datos.guardar_datos(hoteles, clientes, reservas)
-    print(
-        Fore.GREEN + Style.BRIGHT + "\n¡Hotel agregado correctamente!" + Style.RESET_ALL
-    )
+    print(Fore.GREEN + Style.BRIGHT + "\n¡Hotel agregado correctamente!" + Style.RESET_ALL)
 
 
 def actualizar_hotel(
@@ -168,11 +156,7 @@ def consultar_hoteles(hoteles: list) -> None:
                     for h in hotel["habitaciones"]
                 ]
                 # Imprimimos la tabla de habitaciones
-                print(
-                    tabulate(
-                        tabla_hab, headers=headers, tablefmt="grid", stralign="center"
-                    )
-                )
+                print(tabulate(tabla_hab, headers=headers, tablefmt="grid", stralign="center"))
             else:
                 print(Fore.YELLOW + "  El hotel no tiene habitaciones registradas.")
     else:
@@ -189,11 +173,7 @@ def modificar_hotel(hoteles: list, clientes: list, reservas: list) -> None:
     while True:
         try:
             id_mod = int(
-                input(
-                    Fore.GREEN
-                    + "\nIngrese el ID del hotel a modificar: "
-                    + Style.RESET_ALL
-                )
+                input(Fore.GREEN + "\nIngrese el ID del hotel a modificar: " + Style.RESET_ALL)
             )
             break
         except ValueError:
@@ -321,7 +301,9 @@ def eliminar_habitacion_de_hotel(
     # Si hay reservas, no permitir eliminar
     if reservas is not None:
         tiene_reservas = any(
-            r for r in reservas if r.get("id_hotel") == id_hotel and r.get("numero_habitacion") == numero
+            r
+            for r in reservas
+            if r.get("id_hotel") == id_hotel and r.get("numero_habitacion") == numero
         )
         if tiene_reservas:
             return False
@@ -374,7 +356,10 @@ def modificar_habitaciones_hotel(hoteles: list, clientes: list, reservas: list) 
                 [Fore.YELLOW + "3" + Style.RESET_ALL, "Eliminar habitación"],
                 [Fore.RED + "0" + Style.RESET_ALL, "Volver"],
             ],
-            headers=[Fore.GREEN + "Opción" + Style.RESET_ALL, Fore.GREEN + "Acción" + Style.RESET_ALL],
+            headers=[
+                Fore.GREEN + "Opción" + Style.RESET_ALL,
+                Fore.GREEN + "Acción" + Style.RESET_ALL,
+            ],
             tablefmt="heavy_outline",
         )
     )
@@ -390,10 +375,14 @@ def modificar_habitaciones_hotel(hoteles: list, clientes: list, reservas: list) 
         except ValueError:
             print(Fore.RED + "Valores inválidos. Operación cancelada.")
             return
-        if agregar_habitacion_a_hotel(hoteles, id_hotel, numero, capacidad, precio, clientes, reservas):
+        if agregar_habitacion_a_hotel(
+            hoteles, id_hotel, numero, capacidad, precio, clientes, reservas
+        ):
             print(Fore.GREEN + Style.BRIGHT + "Habitación agregada correctamente.")
         else:
-            print(Fore.RED + "No se pudo agregar (ID inválido, número duplicado o valores inválidos).")
+            print(
+                Fore.RED + "No se pudo agregar (ID inválido, número duplicado o valores inválidos)."
+            )
 
     elif opcion == "2":
         # Modificar existente
@@ -404,7 +393,9 @@ def modificar_habitaciones_hotel(hoteles: list, clientes: list, reservas: list) 
             return
 
         # Buscar datos actuales
-        hab_actual = next((h for h in hotel.get("habitaciones", []) if h.get("numero") == numero), None)
+        hab_actual = next(
+            (h for h in hotel.get("habitaciones", []) if h.get("numero") == numero), None
+        )
         if not hab_actual:
             print(Fore.RED + "No existe esa habitación en el hotel.")
             return
@@ -471,9 +462,7 @@ def eliminar_hotel(hoteles: list, clientes: list, reservas: list) -> None:
         return
 
     entrada = input(
-        Fore.GREEN
-        + "\nIngrese el ID o el nombre del hotel que desea eliminar: "
-        + Style.RESET_ALL
+        Fore.GREEN + "\nIngrese el ID o el nombre del hotel que desea eliminar: " + Style.RESET_ALL
     )
     if not entrada:
         print(Fore.RED + "Entrada vacía. Operación cancelada.")
@@ -520,9 +509,7 @@ def eliminar_hotel(hoteles: list, clientes: list, reservas: list) -> None:
                     print(Fore.RED + "Error: Ingrese un ID numérico válido.")
                     continue
 
-                hotel_encontrado = next(
-                    (h for h in coincidencias if h["id"] == id_elegido), None
-                )
+                hotel_encontrado = next((h for h in coincidencias if h["id"] == id_elegido), None)
 
                 if hotel_encontrado:
                     break

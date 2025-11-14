@@ -47,12 +47,8 @@ def main():
     # Se cargan los datos iniciales desde el módulo de datos.
     hoteles, clientes, reservas = datos.cargar_datos()
 
-    print(
-        Fore.CYAN + Style.BRIGHT + "Bienvenido a SRG - Sistema de Registro de Hotelería"
-    )
-    input(
-        Fore.YELLOW + "Presione Enter para comenzar..." + Style.RESET_ALL
-    )  # Pausa inicial
+    print(Fore.CYAN + Style.BRIGHT + "Bienvenido a SRG - Sistema de Registro de Hotelería")
+    input(Fore.YELLOW + "Presione Enter para comenzar..." + Style.RESET_ALL)  # Pausa inicial
 
     while True:
         menu()  # Mostramos el menú

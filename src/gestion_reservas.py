@@ -3,7 +3,7 @@ from datetime import datetime
 from utils import limpiar_pantalla, validar_fecha
 import datos  # Para guardar los cambios
 from gestion_clientes import consultar_clientes
-from gestion_hoteles import consultar_hoteles, buscar_hotel_por_id # type: ignore
+from gestion_hoteles import consultar_hoteles, buscar_hotel_por_id  # type: ignore
 from tabulate import tabulate
 from colorama import Fore, Style, init
 
@@ -15,7 +15,7 @@ def buscar_cliente_por_id(id_cliente: int, clientes: list) -> dict:
     for cliente in clientes:
         if cliente["id"] == id_cliente:
             return cliente
-    return None # type: ignore
+    return None  # type: ignore
 
 
 def buscar_hotel_por_id(id_hotel: int, hoteles: list) -> dict:
@@ -23,7 +23,7 @@ def buscar_hotel_por_id(id_hotel: int, hoteles: list) -> dict:
     for hotel in hoteles:
         if hotel["id"] == id_hotel:
             return hotel
-    return None # type: ignore
+    return None  # type: ignore
 
 
 # Función de validación de disponibilidad
@@ -59,16 +59,11 @@ def validar_disponibilidad_habitacion(
 
     # Verificamos si hay reservas que se solapen
     for reserva in reservas:
-        if (
-            reserva["id_hotel"] == id_hotel
-            and reserva["numero_habitacion"] == num_habitacion
-        ):
+        if reserva["id_hotel"] == id_hotel and reserva["numero_habitacion"] == num_habitacion:
             reserva_inicio_dt = datetime.strptime(reserva["fecha_inicio"], "%Y-%m-%d")
             reserva_fin_dt = datetime.strptime(reserva["fecha_fin"], "%Y-%m-%d")
 
-            if (fecha_inicio_dt < reserva_fin_dt) and (
-                fecha_fin_dt > reserva_inicio_dt
-            ):
+            if (fecha_inicio_dt < reserva_fin_dt) and (fecha_fin_dt > reserva_inicio_dt):
                 print(
                     Fore.RED
                     + Style.BRIGHT
@@ -112,9 +107,7 @@ def actualizar_reserva(
     if not hotel:
         return False
 
-    nuevo_num_hab = (
-        numero_habitacion if numero_habitacion is not None else res["numero_habitacion"]
-    )
+    nuevo_num_hab = numero_habitacion if numero_habitacion is not None else res["numero_habitacion"]
     # validar que la habitación existe en el hotel
     if not any(h.get("numero") == nuevo_num_hab for h in hotel.get("habitaciones", [])):
         return False
@@ -155,23 +148,16 @@ def agregar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
     # Selección de Cliente
     consultar_clientes(clientes)
     if not clientes:
-        print(
-            Fore.YELLOW
-            + "No hay clientes registrados. Debe agregar un cliente primero."
-        )
+        print(Fore.YELLOW + "No hay clientes registrados. Debe agregar un cliente primero.")
         return
     while True:
         try:
             id_cliente_seleccionado = int(
                 input(
-                    Fore.GREEN
-                    + "\nIngrese el ID del cliente para la reserva: "
-                    + Style.RESET_ALL
+                    Fore.GREEN + "\nIngrese el ID del cliente para la reserva: " + Style.RESET_ALL
                 )
             )
-            cliente_seleccionado = buscar_cliente_por_id(
-                id_cliente_seleccionado, clientes
-            )
+            cliente_seleccionado = buscar_cliente_por_id(id_cliente_seleccionado, clientes)
             if cliente_seleccionado:
                 print(
                     Fore.CYAN
@@ -188,18 +174,12 @@ def agregar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
     print("\n")
     consultar_hoteles(hoteles)
     if not hoteles:
-        print(
-            Fore.YELLOW + "No hay hoteles registrados. Debe agregar un hotel primero."
-        )
+        print(Fore.YELLOW + "No hay hoteles registrados. Debe agregar un hotel primero.")
         return
     while True:
         try:
             id_hotel_seleccionado = int(
-                input(
-                    Fore.GREEN
-                    + "\nIngrese el ID del hotel para la reserva: "
-                    + Style.RESET_ALL
-                )
+                input(Fore.GREEN + "\nIngrese el ID del hotel para la reserva: " + Style.RESET_ALL)
             )
             hotel_seleccionado = buscar_hotel_por_id(id_hotel_seleccionado, hoteles)
             if hotel_seleccionado:
@@ -226,9 +206,7 @@ def agregar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
             [h["numero"], h["capacidad"], f"{h['precio']:.2f}"]
             for h in hotel_seleccionado["habitaciones"]
         ]
-        print(
-            tabulate(tabla_hab, headers=headers_hab, tablefmt="grid", stralign="center")
-        )
+        print(tabulate(tabla_hab, headers=headers_hab, tablefmt="grid", stralign="center"))
     else:
         print(Fore.YELLOW + "Este hotel no tiene habitaciones registradas.")
         return
@@ -237,9 +215,7 @@ def agregar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
         try:
             num_habitacion_seleccionada = int(
                 input(
-                    Fore.GREEN
-                    + "\nIngrese el número de la habitación deseada: "
-                    + Style.RESET_ALL
+                    Fore.GREEN + "\nIngrese el número de la habitación deseada: " + Style.RESET_ALL
                 )
             )
             habitacion_valida = any(
@@ -250,8 +226,7 @@ def agregar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
                 break
             else:
                 print(
-                    Fore.RED
-                    + "Número de habitación no válido para este hotel. Intente de nuevo."
+                    Fore.RED + "Número de habitación no válido para este hotel. Intente de nuevo."
                 )
         except ValueError:
             print(Fore.RED + "Error: Ingrese un número válido.")
@@ -279,10 +254,7 @@ def agregar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
         if validar_fecha(fecha_fin_str):
             fecha_fin_dt = datetime.strptime(fecha_fin_str, "%Y-%m-%d")
             if fecha_fin_dt <= fecha_inicio_dt:
-                print(
-                    Fore.RED
-                    + "Error: La fecha de fin debe ser posterior a la fecha de inicio."
-                )
+                print(Fore.RED + "Error: La fecha de fin debe ser posterior a la fecha de inicio.")
             elif fecha_fin_dt > fecha_limite_dt:
                 print(
                     Fore.RED
@@ -324,12 +296,7 @@ def agregar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
     }
     reservas.append(nueva_reserva)
     datos.guardar_datos(hoteles, clientes, reservas)
-    print(
-        Fore.GREEN
-        + Style.BRIGHT
-        + "\n¡Reserva agregada correctamente!"
-        + Style.RESET_ALL
-    )
+    print(Fore.GREEN + Style.BRIGHT + "\n¡Reserva agregada correctamente!" + Style.RESET_ALL)
 
 
 def consultar_reservas(hoteles, clientes, reservas):
@@ -352,11 +319,7 @@ def consultar_reservas(hoteles, clientes, reservas):
             nombre_cliente = (
                 cliente["nombre"]
                 if cliente
-                else (
-                    Fore.RED
-                    + f"ID {reserva['id_cliente']} (Eliminado)"
-                    + Style.RESET_ALL
-                )
+                else (Fore.RED + f"ID {reserva['id_cliente']} (Eliminado)" + Style.RESET_ALL)
             )
 
             hotel = buscar_hotel_por_id(reserva["id_hotel"], hoteles)
@@ -364,9 +327,7 @@ def consultar_reservas(hoteles, clientes, reservas):
             nombre_hotel = (
                 hotel["nombre"]
                 if hotel
-                else (
-                    Fore.RED + f"ID {reserva['id_hotel']} (Eliminado)" + Style.RESET_ALL
-                )
+                else (Fore.RED + f"ID {reserva['id_hotel']} (Eliminado)" + Style.RESET_ALL)
             )
 
             reservas_para_tabla.append(
@@ -396,11 +357,7 @@ def modificar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
     while True:
         try:
             id_mod = int(
-                input(
-                    Fore.GREEN
-                    + "\nIngrese el ID de la reserva a modificar: "
-                    + Style.RESET_ALL
-                )
+                input(Fore.GREEN + "\nIngrese el ID de la reserva a modificar: " + Style.RESET_ALL)
             )
             break
         except ValueError:
@@ -419,9 +376,7 @@ def modificar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
 
     # Cliente
     nuevo_id_cliente_str = input(
-        Fore.GREEN
-        + f"Nuevo ID cliente [{res['id_cliente']}] (Enter = dejar): "
-        + Style.RESET_ALL
+        Fore.GREEN + f"Nuevo ID cliente [{res['id_cliente']}] (Enter = dejar): " + Style.RESET_ALL
     ).strip()
     nuevo_id_cliente = int(nuevo_id_cliente_str) if nuevo_id_cliente_str.isdigit() else None
 
@@ -461,10 +416,14 @@ def modificar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
 
     # Fechas
     nuevo_inicio = input(
-        Fore.GREEN + f"Nueva fecha inicio [{res['fecha_inicio']}] (AAAA-MM-DD, Enter = dejar): " + Style.RESET_ALL
+        Fore.GREEN
+        + f"Nueva fecha inicio [{res['fecha_inicio']}] (AAAA-MM-DD, Enter = dejar): "
+        + Style.RESET_ALL
     ).strip()
     nuevo_fin = input(
-        Fore.GREEN + f"Nueva fecha fin [{res['fecha_fin']}] (AAAA-MM-DD, Enter = dejar): " + Style.RESET_ALL
+        Fore.GREEN
+        + f"Nueva fecha fin [{res['fecha_fin']}] (AAAA-MM-DD, Enter = dejar): "
+        + Style.RESET_ALL
     ).strip()
 
     inicio_val = nuevo_inicio if nuevo_inicio != "" else None
@@ -539,9 +498,7 @@ def eliminar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
         print(f"  Cliente: {nombre_cliente}")
         print(f"  Hotel: {nombre_hotel}")
         print(f"  Habitación: {reserva_encontrada['numero_habitacion']}")
-        print(
-            f"  Fechas: {reserva_encontrada['fecha_inicio']} a {reserva_encontrada['fecha_fin']}"
-        )
+        print(f"  Fechas: {reserva_encontrada['fecha_inicio']} a {reserva_encontrada['fecha_fin']}")
 
         confirmacion = input(
             Fore.RED
