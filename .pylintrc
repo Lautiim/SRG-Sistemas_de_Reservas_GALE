@@ -3,7 +3,7 @@ ignore=build,dist,.venv,src/__pycache__
 extension-pkg-whitelist=
 jobs=0
 unsafe-load-any-extension=no
-init-hook='import sys; sys.path.append("./src")'
+init-hook='import os, sys; sys.path.insert(0, os.path.abspath("."))'
 
 [MESSAGES CONTROL]
 disable=
@@ -11,7 +11,8 @@ disable=
     missing-class-docstring,
     missing-function-docstring,
     too-few-public-methods,
-    invalid-name
+    invalid-name,
+    redefined-outer-name
 
 [REPORTS]
 output-format=colorized
