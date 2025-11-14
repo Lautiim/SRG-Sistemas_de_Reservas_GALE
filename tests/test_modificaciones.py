@@ -97,8 +97,7 @@ def test_actualizar_reserva_cambiar_fechas_sin_solapamiento(data_sample):
         hoteles,
         clientes,
         1,
-        fecha_inicio="2024-01-16",
-        fecha_fin="2024-01-18",
+        fechas=("2024-01-16", "2024-01-18"),
     )
     assert ok is True
     r = next(r for r in reservas if r["id"] == 1)
@@ -116,8 +115,7 @@ def test_actualizar_reserva_solapamiento_falla(data_sample):
         clientes,
         1,
         numero_habitacion=102,
-        fecha_inicio="2024-01-12",
-        fecha_fin="2024-01-13",
+        fechas=("2024-01-12", "2024-01-13"),
     )
     assert ok is False
 
