@@ -45,9 +45,4 @@ Trello = "https://trello.com/b/LePKo6J6/srg-sistemas-de-reservas-gale"
 line-length = 100
 target-version = ["py311", "py310", "py39", "py38"]
 include = "\\.(py)$"
-exclude = [
-    "^/build/",
-    "^/dist/",
-    "^/.venv/",
-    "^/src/__pycache__/",
-]
+exclude = "^/build/|^/dist/|^/.venv/|^/src/__pycache__/"
