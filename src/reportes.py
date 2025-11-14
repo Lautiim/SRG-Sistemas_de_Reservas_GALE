@@ -16,9 +16,7 @@ def _pedir_fecha_inicio() -> tuple[str, datetime]:
     """Solicita una fecha de inicio válida (no pasada)."""
     while True:
         fecha_str = input(
-            Fore.GREEN
-            + "Ingrese la fecha de inicio (AAAA-MM-DD): "
-            + Style.RESET_ALL
+            Fore.GREEN + "Ingrese la fecha de inicio (AAAA-MM-DD): " + Style.RESET_ALL
         )
         if not validar_fecha(fecha_str):
             print(Fore.RED + "Formato de fecha incorrecto. Use AAAA-MM-DD.")
@@ -33,19 +31,13 @@ def _pedir_fecha_inicio() -> tuple[str, datetime]:
 def _pedir_fecha_fin(fecha_inicio_dt: datetime) -> tuple[str, datetime]:
     """Solicita una fecha de fin válida (posterior al inicio)."""
     while True:
-        fecha_str = input(
-            Fore.GREEN
-            + "Ingrese la fecha de fin (AAAA-MM-DD): "
-            + Style.RESET_ALL
-        )
+        fecha_str = input(Fore.GREEN + "Ingrese la fecha de fin (AAAA-MM-DD): " + Style.RESET_ALL)
         if not validar_fecha(fecha_str):
             print(Fore.RED + "Formato de fecha incorrecto. Use AAAA-MM-DD.")
             continue
         fecha_dt = datetime.strptime(fecha_str, "%Y-%m-%d")
         if fecha_dt <= fecha_inicio_dt:
-            print(
-                Fore.RED + "Error: La fecha de fin debe ser posterior a la fecha de inicio."
-            )
+            print(Fore.RED + "Error: La fecha de fin debe ser posterior a la fecha de inicio.")
             continue
         return fecha_str, fecha_dt
 
@@ -54,7 +46,7 @@ def buscar_reserva_x_cliente(hoteles: list, clientes: list, reservas: list):
     """Busca y muestra todas las reservas asociadas a un cliente específico por su ID.
 
     Pre: Recibe la lista de hoteles, clientes y reservas.
-    
+
     Post: Muestra por pantalla las reservas del cliente
     o un mensaje si no hay reservas.
     """
@@ -243,7 +235,7 @@ def consultar_habitaciones_disponibles(hoteles: list, reservas: list):
 
     if not hotel_seleccionado.get("habitaciones"):
         msg_sin_habs = (
-            "El hotel '" + hotel_seleccionado['nombre'] + "' no tiene habitaciones registradas."
+            "El hotel '" + hotel_seleccionado["nombre"] + "' no tiene habitaciones registradas."
         )
         print(Fore.YELLOW + msg_sin_habs)
         return
@@ -274,7 +266,7 @@ def consultar_habitaciones_disponibles(hoteles: list, reservas: list):
     # Mostrar resultados
     titulo_disponibles = (
         "\n--- Habitaciones Disponibles en '"
-        + hotel_seleccionado['nombre']
+        + hotel_seleccionado["nombre"]
         + "' entre "
         + fecha_inicio_str
         + " y "
@@ -567,11 +559,7 @@ def generar_reportes(hoteles: list, clientes: list, reservas: list) -> None:
         else:
             print(Fore.RED + "Opción inválida. Intente de nuevo.")
 
-        input(
-            Fore.YELLOW
-            + "\nPresione Enter para continuar..."
-            + Style.RESET_ALL
-        )
+        input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
 
 
 if __name__ == "__main__":  # Ejecutable directo para pruebas manuales

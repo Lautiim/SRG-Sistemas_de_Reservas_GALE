@@ -442,7 +442,9 @@ def modificar_habitaciones_hotel(hoteles: list, clientes: list, reservas: list) 
             print(Fore.RED + "Número inválido.")
             return
 
-        if eliminar_habitacion_de_hotel(hoteles, id_hotel, numero, clientes=clientes, reservas=reservas):
+        if eliminar_habitacion_de_hotel(
+            hoteles, id_hotel, numero, clientes=clientes, reservas=reservas
+        ):
             print(Fore.GREEN + Style.BRIGHT + "Habitación eliminada correctamente.")
         else:
             print(
