@@ -306,8 +306,7 @@ def eliminar_habitacion_de_hotel(
         elif reservas is not None and any(
             r
             for r in reservas
-            if r.get("id_hotel") == id_hotel
-            and r.get("numero_habitacion") == numero
+            if r.get("id_hotel") == id_hotel and r.get("numero_habitacion") == numero
         ):
             eliminable = False
         else:
@@ -438,9 +437,7 @@ def modificar_habitaciones_hotel(hoteles: list, clientes: list, reservas: list) 
             if eliminado:
                 print(Fore.GREEN + Style.BRIGHT + "Habitación eliminada correctamente.")
             else:
-                msg_no_eliminar = (
-                    "No se pudo eliminar (ID inválido, inexistente o con reservas)."
-                )
+                msg_no_eliminar = "No se pudo eliminar (ID inválido, inexistente o con reservas)."
                 print(Fore.RED + msg_no_eliminar)
         except ValueError:
             print(Fore.RED + "Número inválido.")
@@ -566,9 +563,7 @@ def gestionar_hoteles(hoteles: list, clientes: list, reservas: list) -> None:
         print(tabulate(menu_data, headers=headers, tablefmt="heavy_outline"))
 
         opcion = input(Fore.GREEN + "\nSeleccione una opción: " + Style.RESET_ALL)
-        continuar_msg = (
-            Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL
-        )
+        continuar_msg = Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL
 
         if opcion == "1":
             limpiar_pantalla()

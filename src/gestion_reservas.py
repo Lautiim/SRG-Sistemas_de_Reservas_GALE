@@ -216,8 +216,7 @@ def _pedir_rango_fechas() -> tuple[datetime, datetime, str, str]:
         if fin_dt > limite_dt:
             print(Fore.RED + "Error: La reserva no puede exceder un año desde la fecha de inicio.")
             print(
-                Fore.RED
-                + f"La fecha de fin máxima permitida es: {limite_dt.strftime('%Y-%m-%d')}"
+                Fore.RED + f"La fecha de fin máxima permitida es: {limite_dt.strftime('%Y-%m-%d')}"
             )
             continue
         return inicio_dt, fin_dt, inicio_dt.strftime("%Y-%m-%d"), fin_dt.strftime("%Y-%m-%d")
@@ -435,10 +434,7 @@ def modificar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
     if ok:
         print(Fore.GREEN + Style.BRIGHT + "Reserva actualizada correctamente.")
     else:
-        print(
-            Fore.RED
-            + "No se pudo actualizar."
-        )
+        print(Fore.RED + "No se pudo actualizar.")
 
 
 def eliminar_reserva(hoteles: list, clientes: list, reservas: list) -> None:
@@ -550,41 +546,21 @@ def gestionar_reservas(hoteles, clientes, reservas):
         if opcion == "1":
             limpiar_pantalla()
             agregar_reserva(hoteles, clientes, reservas)
-            input(
-                Fore.YELLOW
-                + "\nPresione Enter para continuar..."
-                + Style.RESET_ALL
-            )
+            input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
         elif opcion == "2":
             limpiar_pantalla()
             consultar_reservas(hoteles, clientes, reservas)
-            input(
-                Fore.YELLOW
-                + "\nPresione Enter para continuar..."
-                + Style.RESET_ALL
-            )
+            input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
         elif opcion == "3":
             limpiar_pantalla()
             eliminar_reserva(hoteles, clientes, reservas)
-            input(
-                Fore.YELLOW
-                + "\nPresione Enter para continuar..."
-                + Style.RESET_ALL
-            )
+            input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
         elif opcion == "4":
             limpiar_pantalla()
             modificar_reserva(hoteles, clientes, reservas)
-            input(
-                Fore.YELLOW
-                + "\nPresione Enter para continuar..."
-                + Style.RESET_ALL
-            )
+            input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
         elif opcion == "0":
             break
         else:
             print(Fore.RED + "Opción inválida. Intente de nuevo.")
-            input(
-                Fore.YELLOW
-                + "\nPresione Enter para continuar..."
-                + Style.RESET_ALL
-            )
+            input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
