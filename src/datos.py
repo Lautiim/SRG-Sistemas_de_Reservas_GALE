@@ -52,7 +52,7 @@ def escribir_archivo(ruta: str, datos: list) -> None:
         ) as f:  # Abrimos el archivo en modo escritura con UTF-8
             json.dump(
                 datos, f, indent=4, ensure_ascii=False
-            )  # Escribimos los datos en formato JSON, con indentación. 
+            )  # Escribimos los datos en formato JSON, con indentación.
             # dump convierte el objeto Python en JSON
     except IOError as error:  # Si hay un error de entrada/salida
         print(f"Error al guardar '{ruta}': {error}")
