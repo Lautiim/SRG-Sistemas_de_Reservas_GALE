@@ -2,12 +2,21 @@
 from colorama import Fore, Style, init
 from tabulate import tabulate
 
-import datos
-import gestion_clientes
-import gestion_hoteles
-import gestion_reservas
-import reportes
-from utils import limpiar_pantalla
+# Soportar importación como paquete (src.*) y ejecución directa
+try:
+    from . import datos  # type: ignore
+    from . import gestion_clientes  # type: ignore
+    from . import gestion_hoteles  # type: ignore
+    from . import gestion_reservas  # type: ignore
+    from . import reportes  # type: ignore
+    from .utils import limpiar_pantalla  # type: ignore
+except ImportError:  # pragma: no cover
+    import datos
+    import gestion_clientes
+    import gestion_hoteles
+    import gestion_reservas
+    import reportes
+    from utils import limpiar_pantalla
 
 
 def menu():

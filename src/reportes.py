@@ -5,11 +5,19 @@ import os
 from colorama import Fore, Style, init
 from tabulate import tabulate
 
-import datos
-from gestion_clientes import buscar_cliente_por_id, consultar_clientes
-from gestion_hoteles import buscar_hotel_por_id, consultar_hoteles
-from gestion_reservas import consultar_reservas
-from utils import limpiar_pantalla, validar_fecha
+# Soportar importación como paquete (src.*) y ejecución directa
+try:
+    from . import datos  # type: ignore
+    from .gestion_clientes import buscar_cliente_por_id, consultar_clientes  # type: ignore
+    from .gestion_hoteles import buscar_hotel_por_id, consultar_hoteles  # type: ignore
+    from .gestion_reservas import consultar_reservas  # type: ignore
+    from .utils import limpiar_pantalla, validar_fecha  # type: ignore
+except ImportError:  # pragma: no cover
+    import datos
+    from gestion_clientes import buscar_cliente_por_id, consultar_clientes
+    from gestion_hoteles import buscar_hotel_por_id, consultar_hoteles
+    from gestion_reservas import consultar_reservas
+    from utils import limpiar_pantalla, validar_fecha
 
 
 def _pedir_fecha_inicio() -> tuple[str, datetime]:

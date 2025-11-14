@@ -4,10 +4,17 @@ from datetime import datetime
 from colorama import Fore, Style, init
 from tabulate import tabulate
 
-import datos  # Para guardar los cambios
-from gestion_clientes import buscar_cliente_por_id, consultar_clientes
-from gestion_hoteles import buscar_hotel_por_id, consultar_hoteles
-from utils import limpiar_pantalla, validar_fecha
+# Soportar importación como paquete (src.*) y ejecución directa de scripts
+try:
+    from . import datos  # type: ignore  # Para guardar los cambios
+    from .gestion_clientes import buscar_cliente_por_id, consultar_clientes  # type: ignore
+    from .gestion_hoteles import buscar_hotel_por_id, consultar_hoteles  # type: ignore
+    from .utils import limpiar_pantalla, validar_fecha  # type: ignore
+except ImportError:  # pragma: no cover
+    import datos  # Para guardar los cambios
+    from gestion_clientes import buscar_cliente_por_id, consultar_clientes
+    from gestion_hoteles import buscar_hotel_por_id, consultar_hoteles
+    from utils import limpiar_pantalla, validar_fecha
 
 # Función de validación de disponibilidad
 

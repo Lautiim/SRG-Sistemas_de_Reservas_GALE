@@ -1,14 +1,4 @@
 import pytest
-import os
-import sys
-
-# Asegura que src/ esté en sys.path para que los imports funcionen
-_THIS_DIR = os.path.dirname(__file__)
-_ROOT_DIR = os.path.abspath(os.path.join(_THIS_DIR, ".."))
-_SRC_DIR = os.path.join(_ROOT_DIR, "src")
-if _SRC_DIR not in sys.path:
-    sys.path.insert(0, _SRC_DIR)
-
 from src.utils import validar_fecha
 from src.gestion_hoteles import buscar_hotel_por_id
 from src.gestion_clientes import cliente_existente

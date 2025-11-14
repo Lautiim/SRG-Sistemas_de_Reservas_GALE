@@ -1,8 +1,13 @@
 from colorama import Fore, Style, init
 from tabulate import tabulate
 
-from utils import limpiar_pantalla
-import datos
+# Soportar importación como paquete (src.*) y ejecución directa
+try:
+    from .utils import limpiar_pantalla  # type: ignore
+    from . import datos  # type: ignore
+except ImportError:  # pragma: no cover
+    from utils import limpiar_pantalla
+    import datos
 
 
 def buscar_hotel_por_id(id_hotel: int, hoteles: list) -> dict | None:
