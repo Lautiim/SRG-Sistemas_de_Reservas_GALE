@@ -7,7 +7,7 @@ UADE Costa Argentina - 2025
 Sistema de gestión de reservas para hoteles en **Python**. Mantiene datos en memoria (sin BD). Incluye creación, consulta, modificación y exportación de información de hoteles, clientes y reservas.
 
 ## Requisitos
-- Python 3.14.x (el proyecto exige >=3.14,<3.15)
+- Soporta Python 3.12 y versiones posteriores
 - Entorno virtual recomendado
 
 ## Funcionalidades Principales
@@ -36,14 +36,13 @@ tests/
 ```
 
 ## Calidad de Código
-- Formateo: Black (línea 100/130 según módulos).
-- Linter: Pylint (se corrigen import order, else redundantes, excepciones amplias).
+- Formateo: Black.
+- Linter: Pylint (para correcciones de import order, else redundantes, excepciones amplias).
 - CI: GitHub Actions (Ubuntu, Windows, macOS) ejecuta black --check, pylint y pytest.
 
 ## Instalación Rápida
 ```powershell
 python -m venv .venv
-. .\.venv\Scripts\Activate.ps1
 python -m pip install -U pip
 python -m pip install -e ".[dev]"
 ```
@@ -67,10 +66,6 @@ pylint src tests
 ## Exportación CSV
 Genera archivos en carpeta `csv/`. Se crea automáticamente si no existe.
 
-## Contribución
-1. Crear rama.
-2. Ejecutar lint y tests.
-3. Commit y pull request.
 
 ## Integrantes
 - Axel Aguilar
