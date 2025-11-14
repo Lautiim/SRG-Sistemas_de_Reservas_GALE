@@ -30,6 +30,7 @@ def cliente_existente(dni: str, clientes: list) -> bool:
 def actualizar_cliente(
     clientes: list,
     id_cliente: int,
+    *,
     hoteles: list | None = None,
     reservas: list | None = None,
     nombre: str | None = None,
@@ -88,8 +89,7 @@ def agregar_cliente(hoteles: list, clientes: list, reservas: list) -> None:
                 )
                 return
             break
-        else:
-            print(Fore.RED + "Error: El DNI debe contener solo números.")
+        print(Fore.RED + "Error: El DNI debe contener solo números.")
 
     telefono = input(Fore.GREEN + "Ingrese el número de teléfono del cliente: " + Style.RESET_ALL)
 
@@ -134,7 +134,8 @@ def consultar_clientes(clientes: list) -> None:
             print(Fore.YELLOW + "(Librería 'tabulate' no encontrada. Mostrando en formato simple.)")
             for cliente in clientes:
                 print(
-                    f"ID: {cliente['id']} | Nombre: {cliente['nombre']} | DNI: {cliente['dni']} | Teléfono: {cliente['telefono']}"
+                    f"ID: {cliente['id']} | Nombre: {cliente['nombre']} | "
+                    f"DNI: {cliente['dni']} | Teléfono: {cliente['telefono']}"
                 )
     else:
         print(Fore.YELLOW + "No hay clientes registrados.")
@@ -231,7 +232,9 @@ def eliminar_cliente(hoteles: list, clientes: list, reservas: list) -> None:
         reservas_asociadas = [r for r in reservas if r["id_cliente"] == id_a_eliminar]
 
         print(
-            f"\nCliente a eliminar: ID: {cliente_encontrado['id']}, Nombre: {cliente_encontrado['nombre']}, DNI: {cliente_encontrado['dni']}"
+            f"\nCliente a eliminar: ID: {cliente_encontrado['id']}, "
+            f"Nombre: {cliente_encontrado['nombre']}, "
+            f"DNI: {cliente_encontrado['dni']}"
         )
         if reservas_asociadas:
             print(
@@ -258,7 +261,7 @@ def eliminar_cliente(hoteles: list, clientes: list, reservas: list) -> None:
         confirmacion = input(
             Fore.RED
             + Style.BRIGHT
-            + f"¿Está seguro que desea eliminar este cliente? (s/n): "
+            + "¿Está seguro que desea eliminar este cliente? (s/n): "
             + Style.RESET_ALL
         )
         if confirmacion.lower() == "s":
