@@ -70,9 +70,6 @@ def main():
         elif opcion == "4":
             # Y para el módulo de reportes.
             reportes.generar_reportes(hoteles, clientes, reservas)
-        elif opcion == "5":
-            # Y para la exportación a CSV.
-            reportes.exportar_datos_csv(hoteles, clientes, reservas)
         elif opcion == "0":
             limpiar_pantalla()
             print(Fore.CYAN + Style.BRIGHT + "=" * 40)

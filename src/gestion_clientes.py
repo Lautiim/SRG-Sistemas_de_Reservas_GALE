@@ -64,7 +64,7 @@ def agregar_cliente(hoteles: list, clientes: list, reservas: list) -> None:
 
     # Calculamos el próximo ID disponible
     if clientes:
-        id_cliente = clientes[-1]["id"] + 1
+        id_cliente = max(cliente["id"] for cliente in clientes) + 1
     else:
         id_cliente = 1
 
