@@ -5,7 +5,6 @@ import gestion_clientes
 import gestion_reservas
 import reportes
 from utils import limpiar_pantalla
-import os
 
 
 # Nuevas importaciones para la estética

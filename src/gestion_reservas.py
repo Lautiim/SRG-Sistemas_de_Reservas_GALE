@@ -2,29 +2,10 @@
 from datetime import datetime
 from utils import limpiar_pantalla, validar_fecha
 import datos  # Para guardar los cambios
-from gestion_clientes import consultar_clientes
-from gestion_hoteles import consultar_hoteles, buscar_hotel_por_id  # type: ignore
+from gestion_clientes import consultar_clientes, buscar_cliente_por_id
+from gestion_hoteles import consultar_hoteles, buscar_hotel_por_id
 from tabulate import tabulate
 from colorama import Fore, Style, init
-
-# Funciones de búsqueda (Helpers)
-
-
-def buscar_cliente_por_id(id_cliente: int, clientes: list) -> dict:
-    """Función para buscar un cliente por su ID."""
-    for cliente in clientes:
-        if cliente["id"] == id_cliente:
-            return cliente
-    return None  # type: ignore
-
-
-def buscar_hotel_por_id(id_hotel: int, hoteles: list) -> dict:
-    """Función para buscar un hotel por su ID."""
-    for hotel in hoteles:
-        if hotel["id"] == id_hotel:
-            return hotel
-    return None  # type: ignore
-
 
 # Función de validación de disponibilidad
 

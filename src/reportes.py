@@ -166,7 +166,7 @@ def buscar_reserva_x_hotel(hoteles: list, clientes: list, reservas: list):
 
 
 def consultar_habitaciones_disponibles(hoteles: list, reservas: list):
-    """Funcion las habitaciones disponibles en un hotel para un rango de fechas."""
+    """Función que muestra las habitaciones disponibles en un hotel para un rango de fechas."""
     print(Fore.CYAN + Style.BRIGHT + "--- Consultar Habitaciones Disponibles ---" + Style.RESET_ALL)
     consultar_hoteles(hoteles)
     if not hoteles:
