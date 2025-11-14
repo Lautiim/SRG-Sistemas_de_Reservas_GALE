@@ -14,7 +14,7 @@ def buscar_reserva_x_cliente(hoteles: list, clientes: list, reservas: list):
     """Busca y muestra todas las reservas asociadas a un cliente específico por su ID.
 
     Pre: Recibe la lista de hoteles, clientes y reservas.
-
+    Post: Muestra por pantalla las reservas del cliente seleccionado o un mensaje si no hay reservas.
     """
     print(Fore.CYAN + Style.BRIGHT + "--- Buscar Reservas por Cliente ---" + Style.RESET_ALL)
     consultar_clientes(clientes)
