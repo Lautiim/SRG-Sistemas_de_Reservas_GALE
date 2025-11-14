@@ -301,61 +301,6 @@ def consultar_habitaciones_disponibles(hoteles: list, reservas: list):
         )
 
 
-def generar_reportes(hoteles: list, clientes: list, reservas: list) -> None:
-    """Función principal para interactuar con el menú de generación de reportes (con color en solo los números)."""
-
-    init(autoreset=True)
-
-    while True:
-        limpiar_pantalla()
-
-        # Título
-        titulo = " --- Generación de Reportes --- "
-        print(Fore.CYAN + Style.BRIGHT + "=" * 50)
-        print(titulo.center(50, " "))
-        print("=" * 50 + Style.RESET_ALL)
-
-        # Datos del menú para tabulate
-        menu_data = [
-            [Fore.YELLOW + "1" + Style.RESET_ALL, "Listar todos los hoteles"],
-            [Fore.YELLOW + "2" + Style.RESET_ALL, "Listar todos los clientes"],
-            [Fore.YELLOW + "3" + Style.RESET_ALL, "Listar todas las reservas"],
-            [Fore.YELLOW + "4" + Style.RESET_ALL, "Buscar reservas por cliente"],
-            [Fore.YELLOW + "5" + Style.RESET_ALL, "Buscar reservas por hotel"],
-            [Fore.YELLOW + "6" + Style.RESET_ALL, "Consultar habitaciones disponibles"],
-            [Fore.RED + "0" + Style.RESET_ALL, "Volver al menú principal"],
-        ]
-
-        # Headers para la tabla
-        headers = [
-            Fore.GREEN + "Opción" + Style.RESET_ALL,
-            Fore.GREEN + "Acción" + Style.RESET_ALL,
-        ]
-
-        # Imprimir la tabla
-        print(tabulate(menu_data, headers=headers, tablefmt="heavy_outline"))
-
-        opcion = input(Fore.GREEN + "\nSeleccione una opción: " + Style.RESET_ALL)
-        limpiar_pantalla()
-
-        if opcion == "1":
-            consultar_hoteles(hoteles)
-        elif opcion == "2":
-            consultar_clientes(clientes)
-        elif opcion == "3":
-            consultar_reservas(hoteles, clientes, reservas)
-        elif opcion == "4":
-            buscar_reserva_x_cliente(hoteles, clientes, reservas)
-        elif opcion == "5":
-            buscar_reserva_x_hotel(hoteles, clientes, reservas)
-        elif opcion == "6":
-            consultar_habitaciones_disponibles(hoteles, reservas)
-        elif opcion == "0":
-            break
-        else:
-            print(Fore.RED + "Opción inválida. Intente de nuevo.")
-
-        input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
 
 
 
@@ -536,18 +481,23 @@ def exportar_datos_csv(hoteles: list, clientes: list, reservas: list) -> None:
     print("=" * 40)
     
     try:
-        # 1. Definir las rutas (usando datos.RUTA_DATA)
-        ruta_clientes_csv = os.path.join(datos.RUTA_DATA, "clientes_export.csv")
-        ruta_reservas_csv = os.path.join(datos.RUTA_DATA, "reservas_export.csv")
-        ruta_hoteles_csv = os.path.join(datos.RUTA_DATA, "hoteles_export.csv")
-        ruta_habitaciones_csv = os.path.join(datos.RUTA_DATA, "habitaciones_export.csv")
+        # 1. Crear carpeta 'csv' si no existe
+        ruta_csv = os.path.join(datos.RUTA_DATA, "csv")
+        if not os.path.exists(ruta_csv):
+            os.makedirs(ruta_csv)
+        
+        # 2. Definir las rutas dentro de la carpeta csv
+        ruta_clientes_csv = os.path.join(ruta_csv, "clientes_export.csv")
+        ruta_reservas_csv = os.path.join(ruta_csv, "reservas_export.csv")
+        ruta_hoteles_csv = os.path.join(ruta_csv, "hoteles_export.csv")
+        ruta_habitaciones_csv = os.path.join(ruta_csv, "habitaciones_export.csv")
 
-        # 2. Llamar a las funciones de exportación (que están en este mismo archivo)
+        # 3. Llamar a las funciones de exportación (que están en este mismo archivo)
         exportar_clientes_csv(clientes, ruta_clientes_csv)
         exportar_reservas_csv(reservas, ruta_reservas_csv)
         exportar_hoteles_csv(hoteles, ruta_hoteles_csv, ruta_habitaciones_csv)
         
-        print(f"\n¡Datos exportados exitosamente en la carpeta '{datos.RUTA_DATA}'!")
+        print(f"\n¡Datos exportados exitosamente en la carpeta 'data/csv/'!")
     
     except Exception as e:
         print(f"\nOcurrió un error general al exportar: {e}")
@@ -555,6 +505,64 @@ def exportar_datos_csv(hoteles: list, clientes: list, reservas: list) -> None:
     input("\nPresione Enter para continuar...")
 
 
+def generar_reportes(hoteles: list, clientes: list, reservas: list) -> None:
+    """Función principal para interactuar con el menú de generación de reportes (con color en solo los números)."""
+
+    init(autoreset=True)
+
+    while True:
+        limpiar_pantalla()
+
+        # Título
+        titulo = " --- Generación de Reportes --- "
+        print(Fore.CYAN + Style.BRIGHT + "=" * 50)
+        print(titulo.center(50, " "))
+        print("=" * 50 + Style.RESET_ALL)
+
+        # Datos del menú para tabulate
+        menu_data = [
+            [Fore.YELLOW + "1" + Style.RESET_ALL, "Listar todos los hoteles"],
+            [Fore.YELLOW + "2" + Style.RESET_ALL, "Listar todos los clientes"],
+            [Fore.YELLOW + "3" + Style.RESET_ALL, "Listar todas las reservas"],
+            [Fore.YELLOW + "4" + Style.RESET_ALL, "Buscar reservas por cliente"],
+            [Fore.YELLOW + "5" + Style.RESET_ALL, "Buscar reservas por hotel"],
+            [Fore.YELLOW + "6" + Style.RESET_ALL, "Consultar habitaciones disponibles"],
+            [Fore.MAGENTA + "7" + Style.RESET_ALL, "Exportar datos a CSV"],
+            [Fore.RED + "0" + Style.RESET_ALL, "Volver al menú principal"],
+        ]
+
+        # Headers para la tabla
+        headers = [
+            Fore.GREEN + "Opción" + Style.RESET_ALL,
+            Fore.GREEN + "Acción" + Style.RESET_ALL,
+        ]
+
+        # Imprimir la tabla
+        print(tabulate(menu_data, headers=headers, tablefmt="heavy_outline"))
+
+        opcion = input(Fore.GREEN + "\nSeleccione una opción: " + Style.RESET_ALL)
+        limpiar_pantalla()
+
+        if opcion == "1":
+            consultar_hoteles(hoteles)
+        elif opcion == "2":
+            consultar_clientes(clientes)
+        elif opcion == "3":
+            consultar_reservas(hoteles, clientes, reservas)
+        elif opcion == "4":
+            buscar_reserva_x_cliente(hoteles, clientes, reservas)
+        elif opcion == "5":
+            buscar_reserva_x_hotel(hoteles, clientes, reservas)
+        elif opcion == "6":
+            consultar_habitaciones_disponibles(hoteles, reservas)
+        elif opcion == "7":
+            exportar_datos_csv(hoteles, clientes, reservas)
+        elif opcion == "0":
+            break
+        else:
+            print(Fore.RED + "Opción inválida. Intente de nuevo.")
+
+        input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
 
 if __name__ == "__main__":
     hoteles, clientes, reservas = datos.cargar_datos()
