@@ -1,7 +1,8 @@
-import datos  # Importamos el módulo completo para acceder a guardar_datos
-from utils import limpiar_pantalla
-from tabulate import tabulate
 from colorama import Fore, Style, init
+from tabulate import tabulate
+
+from utils import limpiar_pantalla
+import datos
 
 
 def buscar_hotel_por_id(id_hotel: int, hoteles: list) -> dict | None:
@@ -284,25 +285,20 @@ def eliminar_habitacion_de_hotel(
     clientes: list | None = None,
     reservas: list | None = None,
 ) -> bool:
-    """Elimina una habitación de un hotel si no tiene reservas asociadas.
+    """Elimina una habitación del hotel si no tiene reservas asociadas.
 
-    Retorna True si elimina. Retorna False si no existe el hotel/habitación
-    o si hay reservas que referencian esa habitación.
+    Retorna True si se elimina, False en caso contrario (hotel inexistente,
+    habitación inexistente o reservas que la referencian).
     """
     hotel = buscar_hotel_por_id(id_hotel, hoteles)
     if not hotel:
         return False
 
-    # Verificar existencia de la habitación
-    idx = -1
-    for i, hab in enumerate(hotel.get("habitaciones", [])):
-        if hab.get("numero") == numero:
-            idx = i
-            break
+    habitaciones = hotel.get("habitaciones", [])
+    idx = next((i for i, hab in enumerate(habitaciones) if hab.get("numero") == numero), -1)
     if idx == -1:
         return False
 
-    # Si hay reservas, no permitir eliminar
     if reservas is not None:
         tiene_reservas = any(
             r
@@ -312,8 +308,7 @@ def eliminar_habitacion_de_hotel(
         if tiene_reservas:
             return False
 
-    # Eliminar y guardar
-    hotel["habitaciones"].pop(idx)
+    habitaciones.pop(idx)
     if clientes is not None and reservas is not None:
         datos.guardar_datos(hoteles, clientes, reservas)
     return True
@@ -524,10 +519,16 @@ def eliminar_hotel(hoteles: list, clientes: list, reservas: list) -> None:
 
     # Confirmación
     confirmacion = input(
-        Fore.RED
-        + Style.BRIGHT
-        + f"\n¿Está seguro que desea eliminar el hotel '{hotel_encontrado['nombre']}' (ID: {hotel_encontrado['id']})? (s/n): "
-        + Style.RESET_ALL
+        (
+            Fore.RED
+            + Style.BRIGHT
+            + "\n¿Está seguro que desea eliminar el hotel '"
+            + hotel_encontrado["nombre"]
+            + "' (ID: "
+            + str(hotel_encontrado["id"])
+            + ")? (s/n): "
+            + Style.RESET_ALL
+        )
     )
     if confirmacion.lower() == "s":
         hoteles.remove(hotel_encontrado)
