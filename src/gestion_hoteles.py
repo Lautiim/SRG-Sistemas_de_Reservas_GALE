@@ -121,6 +121,28 @@ def agregar_hotel(hoteles, clientes, reservas) -> None:
     )
 
 
+def actualizar_hotel(
+    hoteles: list,
+    id_hotel: int,
+    clientes: list | None = None,
+    reservas: list | None = None,
+    nombre: str | None = None,
+    ubicacion: str | None = None,
+) -> bool:
+    """Actualiza campos básicos del hotel (nombre, ubicación)."""
+    hotel = buscar_hotel_por_id(id_hotel, hoteles)
+    if not hotel:
+        return False
+    if nombre is not None and nombre != "":
+        hotel["nombre"] = nombre
+    if ubicacion is not None and ubicacion != "":
+        hotel["ubicacion"] = ubicacion
+
+    if clientes is not None and reservas is not None:
+        datos.guardar_datos(hoteles, clientes, reservas)
+    return True
+
+
 def consultar_hoteles(hoteles: list) -> None:
     """Funcion para mostrar la lista de hoteles registrados."""
     print(Fore.CYAN + Style.BRIGHT + "--- Hoteles Registrados ---" + Style.RESET_ALL)
@@ -155,6 +177,59 @@ def consultar_hoteles(hoteles: list) -> None:
                 print(Fore.YELLOW + "  El hotel no tiene habitaciones registradas.")
     else:
         print(Fore.YELLOW + "No hay hoteles registrados.")
+
+
+def modificar_hotel(hoteles: list, clientes: list, reservas: list) -> None:
+    """Interfaz interactiva para modificar datos básicos de un hotel."""
+    print(Fore.CYAN + Style.BRIGHT + "--- Modificar Hotel ---" + Style.RESET_ALL)
+    consultar_hoteles(hoteles)
+    if not hoteles:
+        return
+
+    while True:
+        try:
+            id_mod = int(
+                input(
+                    Fore.GREEN
+                    + "\nIngrese el ID del hotel a modificar: "
+                    + Style.RESET_ALL
+                )
+            )
+            break
+        except ValueError:
+            print(Fore.RED + "Error: Ingrese un ID numérico válido.")
+
+    hotel = buscar_hotel_por_id(id_mod, hoteles)
+    if not hotel:
+        print(Fore.RED + f"No se encontró hotel con ID {id_mod}.")
+        return
+
+    print(
+        Fore.CYAN
+        + f"Editando: {hotel['nombre']} (Ubicación: {hotel.get('ubicacion', 'N/A')})"
+        + Style.RESET_ALL
+    )
+    nuevo_nombre = input(
+        Fore.GREEN + f"Nuevo nombre [{hotel['nombre']}] (Enter = dejar): " + Style.RESET_ALL
+    ).strip()
+    nueva_ubicacion = input(
+        Fore.GREEN
+        + f"Nueva ubicación [{hotel.get('ubicacion', '')}] (Enter = dejar): "
+        + Style.RESET_ALL
+    ).strip()
+
+    ok = actualizar_hotel(
+        hoteles,
+        id_mod,
+        clientes=clientes,
+        reservas=reservas,
+        nombre=(nuevo_nombre if nuevo_nombre != "" else None),
+        ubicacion=(nueva_ubicacion if nueva_ubicacion != "" else None),
+    )
+    if ok:
+        print(Fore.GREEN + Style.BRIGHT + "Hotel actualizado correctamente.")
+    else:
+        print(Fore.RED + "No se pudo actualizar (ID inválido).")
 
 
 def eliminar_hotel(hoteles: list, clientes: list, reservas: list) -> None:
@@ -260,6 +335,7 @@ def gestionar_hoteles(hoteles: list, clientes: list, reservas: list) -> None:
             [Fore.YELLOW + "1" + Style.RESET_ALL, "Agregar Hotel"],
             [Fore.YELLOW + "2" + Style.RESET_ALL, "Consultar Hoteles"],
             [Fore.YELLOW + "3" + Style.RESET_ALL, "Eliminar Hotel"],
+            [Fore.YELLOW + "4" + Style.RESET_ALL, "Modificar Hotel"],
             [Fore.RED + "0" + Style.RESET_ALL, "Volver al menú principal"],
         ]
 
@@ -284,6 +360,10 @@ def gestionar_hoteles(hoteles: list, clientes: list, reservas: list) -> None:
         elif opcion == "3":
             limpiar_pantalla()
             eliminar_hotel(hoteles, clientes, reservas)
+            input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
+        elif opcion == "4":
+            limpiar_pantalla()
+            modificar_hotel(hoteles, clientes, reservas)
             input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
 
         elif opcion == "0":
