@@ -1,13 +1,4 @@
 import pytest
-
-# Ajuste de sys.path para imports de src
-import os
-import sys
-
-_ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-if _ROOT_DIR not in sys.path:
-    sys.path.insert(0, _ROOT_DIR)
-
 from src.gestion_clientes import actualizar_cliente
 from src.gestion_hoteles import (
     actualizar_hotel,
@@ -107,8 +98,8 @@ def test_actualizar_reserva_cambiar_fechas_sin_solapamiento(data_sample):
 
 def test_actualizar_reserva_solapamiento_falla(data_sample):
     hoteles, clientes, reservas = data_sample
-    # intentar mover reserva 1 a un rango que se solapa con reserva 2 (misma hab no, pero probemos misma habitación)
-    # primero ponela en la hab 102 que tiene otra reserva del 12 al 14
+    # Mover reserva 1 a un rango que se solapa con la reserva 2
+    # En la misma habitación 102, que ya tiene otra reserva del 12 al 14
     ok = actualizar_reserva(
         reservas,
         hoteles,
@@ -137,7 +128,7 @@ def test_agregar_habitacion_ok(data_sample):
 
 
 def test_agregar_habitacion_numero_duplicado_falla(data_sample):
-    hoteles, clientes, reservas = data_sample
+    hoteles, _, _ = data_sample
     # Ya existe 101 en hotel 1
     ok = agregar_habitacion_a_hotel(hoteles, 1, numero=101, capacidad=2, precio=100.0)
     assert ok is False
@@ -157,7 +148,7 @@ def test_actualizar_habitacion_ok(data_sample):
 
 
 def test_actualizar_habitacion_valores_invalidos_falla(data_sample):
-    hoteles, clientes, reservas = data_sample
+    hoteles, _, _ = data_sample
     # Capacidad negativa invalida
     ok = actualizar_habitacion_de_hotel(hoteles, 1, 101, capacidad=-1)
     assert ok is False
