@@ -14,10 +14,10 @@ def test_validar_hotel_inexistente():
 
 
 @pytest.mark.parametrize("fecha", [
-    "01/01/2024", "29/02/2024", "31/12/2025", "30/04/2023"
+    "2024/01/01", "2024/02/29", "2025/12/31", "2023/04/30"
 ])
 
-def test_validar_fecha_valida():
+def test_validar_fecha_valida(fecha):
     assert validar_fecha(fecha) == True
 
 @pytest.mark.parametrize("fecha", [
