@@ -3,6 +3,7 @@ from datetime import datetime
 
 # Ajuste de sys.path para imports de src
 import os, sys
+
 _ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if _ROOT_DIR not in sys.path:
     sys.path.insert(0, _ROOT_DIR)
@@ -76,15 +77,15 @@ def test_actualizar_cliente_nombre_y_dni(data_sample):
 def test_actualizar_cliente_dni_duplicado_falla(data_sample):
     hoteles, clientes, reservas = data_sample
     # intenta poner el DNI del cliente 2 en el cliente 1
-    ok = actualizar_cliente(
-        clientes, 1, hoteles=hoteles, reservas=reservas, dni=clientes[1]["dni"]
-    )
+    ok = actualizar_cliente(clientes, 1, hoteles=hoteles, reservas=reservas, dni=clientes[1]["dni"])
     assert ok is False
 
 
 def test_actualizar_hotel_nombre(data_sample):
     hoteles, clientes, reservas = data_sample
-    ok = actualizar_hotel(hoteles, 1, clientes=clientes, reservas=reservas, nombre="Hotel Sol Deluxe")
+    ok = actualizar_hotel(
+        hoteles, 1, clientes=clientes, reservas=reservas, nombre="Hotel Sol Deluxe"
+    )
     assert ok is True
     assert hoteles[0]["nombre"] == "Hotel Sol Deluxe"
 
@@ -123,12 +124,18 @@ def test_actualizar_reserva_solapamiento_falla(data_sample):
 
 # --- Habitaciones: agregar y modificar ---
 
+
 def test_agregar_habitacion_ok(data_sample):
     hoteles, clientes, reservas = data_sample
-    ok = agregar_habitacion_a_hotel(hoteles, 2, numero=202, capacidad=2, precio=120.0, clientes=clientes, reservas=reservas)
+    ok = agregar_habitacion_a_hotel(
+        hoteles, 2, numero=202, capacidad=2, precio=120.0, clientes=clientes, reservas=reservas
+    )
     assert ok is True
     hotel = next(h for h in hoteles if h["id"] == 2)
-    assert any(hab["numero"] == 202 and hab["capacidad"] == 2 and hab["precio"] == 120.0 for hab in hotel["habitaciones"]) 
+    assert any(
+        hab["numero"] == 202 and hab["capacidad"] == 2 and hab["precio"] == 120.0
+        for hab in hotel["habitaciones"]
+    )
 
 
 def test_agregar_habitacion_numero_duplicado_falla(data_sample):
@@ -141,7 +148,9 @@ def test_agregar_habitacion_numero_duplicado_falla(data_sample):
 def test_actualizar_habitacion_ok(data_sample):
     hoteles, clientes, reservas = data_sample
     # En hotel 1 existe 101
-    ok = actualizar_habitacion_de_hotel(hoteles, 1, 101, capacidad=4, precio=180.0, clientes=clientes, reservas=reservas)
+    ok = actualizar_habitacion_de_hotel(
+        hoteles, 1, 101, capacidad=4, precio=180.0, clientes=clientes, reservas=reservas
+    )
     assert ok is True
     hotel = next(h for h in hoteles if h["id"] == 1)
     hab = next(h for h in hotel["habitaciones"] if h["numero"] == 101)

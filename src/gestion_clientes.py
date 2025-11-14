@@ -69,15 +69,11 @@ def agregar_cliente(hoteles: list, clientes: list, reservas: list) -> None:
     print(Fore.CYAN + Style.BRIGHT + "--- Agregar Cliente ---" + Style.RESET_ALL)
 
     # Pedimos los datos del nuevo cliente
-    nombre = input(
-        Fore.GREEN + "Ingrese el nombre completo del cliente: " + Style.RESET_ALL
-    )
+    nombre = input(Fore.GREEN + "Ingrese el nombre completo del cliente: " + Style.RESET_ALL)
 
     # Validación de DNI
     while True:
-        dni = input(
-            Fore.GREEN + "Ingrese el DNI del cliente (solo números): " + Style.RESET_ALL
-        )
+        dni = input(Fore.GREEN + "Ingrese el DNI del cliente (solo números): " + Style.RESET_ALL)
         if dni.isdigit():
             if cliente_existente(dni, clientes):
                 print(
@@ -95,9 +91,7 @@ def agregar_cliente(hoteles: list, clientes: list, reservas: list) -> None:
         else:
             print(Fore.RED + "Error: El DNI debe contener solo números.")
 
-    telefono = input(
-        Fore.GREEN + "Ingrese el número de teléfono del cliente: " + Style.RESET_ALL
-    )
+    telefono = input(Fore.GREEN + "Ingrese el número de teléfono del cliente: " + Style.RESET_ALL)
 
     # Calculamos el próximo ID disponible
     if clientes:
@@ -113,12 +107,7 @@ def agregar_cliente(hoteles: list, clientes: list, reservas: list) -> None:
     }
     clientes.append(nuevo_cliente)
     datos.guardar_datos(hoteles, clientes, reservas)
-    print(
-        Fore.GREEN
-        + Style.BRIGHT
-        + "\n¡Cliente agregado correctamente!"
-        + Style.RESET_ALL
-    )
+    print(Fore.GREEN + Style.BRIGHT + "\n¡Cliente agregado correctamente!" + Style.RESET_ALL)
 
 
 def consultar_clientes(clientes: list) -> None:
@@ -142,10 +131,7 @@ def consultar_clientes(clientes: list) -> None:
             print(tabulate(tabla_clientes, headers=headers, tablefmt="grid"))
 
         except ImportError:
-            print(
-                Fore.YELLOW
-                + "(Librería 'tabulate' no encontrada. Mostrando en formato simple.)"
-            )
+            print(Fore.YELLOW + "(Librería 'tabulate' no encontrada. Mostrando en formato simple.)")
             for cliente in clientes:
                 print(
                     f"ID: {cliente['id']} | Nombre: {cliente['nombre']} | DNI: {cliente['dni']} | Teléfono: {cliente['telefono']}"
@@ -164,11 +150,7 @@ def modificar_cliente(hoteles: list, clientes: list, reservas: list) -> None:
     while True:
         try:
             id_mod = int(
-                input(
-                    Fore.GREEN
-                    + "\nIngrese el ID del cliente a modificar: "
-                    + Style.RESET_ALL
-                )
+                input(Fore.GREEN + "\nIngrese el ID del cliente a modificar: " + Style.RESET_ALL)
             )
             break
         except ValueError:

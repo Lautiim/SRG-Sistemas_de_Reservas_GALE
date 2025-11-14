@@ -10,19 +10,13 @@ from tabulate import tabulate
 from colorama import Fore, Style, init
 
 
-
 def buscar_reserva_x_cliente(hoteles: list, clientes: list, reservas: list):
     """Busca y muestra todas las reservas asociadas a un cliente específico por su ID.
 
     Pre: Recibe la lista de hoteles, clientes y reservas.
 
     """
-    print(
-        Fore.CYAN
-        + Style.BRIGHT
-        + "--- Buscar Reservas por Cliente ---"
-        + Style.RESET_ALL
-    )
+    print(Fore.CYAN + Style.BRIGHT + "--- Buscar Reservas por Cliente ---" + Style.RESET_ALL)
     consultar_clientes(clientes)
     if not clientes:
         print(Fore.YELLOW + "No hay clientes registrados.")
@@ -69,9 +63,7 @@ def buscar_reserva_x_cliente(hoteles: list, clientes: list, reservas: list):
             else:
                 # Si el hotel no se encuentra, se muestra el ID en rojo
                 nombre_hotel = (
-                    Fore.RED
-                    + f"ID {reserva['id_hotel']} (No encontrado)"
-                    + Style.RESET_ALL
+                    Fore.RED + f"ID {reserva['id_hotel']} (No encontrado)" + Style.RESET_ALL
                 )
 
             reservas_encontradas.append(
@@ -100,9 +92,7 @@ def buscar_reserva_x_cliente(hoteles: list, clientes: list, reservas: list):
 
 def buscar_reserva_x_hotel(hoteles: list, clientes: list, reservas: list):
     """Función para buscar y mostrar reservas por hotel."""
-    print(
-        Fore.CYAN + Style.BRIGHT + "--- Buscar Reservas por Hotel ---" + Style.RESET_ALL
-    )
+    print(Fore.CYAN + Style.BRIGHT + "--- Buscar Reservas por Hotel ---" + Style.RESET_ALL)
     consultar_hoteles(hoteles)
     if not hoteles:
         print(Fore.YELLOW + "No hay hoteles registrados.")
@@ -148,9 +138,7 @@ def buscar_reserva_x_hotel(hoteles: list, clientes: list, reservas: list):
             else:
                 # Si el cliente no se encuentra, se muestra el ID en rojo
                 nombre_cliente = (
-                    Fore.RED
-                    + f"ID {reserva['id_cliente']} (No encontrado)"
-                    + Style.RESET_ALL
+                    Fore.RED + f"ID {reserva['id_cliente']} (No encontrado)" + Style.RESET_ALL
                 )
 
             reservas_encontradas.append(
@@ -179,12 +167,7 @@ def buscar_reserva_x_hotel(hoteles: list, clientes: list, reservas: list):
 
 def consultar_habitaciones_disponibles(hoteles: list, reservas: list):
     """Funcion las habitaciones disponibles en un hotel para un rango de fechas."""
-    print(
-        Fore.CYAN
-        + Style.BRIGHT
-        + "--- Consultar Habitaciones Disponibles ---"
-        + Style.RESET_ALL
-    )
+    print(Fore.CYAN + Style.BRIGHT + "--- Consultar Habitaciones Disponibles ---" + Style.RESET_ALL)
     consultar_hoteles(hoteles)
     if not hoteles:
         print(Fore.YELLOW + "No hay hoteles registrados.")
@@ -223,37 +206,27 @@ def consultar_habitaciones_disponibles(hoteles: list, reservas: list):
     # Selección de fechas
     while True:
         fecha_inicio_str = input(
-            Fore.GREEN
-            + "Ingrese la fecha de inicio deseada (AAAA-MM-DD): "
-            + Style.RESET_ALL
+            Fore.GREEN + "Ingrese la fecha de inicio deseada (AAAA-MM-DD): " + Style.RESET_ALL
         )
         if validar_fecha(fecha_inicio_str):
             fecha_inicio_dt = datetime.strptime(fecha_inicio_str, "%Y-%m-%d")
             if fecha_inicio_dt.date() >= datetime.now().date():
                 break
             else:
-                print(
-                    Fore.RED
-                    + "Error: La fecha de inicio no puede ser una fecha pasada."
-                )
+                print(Fore.RED + "Error: La fecha de inicio no puede ser una fecha pasada.")
         else:
             print(Fore.RED + "Formato de fecha incorrecto. Use AAAA-MM-DD.")
 
     while True:
         fecha_fin_str = input(
-            Fore.GREEN
-            + "Ingrese la fecha de fin deseada (AAAA-MM-DD): "
-            + Style.RESET_ALL
+            Fore.GREEN + "Ingrese la fecha de fin deseada (AAAA-MM-DD): " + Style.RESET_ALL
         )
         if validar_fecha(fecha_fin_str):
             fecha_fin_dt = datetime.strptime(fecha_fin_str, "%Y-%m-%d")
             if fecha_fin_dt > fecha_inicio_dt:
                 break
             else:
-                print(
-                    Fore.RED
-                    + "Error: La fecha de fin debe ser posterior a la fecha de inicio."
-                )
+                print(Fore.RED + "Error: La fecha de fin debe ser posterior a la fecha de inicio.")
         else:
             print(Fore.RED + "Formato de fecha incorrecto. Use AAAA-MM-DD.")
 
@@ -265,9 +238,7 @@ def consultar_habitaciones_disponibles(hoteles: list, reservas: list):
             reserva_inicio_dt = datetime.strptime(r["fecha_inicio"], "%Y-%m-%d")
             reserva_fin_dt = datetime.strptime(r["fecha_fin"], "%Y-%m-%d")
 
-            if (fecha_inicio_dt < reserva_fin_dt) and (
-                fecha_fin_dt > reserva_inicio_dt
-            ):
+            if (fecha_inicio_dt < reserva_fin_dt) and (fecha_fin_dt > reserva_inicio_dt):
                 habitaciones_ocupadas_numeros.add(r["numero_habitacion"])
 
     # Determinar habitaciones disponibles
@@ -291,17 +262,11 @@ def consultar_habitaciones_disponibles(hoteles: list, reservas: list):
             Fore.GREEN + "Precio x Noche" + Style.RESET_ALL,
         ]
         tabla_disponibles = [
-            [h["numero"], h["capacidad"], f"${h['precio']:.2f}"]
-            for h in habitaciones_disponibles
+            [h["numero"], h["capacidad"], f"${h['precio']:.2f}"] for h in habitaciones_disponibles
         ]
         print(tabulate(tabla_disponibles, headers=headers, tablefmt="grid"))
     else:
-        print(
-            Fore.YELLOW + "No hay habitaciones disponibles en las fechas seleccionadas."
-        )
-
-
-
+        print(Fore.YELLOW + "No hay habitaciones disponibles en las fechas seleccionadas.")
 
 
 def exportar_clientes_csv(clientes: list, ruta_archivo: str) -> None:
@@ -319,33 +284,34 @@ def exportar_clientes_csv(clientes: list, ruta_archivo: str) -> None:
         print("No hay clientes para exportar.")
         return
     # Creamos el archivo CSV y escribimos las columnas que deseamos exportar
-    fieldnames = ['id', 'nombre', 'dni', 'telefono']
-    delimitador = ',' # Delimitador estándar para CSV
+    fieldnames = ["id", "nombre", "dni", "telefono"]
+    delimitador = ","  # Delimitador estándar para CSV
     try:
         # Usamos 'w' (write) y newline='' para evitar saltos de línea extra
-        with open(ruta_archivo, 'w', encoding='utf-8') as file:
+        with open(ruta_archivo, "w", encoding="utf-8") as file:
             # Escribimos el encabezado manualmente
             # Une la lista de fieldnames: "id,nombre,dni,telefono"
-            file.write(delimitador.join(fieldnames) + '\n')
+            file.write(delimitador.join(fieldnames) + "\n")
 
             for cliente in clientes:
                 # Creamos una lista de strings para esta fila
                 fila_lista = [
-                    str(cliente.get('id', '')),
-                    str(cliente.get('nombre', '')),
-                    str(cliente.get('dni', '')),
-                    str(cliente.get('telefono', ''))
+                    str(cliente.get("id", "")),
+                    str(cliente.get("nombre", "")),
+                    str(cliente.get("dni", "")),
+                    str(cliente.get("telefono", "")),
                 ]
                 # Unimos la lista con comas y agregamos un salto de línea
-                file.write(delimitador.join(fila_lista) + '\n')
+                file.write(delimitador.join(fila_lista) + "\n")
 
         print(f"Archivo '{ruta_archivo}' creado con éxito.")
-    
+
     except IOError as e:
         print(f"Error al escribir el archivo CSV: {e}")
     except Exception as e:
         print(f"Un error inesperado ocurrió: {e}")
-    
+
+
 def exportar_reservas_csv(reservas: list, ruta_archivo: str) -> None:
     """
     Función para exportar la lista de reservas a un archivo CSV.
@@ -358,33 +324,34 @@ def exportar_reservas_csv(reservas: list, ruta_archivo: str) -> None:
     if not reservas:
         print("No hay reservas para exportar.")
         return
-    #Creamos los encabezados que deseamos exportar en el csv
-    fieldnames = ['id', 'id_cliente', 'id_hotel', 'numero_habitacion', 'fecha_inicio', 'fecha_fin']
-    delimitador = ',' # Delimitador estándar para CSV
+    # Creamos los encabezados que deseamos exportar en el csv
+    fieldnames = ["id", "id_cliente", "id_hotel", "numero_habitacion", "fecha_inicio", "fecha_fin"]
+    delimitador = ","  # Delimitador estándar para CSV
 
     try:
-         # Usamos 'w' (write) y newline='' para evitar saltos de línea extra
-        with open(ruta_archivo, 'w', encoding='utf-8') as file:
+        # Usamos 'w' (write) y newline='' para evitar saltos de línea extra
+        with open(ruta_archivo, "w", encoding="utf-8") as file:
             # Escribimos el encabezado manualmente
-            file.write(delimitador.join(fieldnames) + '\n')
+            file.write(delimitador.join(fieldnames) + "\n")
             for reserva in reservas:
                 # Creamos una lista de strings para esta fila
                 fila_lista = [
-                    str(reserva.get('id', '')),
-                    str(reserva.get('id_cliente', '')),
-                    str(reserva.get('id_hotel', '')),
-                    str(reserva.get('numero_habitacion', '')),
-                    str(reserva.get('fecha_inicio', '')),
-                    str(reserva.get('fecha_fin', ''))
+                    str(reserva.get("id", "")),
+                    str(reserva.get("id_cliente", "")),
+                    str(reserva.get("id_hotel", "")),
+                    str(reserva.get("numero_habitacion", "")),
+                    str(reserva.get("fecha_inicio", "")),
+                    str(reserva.get("fecha_fin", "")),
                 ]
                 # Unimos la lista con comas y agregamos un salto de línea
-                file.write(delimitador.join(fila_lista) + '\n')
+                file.write(delimitador.join(fila_lista) + "\n")
         print(f"Archivo '{ruta_archivo}' creado con éxito.")
 
     except IOError as e:
         print(f"Error al escribir el archivo CSV: {e}")
     except Exception as e:
         print(f"Un error inesperado ocurrió: {e}")
+
 
 def exportar_hoteles_csv(hoteles: list, ruta_hoteles: str, ruta_habitaciones: str) -> None:
     """
@@ -399,23 +366,23 @@ def exportar_hoteles_csv(hoteles: list, ruta_hoteles: str, ruta_habitaciones: st
         print("No hay hoteles para exportar.")
         return
     # Creamos los encabezados principales de hoteles para exportar
-    fieldnames_hoteles = ['id', 'nombre', 'ubicacion']
-    delimitador = ',' # Delimitador estándar para CSV
+    fieldnames_hoteles = ["id", "nombre", "ubicacion"]
+    delimitador = ","  # Delimitador estándar para CSV
 
-    #Recorremos la lista de hoteles para extraer los datos principales
+    # Recorremos la lista de hoteles para extraer los datos principales
     try:
         # Usamos 'w' (write) y newline='' para evitar saltos de línea extra
-        with open(ruta_hoteles, 'w', encoding='utf-8') as file:
-            file.write(delimitador.join(fieldnames_hoteles) + '\n')
+        with open(ruta_hoteles, "w", encoding="utf-8") as file:
+            file.write(delimitador.join(fieldnames_hoteles) + "\n")
             for hotel in hoteles:
                 # Creamos una lista de strings para esta fila
                 fila_lista = [
-                    str(hotel.get('id', '')),
-                    str(hotel.get('nombre', '')),
-                    str(hotel.get('ubicacion', ''))
+                    str(hotel.get("id", "")),
+                    str(hotel.get("nombre", "")),
+                    str(hotel.get("ubicacion", "")),
                 ]
                 # Unimos la lista con comas y agregamos un salto de línea
-                file.write(delimitador.join(fila_lista) + '\n')
+                file.write(delimitador.join(fila_lista) + "\n")
 
         print(f"Archivo '{ruta_hoteles}' creado con éxito.")
 
@@ -424,68 +391,70 @@ def exportar_hoteles_csv(hoteles: list, ruta_hoteles: str, ruta_habitaciones: st
 
     # Ahora exportamos las habitaciones de cada hotel a otro archivo CSV
     print(f"Exportando habitaciones a {ruta_habitaciones}...")
-    fieldnames_habitaciones = ['id_hotel', 'numero', 'capacidad', 'precio']
+    fieldnames_habitaciones = ["id_hotel", "numero", "capacidad", "precio"]
     # Creamos una lista para almacenar las habitaciones en formato CSV
     habitaciones_csv = []
 
     # Recorremos la lista de hoteles para extraer las habitaciones
     for hotel in hoteles:
         # Obtenemos el ID del hotel actual
-        id_hotel = hotel.get('id')
+        id_hotel = hotel.get("id")
         # Recorremos las habitaciones del hotel actual
-        for habitaciones in hotel.get('habitaciones', []):
+        for habitaciones in hotel.get("habitaciones", []):
             # Por cada habitación que encuentra, crea un nuevo diccionario y lo agrega a la lista habitaciones_csv.
-            habitaciones_csv.append({
-                # Agregamos los datos de la habitación correspondiente  
-                'id_hotel': id_hotel,
-                'numero': habitaciones.get('numero'),
-                'capacidad': habitaciones.get('capacidad'),
-                'precio': habitaciones.get('precio')
-            })
+            habitaciones_csv.append(
+                {
+                    # Agregamos los datos de la habitación correspondiente
+                    "id_hotel": id_hotel,
+                    "numero": habitaciones.get("numero"),
+                    "capacidad": habitaciones.get("capacidad"),
+                    "precio": habitaciones.get("precio"),
+                }
+            )
 
     if not habitaciones_csv:
         print("No se encontraron habitaciones para exportar.")
         return
-    
+
     try:
         # Usamos 'w' (write) y newline='' para evitar saltos de línea extra
-        with open(ruta_habitaciones, 'w', encoding='utf-8') as file:
-            file.write(delimitador.join(fieldnames_habitaciones) + '\n')
+        with open(ruta_habitaciones, "w", encoding="utf-8") as file:
+            file.write(delimitador.join(fieldnames_habitaciones) + "\n")
             for habitacion in habitaciones_csv:
                 # Creamos una lista de strings para esta fila
                 fila_lista = [
-                    str(habitacion.get('id_hotel', '')),
-                    str(habitacion.get('numero', '')),
-                    str(habitacion.get('capacidad', '')),
-                    str(habitacion.get('precio', ''))
+                    str(habitacion.get("id_hotel", "")),
+                    str(habitacion.get("numero", "")),
+                    str(habitacion.get("capacidad", "")),
+                    str(habitacion.get("precio", "")),
                 ]
                 # Unimos la lista con comas y agregamos un salto de línea
-                file.write(delimitador.join(fila_lista) + '\n')
-       
+                file.write(delimitador.join(fila_lista) + "\n")
+
         print(f"Archivo '{ruta_habitaciones}' creado con éxito.")
     except IOError as e:
         print(f"Error al escribir el archivo {ruta_habitaciones}: {e}")
 
+
 def exportar_datos_csv(hoteles: list, clientes: list, reservas: list) -> None:
-   
     """
     Función principal para gestionar la exportación de todos los datos a CSV.
     Maneja la lógica de rutas y llama a las funciones de exportación.
     Pre: Recibe las listas de hoteles, clientes y reservas.
-    
+
     Post: Exporta los datos a archivos CSV en las rutas especificadas.
     """
     limpiar_pantalla()
     print("=" * 40)
     print("   --- Exportando datos a CSV ---     ".center(40, " "))
     print("=" * 40)
-    
+
     try:
         # 1. Crear carpeta 'csv' si no existe
         ruta_csv = os.path.join(datos.RUTA_DATA, "csv")
         if not os.path.exists(ruta_csv):
             os.makedirs(ruta_csv)
-        
+
         # 2. Definir las rutas dentro de la carpeta csv
         ruta_clientes_csv = os.path.join(ruta_csv, "clientes_export.csv")
         ruta_reservas_csv = os.path.join(ruta_csv, "reservas_export.csv")
@@ -496,12 +465,12 @@ def exportar_datos_csv(hoteles: list, clientes: list, reservas: list) -> None:
         exportar_clientes_csv(clientes, ruta_clientes_csv)
         exportar_reservas_csv(reservas, ruta_reservas_csv)
         exportar_hoteles_csv(hoteles, ruta_hoteles_csv, ruta_habitaciones_csv)
-        
+
         print(f"\n¡Datos exportados exitosamente en la carpeta 'data/csv/'!")
-    
+
     except Exception as e:
         print(f"\nOcurrió un error general al exportar: {e}")
-    
+
     input("\nPresione Enter para continuar...")
 
 
@@ -563,6 +532,7 @@ def generar_reportes(hoteles: list, clientes: list, reservas: list) -> None:
             print(Fore.RED + "Opción inválida. Intente de nuevo.")
 
         input(Fore.YELLOW + "\nPresione Enter para continuar..." + Style.RESET_ALL)
+
 
 if __name__ == "__main__":
     hoteles, clientes, reservas = datos.cargar_datos()
